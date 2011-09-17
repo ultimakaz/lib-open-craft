@@ -118,13 +118,13 @@ namespace LibOpenCraft.ChunkHandler
                                 //Write Block Info
 
                                 // Write MetaData
-                                compressor.WriteByte(((metadata) << 4) | (c.Blocks.GetData((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 0) & 0x0F));
+                                compressor.WriteByte(((metadata) << 4) | (c.Blocks.GetData((block_x * 2) + 1, (block_y * 2) + 0, (block_z * 2) + 0) & 0x0F));
 
                                 // Write BlockLight
-                                compressor.WriteByte(((block_light & 0x0F) << 4) | (c.Blocks.GetBlockLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 0) & 0x0F));
+                                compressor.WriteByte(((block_light & 0x0F) << 4) | (c.Blocks.GetBlockLight((block_x * 2) + 0, (block_y * 2) + 0, (block_z * 2) + 0) & 0x0F));
 
                                 // Write SkyLight
-                                compressor.WriteByte(((sky_light & 0x0F) << 4) | (c.Blocks.GetSkyLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 0) & 0x0F));
+                                compressor.WriteByte(((sky_light & 0x0F) << 4) | (c.Blocks.GetSkyLight((block_x * 2) + 0, (block_y * 2) + 0, (block_z * 2) + 0) & 0x0F));
                             }
                         }
                     }
