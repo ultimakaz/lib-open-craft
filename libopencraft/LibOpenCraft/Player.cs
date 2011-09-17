@@ -26,9 +26,9 @@ namespace LibOpenCraft
             stance = 0;
             onGround = 1;
             position = new Vector3();
-            position.X = 0.0;
-            position.Y = 0.0;
-            position.Z = 127.0;
+            position.X = 20.0;
+            position.Y = 20.0;
+            position.Z = 128.0;
             customerVariables = new Dictionary<string, object>();
             CurrentSlot = 0;
         }
