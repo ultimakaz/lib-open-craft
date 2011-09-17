@@ -35,19 +35,11 @@ namespace LibOpenCraft.MajongProtocol
         {
             int version = _pReader.ReadInt();
             string username = _pReader.ReadString();
-
-            List<char> temp = new List<char>();
-            while (_client._stream.DataAvailable)
-            {
-                temp.Add((char)_client._stream.ReadByte());
-            }
-
-            Console.Write(temp.ToArray());
             #region Login Handler Packet
             LoginHandlerPacket p = new LoginHandlerPacket(pt);
             p.EntityID = _client.id;
             p.NotUsed = "";
-            p.MapSeed = 971768181197178410;
+            p.MapSeed = 0;
             p.ServerMode = 1;
             p.Dimension = 0;
             p.Unknown = 1;

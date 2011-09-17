@@ -5,3 +5,10 @@ E:\Programming\LibOpenCraft\LibOpenCraft\bin\Debug\LibOpenCraft.ChunkHandler.pdb
 E:\Programming\LibOpenCraft\LibOpenCraft.ChunkHandler\obj\Debug\ResolveAssemblyReference.cache
 E:\Programming\LibOpenCraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.dll
 E:\Programming\LibOpenCraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\config.txt
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\World\temp.txt
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\LibOpenCraft.ChunkHandler.dll
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\LibOpenCraft.ChunkHandler.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.dll
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.pdb
