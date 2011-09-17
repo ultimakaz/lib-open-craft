@@ -51,7 +51,7 @@ namespace LibOpenCraft.ChunkHandler
         public void RunPreChunkInitialization()
         {
             _client.PreChunkRan = 1;
-            int count = 5;
+            int count = 15;
             int x = 0;
             int y = 0;
             for (x = 0; x < count; x++)
