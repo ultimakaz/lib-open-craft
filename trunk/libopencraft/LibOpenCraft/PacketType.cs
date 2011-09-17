@@ -73,5 +73,6 @@ namespace LibOpenCraft
         ServerListPing = 0xFE,
         ServerListPingBack = 0xFF,
         Disconnect_Kick = 0xFF,
+        PreMapChunkDone = 500,
     };
 }
