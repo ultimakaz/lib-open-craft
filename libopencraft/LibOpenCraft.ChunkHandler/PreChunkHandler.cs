@@ -96,14 +96,14 @@ namespace LibOpenCraft.ChunkHandler
                     int block_x = 0;
                     for (; block_x < 16; block_x++)
                     {
-                        int block_y = 0;
-                        for (; block_y < 16; block_y++)
+                        int block_z = 0;
+                        for (block_z = 0; block_z < 16; block_z++)
                         {
-                            int block_z = 0;
-                            for (; block_z < World.world.GetBlockManager().GetHeight(_x, _y); block_z++)
+                            int block_y = 0;
+                            for (block_y = 0; block_y < World.world.GetBlockManager().GetHeight(_x, _y); block_y++)
                             {
                                 Chunk c = World.world.GetChunkManager().GetChunk(_x, _y);
-                                AlphaBlock block = c.Blocks.GetBlock(block_x, block_z, block_y);
+                                AlphaBlock block = c.Blocks.GetBlock(block_x, block_y, block_z);
                                 //Write Block Info
                                 compressor.WriteByte(block.Info.ID);
                                 // Write MetaData

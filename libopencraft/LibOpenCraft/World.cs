@@ -26,6 +26,29 @@ namespace LibOpenCraft
                 for (; y < amount; y++)
                     chunk_manager.CreateChunk(x, y);
             }
+            int Chunk_X = 0;
+            int Chunk_Y = 0;
+            int xx = 0;
+            int yy = 0;
+            int z = 0;
+            for (Chunk_X = 0; Chunk_X < amount; Chunk_X++)
+            {
+                for (Chunk_Y = 0; Chunk_Y < amount; Chunk_Y++)
+                {
+                    Chunk c = chunk_manager.GetChunk(Chunk_X, Chunk_Y);
+                    for (xx = 0; xx < 16; xx++)
+                    {
+                        for (z = 0; z < 16; z++)
+                        {
+                            for (yy = 0; yy < 82; yy++)
+                            {
+                                c.Blocks.SetBlock(xx, yy, z, new AlphaBlock(0x03));
+                            }
+                        }
+                    }
+
+                }
+            }
             chunk_manager.Save();
             world.Save();
             block_manager = new BlockManager(chunk_manager);
