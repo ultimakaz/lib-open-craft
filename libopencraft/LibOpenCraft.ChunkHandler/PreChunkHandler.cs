@@ -112,18 +112,37 @@ namespace LibOpenCraft.ChunkHandler
                         {
                             for (int block_y = 0; block_y < World.world.GetBlockManager().GetHeight(_x, _y) / 2; block_y++)
                             {
-                                int block_light = c.Blocks.GetBlockLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
-                                int sky_light = c.Blocks.GetSkyLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
                                 int metadata = c.Blocks.GetData((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
                                 //Write Block Info
 
                                 // Write MetaData
                                 compressor.WriteByte(((metadata) << 4) | (c.Blocks.GetData((block_x * 2) + 1, (block_y * 2) + 0, (block_z * 2) + 0) & 0x0F));
+                            }
+                        }
+                    }
+
+                    // divided by two
+                    for (int block_x = 0; block_x < 16 / 2; block_x++)
+                    {
+                        for (int block_z = 0; block_z < 16 / 2; block_z++)
+                        {
+                            for (int block_y = 0; block_y < World.world.GetBlockManager().GetHeight(_x, _y) / 2; block_y++)
+                            {
+                                int block_light = c.Blocks.GetBlockLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
 
                                 // Write BlockLight
                                 compressor.WriteByte(((block_light & 0x0F) << 4) | (c.Blocks.GetBlockLight((block_x * 2) + 0, (block_y * 2) + 0, (block_z * 2) + 0) & 0x0F));
+                            }
+                        }
+                    }
+                    for (int block_x = 0; block_x < 16 / 2; block_x++)
+                    {
+                        for (int block_z = 0; block_z < 16 / 2; block_z++)
+                        {
+                            for (int block_y = 0; block_y < World.world.GetBlockManager().GetHeight(_x, _y) / 2; block_y++)
+                            {
+                                int sky_light = c.Blocks.GetSkyLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
 
-                                // Write SkyLight
                                 compressor.WriteByte(((sky_light & 0x0F) << 4) | (c.Blocks.GetSkyLight((block_x * 2) + 0, (block_y * 2) + 0, (block_z * 2) + 0) & 0x0F));
                             }
                         }
