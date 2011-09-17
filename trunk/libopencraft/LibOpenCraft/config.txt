@@ -1,0 +1,6 @@
+﻿ServerName="libOpenCraft_test_server"
+ServerDescription="LibOpenCraft test server"
+MaxPlayers=8
+Port=25565
+ServerMode=1
+Handshake=2e66f1dc032ab5f0
