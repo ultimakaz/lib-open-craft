@@ -64,7 +64,7 @@ namespace LibOpenCraft.ChunkHandler
                     _cPacket.Z = y * 16;
                     _cPacket.SIZE_X = 15;
                     _cPacket.SIZE_Y = 127;
-                    _cPacket.SIZE_Z = 16;
+                    _cPacket.SIZE_Z = 15;
                     byte[] chunk =  MakeChunkArray(x, y);
                     _cPacket.Compressed_Size = chunk.Count();
                     _cPacket.ChunkData = chunk;
@@ -92,26 +92,39 @@ namespace LibOpenCraft.ChunkHandler
             {
                 using (ZOutputStream compressor = new ZOutputStream(memStream, zlibConst.Z_BEST_COMPRESSION))
                 {
-                    // Write Blocks
-                    int block_x = 0;
-                    for (; block_x < 16; block_x++)
+                    Chunk c = World.world.GetChunkManager().GetChunk(_x, _y);
+                    for (int block_x = 0; block_x < 16; block_x++)
                     {
-                        int block_z = 0;
-                        for (block_z = 0; block_z < 16; block_z++)
+                        for (int block_z = 0; block_z < 16; block_z++)
                         {
-                            int block_y = 0;
-                            for (block_y = 0; block_y < World.world.GetBlockManager().GetHeight(_x, _y); block_y++)
+                            for (int block_y = 0; block_y < World.world.GetBlockManager().GetHeight(_x, _y); block_y++)
                             {
-                                Chunk c = World.world.GetChunkManager().GetChunk(_x, _y);
-                                AlphaBlock block = c.Blocks.GetBlock(block_x, block_y, block_z);
+                                int block_id = c.Blocks.GetID(block_x, block_y, block_z);
                                 //Write Block Info
-                                compressor.WriteByte(block.Info.ID);
+                                compressor.WriteByte(block_id);
+                            }
+                        }
+                    }
+                    // divided by two
+                    for (int block_x = 0; block_x < 16 / 2; block_x++)
+                    {
+                        for (int block_z = 0; block_z < 16 / 2; block_z++)
+                        {
+                            for (int block_y = 0; block_y < World.world.GetBlockManager().GetHeight(_x, _y) / 2; block_y++)
+                            {
+                                int block_light = c.Blocks.GetBlockLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
+                                int sky_light = c.Blocks.GetSkyLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
+                                int metadata = c.Blocks.GetData((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 1);
+                                //Write Block Info
+
                                 // Write MetaData
-                                compressor.WriteByte(((block.Data & 0x0F) << 4) | (block.Data & 0x0F));
+                                compressor.WriteByte(((metadata) << 4) | (c.Blocks.GetData((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 0) & 0x0F));
+
                                 // Write BlockLight
-                                compressor.WriteByte(((block.Info.Luminance & 0x0F) << 4) | (block.Info.Luminance & 0x0F));
+                                compressor.WriteByte(((block_light & 0x0F) << 4) | (c.Blocks.GetBlockLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 0) & 0x0F));
+
                                 // Write SkyLight
-                                compressor.WriteByte(((block.Info.Luminance & 0x0F) << 4) | (block.Info.Luminance & 0x0F));
+                                compressor.WriteByte(((sky_light & 0x0F) << 4) | (c.Blocks.GetSkyLight((block_x * 2) + 1, (block_y * 2) + 1, (block_z * 2) + 0) & 0x0F));
                             }
                         }
                     }

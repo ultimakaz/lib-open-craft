@@ -33,8 +33,8 @@ namespace LibOpenCraft.MajongProtocol
             p.OnGround = cm._player.onGround;
             p.Stance = cm._player.stance;
             p.X = cm._player.position.X;
-            p.Y = cm._player.position.Y;
-            p.Z = cm._player.position.Z;
+            p.Y = cm._player.position.Z;
+            p.Z = cm._player.position.Y;
             p.BuildPacket();
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
@@ -51,8 +51,8 @@ namespace LibOpenCraft.MajongProtocol
             p.OnGround = _client._player.onGround;
             p.Stance = _client._player.stance;
             p.X = _client._player.position.X;
-            p.Y = _client._player.position.Y;
-            p.Z = _client._player.position.Z;
+            p.Y = _client._player.position.Z;
+            p.Z = _client._player.position.Y;
             p.BuildPacket();
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)

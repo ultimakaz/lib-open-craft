@@ -121,6 +121,7 @@ namespace LibOpenCraft
                 _client.Close();
                 Stop(true);
                 Console.WriteLine("ERROR: " + e.Message);
+                GridServer.InvokeRemovePlayer(id);
             }
         }
         protected void Recieve(object obj)
@@ -171,6 +172,7 @@ namespace LibOpenCraft
                     if (_recieveClient._client != null)
                         _recieveClient._client.Close();
                     _recieveClient.Stop(true);
+                    GridServer.InvokeRemovePlayer(id);
                     Console.WriteLine("ERROR: " + e.Message);
                 }
             }
