@@ -66,7 +66,7 @@ namespace LibOpenCraft.MajongProtocol
         }
         protected void Listener(object obj)
         {
-            _listener = new TcpListener(IPAddress.Any, (int)Config.Configuration["Port"]);
+            _listener = new TcpListener(IPAddress.Parse((string)Config.Configuration["IPAddress"]), (int)Config.Configuration["Port"]);
             _listener.Start(100);
             while (true)
             {

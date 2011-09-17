@@ -13,3 +13,12 @@ E:\Programming\LibOpenCraft\LibOpenCraft\bin\Debug\config.txt
 E:\Programming\LibOpenCraft\LibOpenCraft\bin\Debug\World\temp.txt
 E:\Programming\LibOpenCraft\LibOpenCraft\bin\Debug\Ionic.Zlib.dll
 E:\Programming\LibOpenCraft\LibOpenCraft\bin\Debug\Substrate.dll
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Debug\LibOpenCraft.exe
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Debug\LibOpenCraft.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\config.txt
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\World\temp.txt
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\LibOpenCraft.exe
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\LibOpenCraft.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\Ionic.Zlib.dll
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\Substrate.dll

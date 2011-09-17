@@ -37,6 +37,7 @@ namespace LibOpenCraft.MajongProtocol
             p.BuildPacket();
             _client.SendPacket(p, _client.id, true, _client);
             GridServer.players.Remove(_client.id);
+            _client._stream.Close();
             p = null;
             _client.Stop(true);
         }

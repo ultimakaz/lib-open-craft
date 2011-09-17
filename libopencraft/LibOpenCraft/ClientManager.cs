@@ -89,7 +89,7 @@ namespace LibOpenCraft
             try
             {
                 byte[] t_byte = p.GetBytes();
-                if (GridServer.InvokeContainsKeyPlayer(id))
+                if (GridServer.InvokeContainsKeyPlayer(id) && PingType == false)
                 {
                     ClientManager cm = GridServer.InvokeGetPlayer(id);
                     cm._stream.Write(t_byte, 0, t_byte.Length);
@@ -101,7 +101,11 @@ namespace LibOpenCraft
                 }
                 else if (PingType == true)
                 {
-                    _cm._stream.Write(t_byte, 0, t_byte.Length);
+                    byte[] temp = new byte[256];
+                    t_byte.CopyTo(temp, 0);
+                    _cm._stream.Write(temp, 0, temp.Length);
+                    _cm._stream.Flush();
+                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     t_byte = null;
                     p = null;
                 }
@@ -113,6 +117,9 @@ namespace LibOpenCraft
             }
             catch(Exception e)
             {
+                _stream.Close();
+                _client.Close();
+                Stop(true);
                 Console.WriteLine("ERROR: " + e.Message);
             }
         }
@@ -159,6 +166,11 @@ namespace LibOpenCraft
                 }
                 catch (Exception e)
                 {
+                    if (_recieveClient._stream != null)
+                        _recieveClient._stream.Close();
+                    if (_recieveClient._client != null)
+                        _recieveClient._client.Close();
+                    _recieveClient.Stop(true);
                     Console.WriteLine("ERROR: " + e.Message);
                 }
             }

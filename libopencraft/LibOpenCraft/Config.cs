@@ -58,6 +58,10 @@ namespace LibOpenCraft
                 {
                     
                     bool p = var.Contains('.');
+                    string[] temp = null;
+                    if (p == true)
+                        temp = var.Split(new char[1] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (temp != null && temp.Count() > 1) return var;
                     bool f = var.Contains('f');
                     if (p && f) 
                         return (object)float.Parse(var);
