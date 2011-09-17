@@ -17,7 +17,7 @@ namespace LibOpenCraft.MajongProtocol
         public PlayerPosition()
             : base(PacketType.PlayerPosition)
         {
-            
+            ModuleHandler.InvokeAddModuleAddon(PacketType.PreMapChunkDone, OnPlayerPositionHandler);
         }
 
         public override void Start()
@@ -25,6 +25,24 @@ namespace LibOpenCraft.MajongProtocol
             base.Start();
             ModuleHandler.AddEventModule(PacketType.PlayerPosition, new ModuleCallback(OnPlayerPosition));
             base.RunModuleCache();
+        }
+
+        public void OnPlayerPositionHandler(PacketType p_type, string CustomPacketType, ref PacketReader _pReader, PacketHandler _p, ref ClientManager cm)
+        {
+            PlayerPositionPacket p = new PlayerPositionPacket(PacketType.PlayerPosition);
+            p.OnGround = cm._player.onGround;
+            p.Stance = cm._player.stance;
+            p.X = cm._player.position.X;
+            p.Y = cm._player.position.Y;
+            p.Z = cm._player.position.Z;
+            p.BuildPacket();
+            int i = 0;
+            for (; i < base.ModuleAddons.Count; i++)
+            {
+                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref cm);
+            }
+            cm.SendPacket(p, cm.id);
+            p = null;
         }
 
         public void OnPlayerPosition(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)

@@ -27,6 +27,7 @@ namespace LibOpenCraft.ChunkHandler
         {
             ModuleHandler.InvokeAddModuleAddon(PacketType.LoginRequest, LoginPreChunkHandler);
             ModuleHandler.AddEventModule(PacketType.PreChunk, OnPreChunkRequested);
+            base._ptype = PacketType.PreMapChunkDone;
         }
 
         public void OnPreChunkRequested(ref PacketReader packet_reader, PacketType p_type, ref ClientManager cm)
@@ -35,10 +36,16 @@ namespace LibOpenCraft.ChunkHandler
 
         public void LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
         {
+            base.RunModuleCache();
             _client = cm;
             _client.customAttributes.Add("InPrechunk", null);
             RunPreChunkInitialization();
-            
+            _client.customAttributes.Remove("InPrechunk");
+            int i = 0;
+            for (; i < base.ModuleAddons.Count; i++)
+            {
+                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, (PacketHandler)_p, ref cm);
+            }
         }
 
         public void RunPreChunkInitialization()
@@ -65,7 +72,6 @@ namespace LibOpenCraft.ChunkHandler
                     SendPreChunks(x, y, _cPacket);
                 }
             }
-            _client.customAttributes.Remove("InPrechunk");
         }
 
         public void SendPreChunks(int x, int y, ChunkPacket _chunkPacket)
