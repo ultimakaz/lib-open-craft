@@ -97,7 +97,7 @@ namespace LibOpenCraft.ChunkHandler
 
                 using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_COMPRESSION))
                 {
-                    for (int block_x = 0; block_x < 16; block_x++)
+                    /*for (int block_x = 0; block_x < 16; block_x++)
                     {
                         for (int block_z = 0; block_z < 16; block_z++)
                         {
@@ -160,6 +160,29 @@ namespace LibOpenCraft.ChunkHandler
                                 //compressor.Flush();
                             }
                         }
+                    }*/
+                    for (int i = 0; i < (16 * 16 * 128); i++)
+                    {
+                        compressor.WriteByte(Blocks.GetBlock(i, chunk).BlockID);
+                    }
+
+                    // Write MetaData
+                    for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+                    {
+                        compressor.WriteByte(((Blocks.GetBlock((i * 2) + 1, chunk).Metadata & 0x0F) << 4) | (Blocks.GetBlock((i * 2) + 0, chunk).Metadata & 0x0F));
+                    }
+
+                    // Write BlockLight
+                    for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+                    {
+                        compressor.WriteByte(0);
+                        compressor.WriteByte(((Blocks.GetBlock((i * 2) + 1, chunk).BlockLight & 0x0F) << 4) | (Blocks.GetBlock((i * 2) + 0, chunk).BlockLight & 0x0F));
+                    }
+
+                    // Write SkyLight
+                    for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+                    {
+                        compressor.WriteByte(((Blocks.GetBlock((i * 2) + 1, chunk).BlockSkyLight & 0x0F) << 4) | (Blocks.GetBlock((i * 2) + 0, chunk).BlockSkyLight & 0x0F));
                     }
                 }
                 return memStream.ToArray();
