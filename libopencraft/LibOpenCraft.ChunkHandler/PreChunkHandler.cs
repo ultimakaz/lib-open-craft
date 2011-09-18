@@ -90,77 +90,13 @@ namespace LibOpenCraft.ChunkHandler
 
         public byte[] MakeChunkArray(int _x, int _y)
         {
-            Chunk d_chunk = Blocks.GetChunkClass(_x / Blocks.c_size, _y / Blocks.c_size);
+            Chunk chunk = new Chunk((short)_x, (short)_y);
             byte[] chunk = d_chunk.Data;
             using (MemoryStream memStream = new MemoryStream())
             {
 
                 using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_COMPRESSION))
                 {
-                    /*for (int block_x = 0; block_x < 16; block_x++)
-                    {
-                        for (int block_z = 0; block_z < 16; block_z++)
-                        {
-                            for (int block_y = 0; block_y < 128; block_y++)
-                            {
-                                Block b1 = Blocks.GetBlock(new Vector3D(block_x, block_y, block_z), chunk);
-                                //Write Block Info
-                                compressor.WriteByte((byte)b1.BlockID);
-                                //compressor.Flush();
-                            }
-                        }
-                    }
-                    // divided by two
-                    for (int block_x = 0; block_x < 16 / 2; block_x++)
-                    {
-                        for (int block_z = 0; block_z < 16 / 2; block_z++)
-                        {
-                            for (int block_y = 0; block_y < 128 / 2; block_y++)
-                            {
-                                Block b2 = Blocks.GetBlock(new Vector3D((block_x * 2) + 0, (block_y * 2) + 0, (block_z * 2) + 0), chunk);
-                                //Write Block Info
-
-                                // Write MetaData
-                                byte metadata = b2.Metadata;
-                                compressor.WriteByte(metadata);
-                                //compressor.Flush();
-                            }
-                        }
-                    }
-
-                    // divided by two
-                    for (int block_x = 0; block_x < 16 / 2; block_x++)
-                    {
-                        for (int block_z = 0; block_z < 16 / 2; block_z++)
-                        {
-                            for (int block_y = 0; block_y < 128 / 2; block_y++)
-                            {
-                                Block b2 = Blocks.GetBlock(new Vector3D((block_x * 2) + 0, (block_y * 2) + 0, (block_z * 2) + 0), chunk);
-                                //Write Block Info
-                                byte blocklight = b2.BlockLight;
-                                // Write block light
-                                compressor.WriteByte(blocklight);
-                                //compressor.Flush();
-                            }
-                        }
-                    }
-                    for (int block_x = 0; block_x < 16 / 2; block_x++)
-                    {
-                        for (int block_z = 0; block_z < 16 / 2; block_z++)
-                        {
-                            for (int block_y = 0; block_y < 128 / 2; block_y++)
-                            {
-                                Block b2 = Blocks.GetBlock(new Vector3D(((block_x * _x) * 2) + 0, (block_y * 2) + 0, ((block_z * _y) * 2) + 0), chunk);
-                                //Write Block Info
-
-                                // Write skylight
-                                byte skylight = b2.BlockSkyLight;//(byte)((b1.BlockSkyLight << 4) | ((b2.BlockSkyLight) & 0x0F));
-
-                                compressor.WriteByte(skylight);
-                                //compressor.Flush();
-                            }
-                        }
-                    }*/
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
                         compressor.WriteByte(Blocks.GetBlock(i, chunk).BlockID);

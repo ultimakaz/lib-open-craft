@@ -31,7 +31,6 @@ namespace LibOpenCraft.MajongProtocol
 
         public void OnKeepAlive(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
-            if (_client.customAttributes.ContainsKey("InPrechunk")) return;
             if (!_client.customAttributes.ContainsKey("KeepAliveFirst"))
                 _client.customAttributes.Add("KeepAliveFirst", (object)false);
 
