@@ -37,9 +37,7 @@ namespace LibOpenCraft.MajongProtocol
             p.BuildPacket();
             _client.SendPacket(p, _client.id, true, _client);
             GridServer.player_list.Remove(_client.id);
-            _client._stream.Close();
             p = null;
-            _client.Stop(true);
         }
 
         public override void Stop()

@@ -44,54 +44,64 @@ namespace LibOpenCraft.ChunkHandler
             {
                 base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, (PacketHandler)_p, ref cm);
             }
+            SendChunks(4, 10);
         }
 
         public void RunPreChunkInitialization()
         {
             _client.PreChunkRan = 1;
-            int count = 10;
+            int count = 3;
             int x = 0;
             int y = 0;
             for (x = 0; x < count; x++)
             {
                 for (y = 0; y < count; y++)
                 {
-
-                    ChunkPacket _cPacket = new ChunkPacket();
-                    _cPacket.X = x * 16;
-                    _cPacket.Z = y * 16;
-                    _cPacket.SIZE_X = 15;
-                    _cPacket.SIZE_Y = 127;
-                    _cPacket.SIZE_Z = 15;
-                    byte[] chunk =  MakeChunkArray(x, y);
-                    _cPacket.Compressed_Size = chunk.Count();
-                    _cPacket.ChunkData = chunk;
-                    _cPacket.BuildPacket();
-                    chunk = null;
-                    SendPreChunks(x, y, _cPacket);
-                    _cPacket.ChunkData = null;
+                    GC.Collect();
+                    PreChunkPacket p = new PreChunkPacket(PacketType.PreChunk);
+                    p.x = x;
+                    p.y = y;
+                    p.load = 1;
+                    p.BuildPacket();
+                    _client.SendPacket(p, _client.id, false, null, true);
+                    //System.Threading.Thread.Sleep(5);
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id, false, null, true);
+                    GC.Collect();
+                }
+            }
+        }
+        public void SendChunks(int start, int amount)
+        {
+            int count = amount;
+            int x = start;
+            int y = start;
+            for (x = 0; x < count; x++)
+            {
+                for (y = 0; y < count; y++)
+                {
+                    GC.Collect();
+                    PreChunkPacket p = new PreChunkPacket(PacketType.PreChunk);
+                    p.x = x;
+                    p.y = y;
+                    p.load = 1;
+                    p.BuildPacket();
+                    _client.SendPacket(p, _client.id, false, null, true);
+                    //System.Threading.Thread.Sleep(5);
+                    
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id, false, null, (y >= count ? false : true));
+                    GC.Collect();
                 }
             }
         }
 
-        public void SendPreChunks(int x, int y, ChunkPacket _chunkPacket)
+        public ChunkPacket MakeChunkArray(int _x, int _y)
         {
-            GC.Collect();
-            PreChunkPacket p = new PreChunkPacket(PacketType.PreChunk);
-            p.x = x;
-            p.y = y;
-            p.load = 1;
-            p.BuildPacket();
-            _client.SendPacket(p, _client.id, false, null, true);
-            //System.Threading.Thread.Sleep(5);
-            _client.SendPacket(_chunkPacket, _client.id, false, null, true);
-            GC.Collect();
-        }
-
-        public byte[] MakeChunkArray(int _x, int _y)
-        {
-            Chunk chunk = new Chunk((short)_x, (short)_y);
-            byte[] chunk = d_chunk.Data;
+            ChunkPacket _cPacket = new ChunkPacket();
+            _cPacket.X = _x * 16;
+            _cPacket.Z = _y * 16;
+            _cPacket.SIZE_X = 15;
+            _cPacket.SIZE_Y = 127;
+            _cPacket.SIZE_Z = 15;
             using (MemoryStream memStream = new MemoryStream())
             {
 
@@ -99,30 +109,35 @@ namespace LibOpenCraft.ChunkHandler
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
-                        compressor.WriteByte(Blocks.GetBlock(i, chunk).BlockID);
+                        compressor.WriteByte(GridServer.chunks[new Vector2D(_x, _y)].GetBlocktype(i));
                     }
 
                     // Write MetaData
                     for (int i = 0; i < (16 * 16 * 128 / 2); i++)
                     {
-                        compressor.WriteByte(((Blocks.GetBlock((i * 2) + 1, chunk).Metadata & 0x0F) << 4) | (Blocks.GetBlock((i * 2) + 0, chunk).Metadata & 0x0F));
+                        compressor.WriteByte(((GridServer.chunks[new Vector2D(_x, _y)].GetData((i * 2) + 1) & 0x0F) << 4) | (GridServer.chunks[new Vector2D(_x, _y)].GetData((i * 2) + 0) & 0x0F));
                     }
 
                     // Write BlockLight
                     for (int i = 0; i < (16 * 16 * 128 / 2); i++)
                     {
-                        compressor.WriteByte(0);
-                        compressor.WriteByte(((Blocks.GetBlock((i * 2) + 1, chunk).BlockLight & 0x0F) << 4) | (Blocks.GetBlock((i * 2) + 0, chunk).BlockLight & 0x0F));
+                        compressor.WriteByte(((GridServer.chunks[new Vector2D(_x, _y)].GetBlockLight((i * 2) + 1) & 0x0F) << 4) | (GridServer.chunks[new Vector2D(_x, _y)].GetBlockLight((i * 2) + 0) & 0x0F));
                     }
 
                     // Write SkyLight
                     for (int i = 0; i < (16 * 16 * 128 / 2); i++)
                     {
-                        compressor.WriteByte(((Blocks.GetBlock((i * 2) + 1, chunk).BlockSkyLight & 0x0F) << 4) | (Blocks.GetBlock((i * 2) + 0, chunk).BlockSkyLight & 0x0F));
+                        compressor.WriteByte(((GridServer.chunks[new Vector2D(_x, _y)].GetSkyLight((i * 2) + 1) & 0x0F) << 4) | (GridServer.chunks[new Vector2D(_x, _y)].GetSkyLight((i * 2) + 0) & 0x0F));
                     }
                 }
-                return memStream.ToArray();
+                _cPacket.ChunkData = memStream.ToArray();
+                memStream.Flush();
+                memStream.Close();
+                memStream.Dispose();
             }
+            _cPacket.Compressed_Size = _cPacket.ChunkData.Count();
+            _cPacket.BuildPacket();
+            return _cPacket;
         }
         //
     }

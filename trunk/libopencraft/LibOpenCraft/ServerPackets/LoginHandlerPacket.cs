@@ -48,7 +48,7 @@ namespace LibOpenCraft.ServerPackets
             set;
         }
         /// <summary>
-        /// This has only been recored as 1, So far. I am pretty sure its unkown.
+        /// This has only been recored as 1 and 2, So far. I am pretty sure its unkown.
         /// </summary>
         public byte Unknown
         {

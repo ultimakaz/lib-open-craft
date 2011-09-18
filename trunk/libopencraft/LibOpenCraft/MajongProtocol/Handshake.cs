@@ -36,7 +36,6 @@ namespace LibOpenCraft.MajongProtocol
             HandshakePacket p = new HandshakePacket(PacketType.Handshake);
             p.ConnectionHash = (string)Config.Configuration["Handshake"];
             p.BuildPacket();
-            System.Threading.Thread.Sleep(10);
             _client.SendPacket(p, _client.id);
             try
             {

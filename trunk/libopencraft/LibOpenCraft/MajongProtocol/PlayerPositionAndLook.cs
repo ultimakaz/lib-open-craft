@@ -18,7 +18,7 @@ namespace LibOpenCraft.MajongProtocol
         public PlayerPositionAndLook()
             : base(PacketType.PlayerPositionLook)
         {
-            //ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerPosition, OnPlayerPositionLookHandler);// attach to PlayerPosition module
+            ModuleHandler.InvokeAddModuleAddon(PacketType.SpwanPosition, OnPlayerPositionLookHandler);// attach to PlayerPosition module
         }
 
         public override void Start()
