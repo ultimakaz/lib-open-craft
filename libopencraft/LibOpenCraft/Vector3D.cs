@@ -5,11 +5,11 @@ using System.Text;
 
 namespace LibOpenCraft
 {
-    public class Vector3D
+    public struct Vector3D
     {
-        public double X = new double();
-        public double Y = new double();
-        public double Z = new double();
+        public double X;
+        public double Y;
+        public double Z;
         public Vector3D(string value)
         {
             string temp = value.Substring(value.IndexOf("<") + 1, value.IndexOf(">") - 1);
@@ -52,6 +52,16 @@ namespace LibOpenCraft
         public override string ToString()
         {
             return (string)("<" + X + "," + Y + "," + Z + ">");
+        }
+    }
+    public struct Vector2D
+    {
+        public int X;
+        public int Z;
+        public Vector2D(int x, int z)
+        {
+            X = x;
+            Z = z;
         }
     }
 }

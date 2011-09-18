@@ -18,19 +18,19 @@ namespace LibOpenCraft.MajongProtocol
         public SpawnPlayer()
             : base(PacketType.SpwanPosition)
         {
-            //ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerPosition, OnSpwanPositionHandler);
+            ModuleHandler.InvokeAddModuleAddon(PacketType.PreMapChunkDone, OnSpwanPositionHandler);
         }
 
         public override void Start()
         {
             base.Start();
-            //ModuleHandler.AddEventModule(PacketType.SpwanPosition, new ModuleCallback(OnSpwanPosition));
+            ModuleHandler.AddEventModule(PacketType.SpwanPosition, new ModuleCallback(OnSpwanPosition));
             base.RunModuleCache();
         }
 
         public void OnSpwanPositionHandler(PacketType p_type, string CustomPacketType, ref PacketReader _pReader, PacketHandler _p, ref ClientManager cm)
         {
-            PlayerPositionPacket p = new PlayerPositionPacket(PacketType.SpwanPosition);
+            SpawnPlayerPacket p = new SpawnPlayerPacket(PacketType.SpwanPosition);
             p.X = cm._player.position.X;
             p.Y = cm._player.position.Z;
             p.Z = cm._player.position.Y;

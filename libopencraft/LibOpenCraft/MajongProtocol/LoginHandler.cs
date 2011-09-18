@@ -42,7 +42,7 @@ namespace LibOpenCraft.MajongProtocol
             p.MapSeed = 0;
             p.ServerMode = 1;
             p.Dimension = 0;
-            p.Unknown = 1;
+            p.Unknown = 2;
             p.WorldHeight = 128;
             p.MaxPlayers = (byte)(int)Config.Configuration["MaxPlayers"];
             p.BuildPacket();

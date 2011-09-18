@@ -8,5 +8,3 @@ Handshake=-
 Size_X=15
 Size_Y=127
 Size_Z=15
-WorldName=testworld
-WorldFolder=myworldsfolder

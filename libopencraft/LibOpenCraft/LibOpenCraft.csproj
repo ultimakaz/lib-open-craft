@@ -68,15 +68,6 @@
     <Compile Include="ClientPackets\LoginHandlerPacket.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="GridServer.cs" />
-    <Compile Include="loc_DataSet.cs">
-      <DependentUpon>loc_DataSet.xsd</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="loc_DataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>loc_DataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="MajongProtocol\ClientListener.cs" />
     <Compile Include="MajongProtocol\PlayerPositionAndLook.cs" />
     <Compile Include="MajongProtocol\PlayerPosition.cs" />
@@ -115,26 +106,12 @@
     <Content Include="config.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="libopencraft_db.sdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="World\temp.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="loc_DataSet.xsc">
-      <DependentUpon>loc_DataSet.xsd</DependentUpon>
-    </None>
-    <None Include="loc_DataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>loc_DataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="loc_DataSet.xss">
-      <DependentUpon>loc_DataSet.xsd</DependentUpon>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

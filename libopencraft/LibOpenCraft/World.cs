@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
-using LibOpenCraft.loc_DataSetTableAdapters;
 using NBT;
 
 namespace LibOpenCraft
 {
-    public static class World
+    public class World
     {
         public static void LoadWorld()
         {
-            int count = 50 / Blocks.c_size;
+            int count = 50;
             for (int x = 0; x < count; x++)
             {
                 for (int z = 0; z < count; z++)
                 {
                     GC.Collect();
-                    //Blocks.CreateChunk(x, z, 100);
+                    if (!GridServer.chunks.ContainsKey(new Vector2D(x, z)))
+                        GridServer.chunks.Add(new Vector2D(x, z), new Chunk((short)x, (short)z));
                     GC.Collect();
                 }
             }
@@ -51,7 +51,7 @@ namespace LibOpenCraft
             }
         }
 
-        public World World { get; internal set; }
+        public World World { get; set; }
         public Chunk Right { get; internal set; }
         public Chunk Left { get; internal set; }
         public Chunk Front { get; internal set; }
@@ -60,6 +60,60 @@ namespace LibOpenCraft
         public Chunk(short x, short z)
         {
             X = x; Z = z;
+            Blocks = new byte[16 * 16 * 128];
+            Data = new byte[(16 * 16 * 128) / 2];
+            BlockLight = new byte[(16 * 16 * 128) / 2];
+            SkyLight = new byte[(16 * 16 * 128) / 2];
+            HeightMap = new byte[256];
+            for (int block_x = 0; block_x < 16; block_x++)
+            {
+                for (int block_z = 0; block_z < 16; block_z++)
+                {
+                    for (int block_y = 0; block_y < 128; block_y++)
+                    {
+                        int i = GetIndex(block_x, block_y, block_z);
+                        if (block_y < 65)//Create Water
+                            SetBlocktype(i, 0x09);
+                        else if (block_y < 90)//Create Dirt
+                            SetBlocktype(i, 0x03);
+                        else if (block_y > 90)//Create Air
+                            SetBlocktype(i, 0x00);
+                    }
+                }
+            }
+
+            // Write MetaData
+            for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+            {
+                SetData(i * 2, 0x00);
+            }
+
+            // Write BlockLight
+            for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+            {
+                SetBlockLight(i * 2, 0x00);
+            }
+
+            // Write SkyLight
+            for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+            {
+                SetSkyLight(i * 2, 0x0FF);
+            }
+        }
+
+        public void CreateChunk()
+        {
+
+        }
+
+        public void SaveChunk()
+        {
+
+        }
+
+        public void LoadChunk()
+        {
+
         }
 
         public static Chunk Load(string path)
@@ -94,47 +148,93 @@ namespace LibOpenCraft
             z = (z % Height + Height) % Height;
             return x + z * Width;
         }
+
         public byte GetBlocktype(int x, int y, int z)
         {
             return Blocks[GetIndex(x, y, z)];
         }
+        public byte GetBlocktype(int index)
+        {
+            return Blocks[index];
+        }
+
         public void SetBlocktype(int x, int y, int z, byte type)
         {
             Blocks[GetIndex(x, y, z)] = type;
         }
+        public void SetBlocktype(int index, byte type)
+        {
+            Blocks[index] = type;
+        }
+
         public byte GetData(int x, int y, int z)
         {
             int index = GetIndex(x, y, z);
             if (index % 2 == 0) return (byte)(Data[index / 2] & 0xF);
             else return (byte)(Data[index / 2] >> 4);
         }
+        public byte GetData(int index)
+        {
+            if (index % 2 == 0) return (byte)(Data[index / 2] & 0xF);
+            else return (byte)(Data[index / 2] >> 4);
+        }
+
         public void SetData(int x, int y, int z, byte data)
         {
             int index = GetIndex(x, y, z);
             if (index % 2 == 0) Data[index / 2] = (byte)((Data[index / 2] & 0xF) | (data & 0x0F));
             else Data[index / 2] = (byte)((Data[index / 2] & 0x0F) | (data << 4));
         }
+        public void SetData(int index, byte data)
+        {
+            if (index % 2 == 0) Data[index / 2] = (byte)((Data[index / 2] & 0xF) | (data & 0x0F));
+            else Data[index / 2] = (byte)((Data[index / 2] & 0x0F) | (data << 4));
+        }
+
         public byte GetBlockLight(int x, int y, int z)
         {
             int index = GetIndex(x, y, z);
             if (index % 2 == 0) return (byte)(BlockLight[index / 2] & 0xF);
             else return (byte)(BlockLight[index / 2] >> 4);
         }
+        public byte GetBlockLight(int index)
+        {
+            if (index % 2 == 0) return (byte)(BlockLight[index / 2] & 0xF);
+            else return (byte)(BlockLight[index / 2] >> 4);
+        }
+
         public void SetBlockLight(int x, int y, int z, byte blockLight)
         {
             int index = GetIndex(x, y, z);
             if (index % 2 == 0) BlockLight[index / 2] = (byte)((BlockLight[index / 2] & 0xF) | (blockLight & 0x0F));
             else BlockLight[index / 2] = (byte)((BlockLight[index / 2] & 0x0F) | (blockLight << 4));
         }
+        public void SetBlockLight(int index, byte blockLight)
+        {
+            if (index % 2 == 0) BlockLight[index / 2] = (byte)((BlockLight[index / 2] & 0xF) | (blockLight & 0x0F));
+            else BlockLight[index / 2] = (byte)((BlockLight[index / 2] & 0x0F) | (blockLight << 4));
+        }
+
         public byte GetSkyLight(int x, int y, int z)
         {
             int index = GetIndex(x, y, z);
             if (index % 2 == 0) return (byte)(SkyLight[index / 2] & 0xF);
             else return (byte)(SkyLight[index / 2] >> 4);
         }
+        public byte GetSkyLight(int index)
+        {
+            if (index % 2 == 0) return (byte)(SkyLight[index / 2] & 0xF);
+            else return (byte)(SkyLight[index / 2] >> 4);
+        }
+
         public void SetSkyLight(int x, int y, int z, byte skyLight)
         {
             int index = GetIndex(x, y, z);
+            if (index % 2 == 0) SkyLight[index / 2] = (byte)((SkyLight[index / 2] & 0xF) | (skyLight & 0x0F));
+            else SkyLight[index / 2] = (byte)((SkyLight[index / 2] & 0x0F) | (skyLight << 4));
+        }
+        public void SetSkyLight(int index, byte skyLight)
+        {
             if (index % 2 == 0) SkyLight[index / 2] = (byte)((SkyLight[index / 2] & 0xF) | (skyLight & 0x0F));
             else SkyLight[index / 2] = (byte)((SkyLight[index / 2] & 0x0F) | (skyLight << 4));
         }
