@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.IO.Compression;
 using LibOpenCraft.loc_DataSetTableAdapters;
+using NBT;
 
 namespace LibOpenCraft
 {
@@ -18,12 +19,189 @@ namespace LibOpenCraft
                 for (int z = 0; z < count; z++)
                 {
                     GC.Collect();
-                    Blocks.CreateChunk(x, z, 100);
+                    //Blocks.CreateChunk(x, z, 100);
                     GC.Collect();
                 }
             }
         }
     }
+    public class Chunk
+    {
+        public const int Width = 16;
+        public const int Depth = 128;
+        public const int Height = 16;
+
+        bool _cached1, _cached2;
+
+        public short X { get; private set; }
+        public short Z { get; private set; }
+        public byte[] Blocks { get; set; }
+        public byte[] Data { get; set; }
+        public byte[] BlockLight { get; set; }
+        public byte[] SkyLight { get; set; }
+        public byte[] HeightMap { get; set; }
+
+        public bool Cached
+        {
+            get { return _cached1 && _cached2; }
+            set
+            {
+                _cached1 = value;
+                _cached2 = value;
+            }
+        }
+
+        public World World { get; internal set; }
+        public Chunk Right { get; internal set; }
+        public Chunk Left { get; internal set; }
+        public Chunk Front { get; internal set; }
+        public Chunk Back { get; internal set; }
+
+        public Chunk(short x, short z)
+        {
+            X = x; Z = z;
+        }
+
+        public static Chunk Load(string path)
+        {
+            Tag tag = Tag.Load(path);
+            return Chunk.Load(tag["Level"]);
+        }
+        public static Chunk Load(Tag tag)
+        {
+            short x = (short)(int)tag["xPos"];
+            short z = (short)(int)tag["zPos"];
+            Chunk chunk = new Chunk(x, z);
+            chunk.Blocks = (byte[])tag["Blocks"];
+            chunk.Data = (byte[])tag["Data"];
+            chunk.BlockLight = (byte[])tag["BlockLight"];
+            chunk.SkyLight = (byte[])tag["SkyLight"];
+            chunk.HeightMap = (byte[])tag["HeightMap"];
+            return chunk;
+        }
+
+        #region Manipulation
+        static int GetIndex(int x, int y, int z)
+        {
+            x = (x % Width + Width) % Width;
+            y = (y % Depth + Depth) % Depth;
+            z = (z % Height + Height) % Height;
+            return x * Depth * Height + y + z * Depth;
+        }
+        static int GetIndex(int x, int z)
+        {
+            x = (x % Width + Width) % Width;
+            z = (z % Height + Height) % Height;
+            return x + z * Width;
+        }
+        public byte GetBlocktype(int x, int y, int z)
+        {
+            return Blocks[GetIndex(x, y, z)];
+        }
+        public void SetBlocktype(int x, int y, int z, byte type)
+        {
+            Blocks[GetIndex(x, y, z)] = type;
+        }
+        public byte GetData(int x, int y, int z)
+        {
+            int index = GetIndex(x, y, z);
+            if (index % 2 == 0) return (byte)(Data[index / 2] & 0xF);
+            else return (byte)(Data[index / 2] >> 4);
+        }
+        public void SetData(int x, int y, int z, byte data)
+        {
+            int index = GetIndex(x, y, z);
+            if (index % 2 == 0) Data[index / 2] = (byte)((Data[index / 2] & 0xF) | (data & 0x0F));
+            else Data[index / 2] = (byte)((Data[index / 2] & 0x0F) | (data << 4));
+        }
+        public byte GetBlockLight(int x, int y, int z)
+        {
+            int index = GetIndex(x, y, z);
+            if (index % 2 == 0) return (byte)(BlockLight[index / 2] & 0xF);
+            else return (byte)(BlockLight[index / 2] >> 4);
+        }
+        public void SetBlockLight(int x, int y, int z, byte blockLight)
+        {
+            int index = GetIndex(x, y, z);
+            if (index % 2 == 0) BlockLight[index / 2] = (byte)((BlockLight[index / 2] & 0xF) | (blockLight & 0x0F));
+            else BlockLight[index / 2] = (byte)((BlockLight[index / 2] & 0x0F) | (blockLight << 4));
+        }
+        public byte GetSkyLight(int x, int y, int z)
+        {
+            int index = GetIndex(x, y, z);
+            if (index % 2 == 0) return (byte)(SkyLight[index / 2] & 0xF);
+            else return (byte)(SkyLight[index / 2] >> 4);
+        }
+        public void SetSkyLight(int x, int y, int z, byte skyLight)
+        {
+            int index = GetIndex(x, y, z);
+            if (index % 2 == 0) SkyLight[index / 2] = (byte)((SkyLight[index / 2] & 0xF) | (skyLight & 0x0F));
+            else SkyLight[index / 2] = (byte)((SkyLight[index / 2] & 0x0F) | (skyLight << 4));
+        }
+        public byte GetHeightMap(int x, int z)
+        {
+            return HeightMap[GetIndex(x, z)];
+        }
+        public void SetHeightMap(int x, int z, byte heightMap)
+        {
+            HeightMap[GetIndex(x, z)] = heightMap;
+        }
+        #endregion
+
+        #region Render
+        /*public void Render(bool cache)
+        {
+            if (_cached1 || (_displayList1.Cached && !cache))
+                _displayList1.Call();
+            else if (cache)
+            {
+                _displayList1.Begin();
+                GL.Begin(BeginMode.Quads);
+                for (int x = 0; x < Width; ++x)
+                    for (int y = 0; y < Depth; ++y)
+                        for (int z = 0; z < Height; ++z)
+                        {
+                            Blocktype type = GetBlocktype(x, y, z);
+                            if (type == Blocktype.Air ||
+                                type == Blocktype.Water ||
+                                type == Blocktype.StillWater ||
+                                type == Blocktype.Ice) continue;
+                            BlocktypeInfo info = BlocktypeInfo.Find(type);
+                            BlockRenderer.Render(this, info, x, y, z);
+                        }
+                GL.End();
+                _displayList1.End();
+                _cached1 = true;
+            }
+        }
+
+        public void RenderTransparent(bool cache)
+        {
+            if (_cached2 || (_displayList2.Cached && !cache))
+                _displayList2.Call();
+            else if (cache)
+            {
+                _displayList2.Begin();
+                GL.Begin(BeginMode.Quads);
+                for (int x = 0; x < Width; ++x)
+                    for (int y = 0; y < Depth; ++y)
+                        for (int z = 0; z < Height; ++z)
+                        {
+                            Blocktype type = GetBlocktype(x, y, z);
+                            if (type != Blocktype.Water &&
+                                type != Blocktype.StillWater &&
+                                type != Blocktype.Ice) continue;
+                            BlocktypeInfo info = BlocktypeInfo.Find(type);
+                            BlockRenderer.Render(this, info, x, y, z);
+                        }
+                GL.End();
+                _displayList2.End();
+                _cached2 = true;
+            }
+        }*/
+        #endregion
+    }
+    /* Horrible implementation of minecraft chunks
     public static class Blocks
     {
 
@@ -63,7 +241,7 @@ namespace LibOpenCraft
                 /*
                  * block sizes plus short length of double short aka length of the block data 
                  * then double aka Vector3D the rest block data.
-                 */
+                 *
                 temp.Data = new byte[(64 * 64 * 512) * c_size];
                 return temp;
             }
@@ -145,6 +323,10 @@ namespace LibOpenCraft
         {
             int index = GetIndex(v3);
             byte[] data = new byte[4] { Chunk[(index * c_size)], Chunk[(index * c_size) + 1], Chunk[(index * c_size) + 2], Chunk[(index * c_size) + 3] };
+            if (GetIndex(v3) % 2 == 0)
+                data[index / 2] = data[index / 2] & 0x0F | (data << 4);
+            else
+                data[index / 2] = data[index / 2] & 0xF0 | (data & 0x0F); 
             data.CopyTo(Chunk, index * 2);
             data = null;
         }
@@ -163,8 +345,10 @@ namespace LibOpenCraft
                 {
                     for (int block_y = 0; block_y < 128; block_y++)
                     {
-                        if (block_y < height)
+                        if (block_y < height && block_y > 64)
                             t_chunk = CreateBlock(new Vector3D(block_x, block_y, block_z), t_chunk, 0x03);
+                        else if (block_y < 64)
+                            t_chunk = CreateBlock(new Vector3D(block_x, block_y, block_z), t_chunk, 0x09);
                         else
                             t_chunk = CreateBlock(new Vector3D(block_x, block_y, block_z), t_chunk);
                     }
@@ -180,10 +364,7 @@ namespace LibOpenCraft
             Block b = new Block(v3);
             byte[] block = new byte[4] { Default, BlockHelper.GetMetaData(Default), 0x0F, 0x0F };
             block.CopyTo(Chunk.Data, s_index * c_size);
-            //blk.BlockID = Chunk[v_len + 3];
-            //blk.Metadata = Chunk[v_len + 4];
-            //blk.BlockLight = Chunk[v_len + 5];
-            //blk.BlockSkyLight = Chunk[v_len + 6];
+
             block = null;
             return Chunk;
         }
@@ -241,5 +422,5 @@ namespace LibOpenCraft
                     return 0x00;
             }
         }
-    }
+    }*/
 }

@@ -155,7 +155,7 @@ namespace LibOpenCraft
                     }
                     else
                     {
-                        if (keep_alive.Second + 1 < DateTime.Now.Second && !_recieveClient.customAttributes.ContainsKey("InPrechunk"))
+                        if (keep_alive.Second + 1 < DateTime.Now.Second)
                         {
                             LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
                             p.AddInt(id);
