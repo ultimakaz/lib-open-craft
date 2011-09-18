@@ -17,107 +17,15 @@ namespace LibOpenCraft
         private CompositionContainer _container;
 
         #region Player data networking code
-        public static Dictionary<int, ClientManager> players = new Dictionary<int, ClientManager>();
+        public static Dictionary<int, ClientManager> player_list = new Dictionary<int, ClientManager>();
 
-        public static int NewPlayer(TcpClient client)
-        {
-            int count = GridServer.InvokeCountPlayer();
-            GridServer.InvokeAddPlayer(count, new ClientManager(client));
-            players[count].id = count;
-            return players[count].id;
-        }
-        public static int InvokeCountPlayer()
-        {
-            Assembly _Assemblies = Assembly.GetAssembly(GridServer.players.GetType());
-            Type _Type = GridServer.players.GetType();
-
-            // Get the desired method we want from the target type.
-            PropertyInfo _MethodInfo = null;
-            try
-            {
-                _MethodInfo = _Type.GetProperty("Count");
-            }
-            catch (Exception ex)
-            {
-                return -1;
-            }
-            return (int)_MethodInfo.GetValue(GridServer.players, null);
-        }
-        public static bool InvokeContainsKeyPlayer(int id)
-        {
-            Assembly _Assemblies = Assembly.GetAssembly(GridServer.players.GetType());
-            Type _Type = GridServer.players.GetType();
-
-            // Get the desired method we want from the target type.
-            MethodInfo _MethodInfo = null;
-            try
-            {
-                _MethodInfo = _Type.GetMethod("ContainsKey");
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-            return (bool)_MethodInfo.Invoke(GridServer.players, new object[1] { ((object)id) });
-        }
-        public static void InvokeAddPlayer(int id, ClientManager cm)
-        {
-            Assembly _Assemblies = Assembly.GetAssembly(GridServer.players.GetType());
-            Type _Type = GridServer.players.GetType();
-
-            // Get the desired method we want from the target type.
-            MethodInfo _MethodInfo = null;
-            try
-            {
-                _MethodInfo = _Type.GetMethod("Add");
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
-            _MethodInfo.Invoke(GridServer.players, new object[2] { ((object)id), (object)cm });
-        }
-        public static void InvokeRemovePlayer(int id)
-        {
-            Assembly _Assemblies = Assembly.GetAssembly(GridServer.players.GetType());
-            Type _Type = GridServer.players.GetType();
-
-            // Get the desired method we want from the target type.
-            MethodInfo _MethodInfo = null;
-            try
-            {
-                _MethodInfo = _Type.GetMethod("Remove");
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
-            _MethodInfo.Invoke(GridServer.players, new object[1] { ((object)id) });
-        }
-
-        public static ClientManager InvokeGetPlayer(int id)
-        {
-            if (InvokeContainsKeyPlayer(id))
-            {
-                return GridServer.players[id];
-            }
-            else
-                return null;
-        }
 
         #endregion Player data networking code
         public GridServer()
         {
             Config.InitializeSettings();
+            World.LoadWorld();
             SetupModules();
-            if (System.IO.File.Exists(AppDomain.CurrentDomain.BaseDirectory + "World\\" + "level.dat"))
-            {
-                World.LoadWorld();
-            }
-            else
-            {
-                World.GenerateWorld();
-            }
         }
         public void SetupModules()
         {

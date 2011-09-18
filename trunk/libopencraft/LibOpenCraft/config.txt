@@ -2,6 +2,11 @@
 ServerDescription=LibOpenCraft test server
 MaxPlayers=100
 Port=25565
-IPAddress=127.0.0.1
+IPAddress=192.168.1.5
 ServerMode=1
 Handshake=+
+Size_X=15
+Size_Y=127
+Size_Z=15
+WorldName=testworld
+WorldFolder=myworldsfolder

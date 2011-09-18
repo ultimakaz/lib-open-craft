@@ -51,16 +51,18 @@ namespace LibOpenCraft.MajongProtocol
         {
             if (IAR.AsyncState == (object)"New Connection")
             {
-                int id = GridServer.NewPlayer(_listener.EndAcceptTcpClient(IAR));
-                if (GridServer.InvokeContainsKeyPlayer(id))
+                Random r = new Random();
+                
+                int id;
+                while(GridServer.player_list.ContainsKey((id = r.Next(0, 1024)))) Thread.Sleep(1);
+                GridServer.player_list.Add(id, new ClientManager(_listener.EndAcceptTcpClient(IAR), id));
+                if (GridServer.player_list.ContainsKey(id))
                 {
 
                 }
                 else
                 {
-                    ClientManager cm = GridServer.players[-1];
-                    GridServer.players.Remove(-1);
-                    GridServer.players.Add(id, cm);
+
                 }
             }
         }

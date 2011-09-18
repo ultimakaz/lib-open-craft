@@ -36,12 +36,12 @@ namespace LibOpenCraft.MajongProtocol
             p.Y = cm._player.position.Z;
             p.Z = cm._player.position.Y;
             p.BuildPacket();
+            cm.SendPacket(p, cm.id);
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
-                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref cm);
+                base.ModuleAddons.ElementAt(i).Value(PacketType.PlayerPosition, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref cm);
             }
-            cm.SendPacket(p, cm.id);
             p = null;
         }
 
@@ -54,12 +54,12 @@ namespace LibOpenCraft.MajongProtocol
             p.Y = _client._player.position.Z;
             p.Z = _client._player.position.Y;
             p.BuildPacket();
+            _client.SendPacket(p, _client.id);
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
                 base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref _client);
             }
-            _client.SendPacket(p, _client.id);
             p = null;
         }
 

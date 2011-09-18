@@ -38,11 +38,17 @@ namespace LibOpenCraft.MajongProtocol
             p.BuildPacket();
             System.Threading.Thread.Sleep(10);
             _client.SendPacket(p, _client.id);
-
-            int i = 0;
-            for (; i < base.ModuleAddons.Count; i++)
+            try
             {
-                base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref _client);
+                int i = 0;
+                for (; i < base.ModuleAddons.Count; i++)
+                {
+                    base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref _client);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR: " + e.Message);
             }
             p = null;
             #endregion Building Packet

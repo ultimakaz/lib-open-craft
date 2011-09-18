@@ -478,24 +478,33 @@ namespace LibOpenCraft
         }
         public void RunModuleCache()
         {
-            int count = ModuleHandler.InvokeGetModuleAddonCount();
-            int i = 0;
-            for (; i < count; i++)
+            try
             {
-                object[] obj_temp = ModuleHandler.InvokeGetModuleAddon(i, true);
-                string key = (string)obj_temp[0];
-                string[] split_key = key.Split(new char[1] { '_' }, StringSplitOptions.RemoveEmptyEntries);
-                if (split_key[0] == _ptype.ToString())
+                int count = ModuleHandler.InvokeGetModuleAddonCount();
+                int i = 0;
+                for (; i < count; i++)
                 {
-                    obj_temp = ModuleHandler.InvokeGetModuleAddon(i, false);
-                    key = (string)obj_temp[0];
-                    ModuleAddonCallback mac = (ModuleAddonCallback)obj_temp[1];
-                    ModuleAddons.Add(key, mac);
-                }
-                else
-                {
+                    object[] obj_temp = ModuleHandler.InvokeGetModuleAddon(i, true);
+                    string key = (string)obj_temp[0];
+                    string[] split_key = key.Split(new char[1] { '_' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (split_key[0] == _ptype.ToString())
+                    {
+                        obj_temp = ModuleHandler.InvokeGetModuleAddon(i, false);
+                        key = (string)obj_temp[0];
+                        ModuleAddonCallback mac = (ModuleAddonCallback)obj_temp[1];
+                        if (ModuleAddons.ContainsKey(key))
+                            ModuleAddons.Remove(key);
+                        ModuleAddons.Add(key, mac);
+                    }
+                    else
+                    {
 
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("ERROR: " + e.Message);
             }
         }
     }

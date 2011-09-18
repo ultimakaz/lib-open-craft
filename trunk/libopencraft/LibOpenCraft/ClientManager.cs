@@ -30,10 +30,11 @@ namespace LibOpenCraft
 
         private ClientManager _recieveClient;
 
-        public ClientManager(TcpClient client)
+        public ClientManager(TcpClient client, int _id)
         {
             try
             {
+                id = _id;
                 _client = client;
                 _stream = client.GetStream();
                 recieve_async = new AsyncCallback(AsyncResult_recieve);
@@ -89,9 +90,9 @@ namespace LibOpenCraft
             try
             {
                 byte[] t_byte = p.GetBytes();
-                if (GridServer.InvokeContainsKeyPlayer(id) && PingType == false)
+                if (GridServer.player_list.ContainsKey(id) && PingType == false)
                 {
-                    ClientManager cm = GridServer.InvokeGetPlayer(id);
+                    ClientManager cm = GridServer.player_list[id];
                     cm._stream.Write(t_byte, 0, t_byte.Length);
                     cm._stream.Flush();
                     WaitToRead = Waitread;
@@ -121,12 +122,15 @@ namespace LibOpenCraft
                 _client.Close();
                 Stop(true);
                 Console.WriteLine("ERROR: " + e.Message);
-                GridServer.InvokeRemovePlayer(id);
+                Random r = new Random();
+                GridServer.player_list.Remove(id);
             }
         }
         protected void Recieve(object obj)
         {
             _recieveClient = (ClientManager)obj;
+            if (!_recieveClient._stream.CanRead) new Exception();
+            if (!_recieveClient._client.Connected == true) new Exception();
             PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(_recieveClient._stream));
             bool connected = true;
             while (connected == true)
@@ -151,13 +155,14 @@ namespace LibOpenCraft
                     }
                     else
                     {
-                        if (_recieveClient.WaitToRead == false && keep_alive.Second > DateTime.Now.Second + 1 && !_recieveClient.customAttributes.ContainsKey("InPrechunk"))
+                        if (keep_alive.Second + 1 < DateTime.Now.Second && !_recieveClient.customAttributes.ContainsKey("InPrechunk"))
                         {
                             LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
                             p.AddInt(id);
                             SendPacket(p, id);
                             p = null;
                             keep_alive = DateTime.Now;
+                            _recieveClient.WaitToRead = false;
                         }
                         if (_player.name == "")
                             Thread.Sleep(10);
@@ -172,7 +177,7 @@ namespace LibOpenCraft
                     if (_recieveClient._client != null)
                         _recieveClient._client.Close();
                     _recieveClient.Stop(true);
-                    GridServer.InvokeRemovePlayer(id);
+                    GridServer.player_list.Remove(id);
                     Console.WriteLine("ERROR: " + e.Message);
                 }
             }
