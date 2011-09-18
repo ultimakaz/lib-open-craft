@@ -33,10 +33,10 @@ namespace LibOpenCraft.MajongProtocol
             ServerListPingPacket p = new ServerListPingPacket();
             p.NumberOfSlots = (int)Config.Configuration["MaxPlayers"];
             p.ServerDescription = (string)Config.Configuration["ServerDescription"];
-            p.NumberOfUsers = GridServer.players.Count;
+            p.NumberOfUsers = GridServer.player_list.Count;
             p.BuildPacket();
             _client.SendPacket(p, _client.id, true, _client);
-            GridServer.players.Remove(_client.id);
+            GridServer.player_list.Remove(_client.id);
             _client._stream.Close();
             p = null;
             _client.Stop(true);

@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Substrate;
-
 namespace LibOpenCraft
 {
     public class PlayerClass
     {
         public Dictionary<string, object> customerVariables;
         public string name;
-        public Vector3 position;
+        public Vector3D position;
         public double stance;
         public int onGround;
 
@@ -25,10 +23,10 @@ namespace LibOpenCraft
             name = "";
             stance = 0;
             onGround = 1;
-            position = new Vector3();
-            position.X = 20.0;
-            position.Y = 20.0;
-            position.Z = 128.0;
+            position = new Vector3D(0.0, 80, 0.0);
+            position.X = 50.0;
+            position.Y = 50.0;
+            position.Z = 127.0;
             customerVariables = new Dictionary<string, object>();
             CurrentSlot = 0;
         }

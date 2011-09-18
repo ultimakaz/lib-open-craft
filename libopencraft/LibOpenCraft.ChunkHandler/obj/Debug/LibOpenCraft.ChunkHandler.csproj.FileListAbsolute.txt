@@ -12,3 +12,4 @@ C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\LibOpe
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.dll
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\libopencraft_db.sdf
