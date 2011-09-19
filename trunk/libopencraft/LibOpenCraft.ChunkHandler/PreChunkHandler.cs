@@ -44,18 +44,9 @@ namespace LibOpenCraft.ChunkHandler
             {
                 base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, (PacketHandler)_p, ref cm);
             }
-            System.Threading.Thread.Sleep(1000);
+
             SendChunks(4, 5);
             #region SendSpawn
-            int index = 0;
-            try
-            {
-                index = Chunk.GetIndex((int)_client._player.position.X / 16, (int)_client._player.position.Y / 16);
-            }
-            catch (Exception)
-            {
-
-            }
             NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
             EntitySpawn.X = (int)cm._player.position.X;
             EntitySpawn.Y = (int)cm._player.position.Y;
@@ -66,7 +57,7 @@ namespace LibOpenCraft.ChunkHandler
             EntitySpawn.Pitch = (byte)cm._player.Pitch;
             EntitySpawn.Rotation = (byte)cm._player.stance;
             EntitySpawn.BuildPacket();
-            int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
+            int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
 
             lock (GridServer.player_list.Values)
             {

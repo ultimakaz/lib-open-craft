@@ -74,6 +74,7 @@
     <Compile Include="MajongProtocol\CloseWindow.cs" />
     <Compile Include="MajongProtocol\CreativeInventoryAction.cs" />
     <Compile Include="MajongProtocol\EntityAction.cs" />
+    <Compile Include="MajongProtocol\EntityTeleportPacket.cs" />
     <Compile Include="MajongProtocol\PlayerBlockPlacement.cs" />
     <Compile Include="MajongProtocol\PlayerDigging.cs" />
     <Compile Include="MajongProtocol\PlayerProtocol.cs" />
