@@ -8,7 +8,7 @@ namespace LibOpenCraft
 {
     public delegate void ModuleCallback(ref PacketReader packet_reader, PacketType p_type, ref ClientManager cm);
 
-    public delegate void ModuleAddonCallback(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler p, ref ClientManager cm);
+    public delegate PacketHandler ModuleAddonCallback(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler p, ref ClientManager cm);
 
     public static class ModuleHandler
     {

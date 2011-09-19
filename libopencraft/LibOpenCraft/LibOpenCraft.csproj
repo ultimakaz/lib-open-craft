@@ -68,10 +68,15 @@
     <Compile Include="ClientPackets\LoginHandlerPacket.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="GridServer.cs" />
+    <Compile Include="MajongProtocol\Animation.cs" />
     <Compile Include="MajongProtocol\BlockChange.cs" />
     <Compile Include="MajongProtocol\ClientListener.cs" />
+    <Compile Include="MajongProtocol\CreativeInventoryAction.cs" />
+    <Compile Include="MajongProtocol\EntityAction.cs" />
+    <Compile Include="MajongProtocol\PlayerBlockPlacement.cs" />
+    <Compile Include="MajongProtocol\PlayerDigging.cs" />
+    <Compile Include="MajongProtocol\PlayerProtocol.cs" />
     <Compile Include="MajongProtocol\PlayerPositionAndLook.cs" />
-    <Compile Include="MajongProtocol\PlayerPosition.cs" />
     <Compile Include="MajongProtocol\ServerListPing.cs" />
     <Compile Include="MajongProtocol\Handshake.cs" />
     <Compile Include="MajongProtocol\KeepAlive.cs" />
@@ -85,8 +90,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ServerPackets\AnimationPacket.cs" />
     <Compile Include="ServerPackets\BlockChangePacket.cs" />
     <Compile Include="ServerPackets\ChunkPacket.cs" />
+    <Compile Include="ServerPackets\EntityMetadataPacket.cs" />
+    <Compile Include="ServerPackets\PlayerBlockPlacementPacket.cs" />
+    <Compile Include="ServerPackets\PlayerDiggingPacket.cs" />
     <Compile Include="ServerPackets\PlayerPositionAndLookPacket.cs" />
     <Compile Include="ServerPackets\PlayerPositionPacket.cs" />
     <Compile Include="ServerPackets\PreChunkPacket.cs" />

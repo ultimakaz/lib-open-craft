@@ -28,7 +28,7 @@ namespace LibOpenCraft.MajongProtocol
             base.RunModuleCache();
         }
 
-        public void OnSpwanPositionHandler(PacketType p_type, string CustomPacketType, ref PacketReader _pReader, PacketHandler _p, ref ClientManager cm)
+        public PacketHandler OnSpwanPositionHandler(PacketType p_type, string CustomPacketType, ref PacketReader _pReader, PacketHandler _p, ref ClientManager cm)
         {
             SpawnPlayerPacket p = new SpawnPlayerPacket(PacketType.SpwanPosition);
             p.X = cm._player.position.X;
@@ -42,6 +42,7 @@ namespace LibOpenCraft.MajongProtocol
                 base.ModuleAddons.ElementAt(i).Value(PacketType.SpwanPosition, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref cm);
             }
             p = null;
+            return _p;
         }
 
         public void OnSpwanPosition(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)

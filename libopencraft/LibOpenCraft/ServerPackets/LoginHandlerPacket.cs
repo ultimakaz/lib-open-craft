@@ -72,7 +72,8 @@ namespace LibOpenCraft.ServerPackets
             set;
         }
         public override bool BuildPacket()
-        {
+        {  //[int('protoVersion'), 
+            //str16('username'), long(/*seed*/), int(/*mode*/), byte(/*world*/), byte(), ubyte(/*height*/), ubyte(/*maxPlayers*/)]
             this.AddInt(EntityID);
             this.AddString(NotUsed);
             if (MapSeed != -2)
