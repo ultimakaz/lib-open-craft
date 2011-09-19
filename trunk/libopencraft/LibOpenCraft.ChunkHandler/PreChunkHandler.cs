@@ -166,6 +166,7 @@ namespace LibOpenCraft.ChunkHandler
                         compressor.WriteByte((byte)(((GridServer.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (GridServer.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
                     }
                 }
+                System.Threading.Thread.Sleep(1);
                 _cPacket.ChunkData = memStream.ToArray();
                 memStream.Flush();
                 memStream.Close();
