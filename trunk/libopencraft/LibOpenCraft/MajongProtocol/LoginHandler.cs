@@ -33,16 +33,30 @@ namespace LibOpenCraft.MajongProtocol
 
         public void OnLoginRequest(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
+            //[int('protoVersion'), 
+            //str16('username'), 
+            //long(/*seed*/), 
+            //int(/*mode*/), 
+            //byte(/*world*/), 
+            //byte(), 
+            //ubyte(/*height*/), 
+            //ubyte(/*maxPlayers*/)]
             int version = _pReader.ReadInt();
             string username = _pReader.ReadString();
+            long seed = _pReader.ReadLong();
+            int mode = _pReader.ReadInt();
+            byte world = _pReader.ReadByte();
+            _pReader.ReadByte();//nothing
+            byte height = _pReader.ReadByte();
+            byte maxPlayers = _pReader.ReadByte();
             #region Login Handler Packet
             LoginHandlerPacket p = new LoginHandlerPacket(pt);
             p.EntityID = _client.id;
             p.NotUsed = "";
             p.MapSeed = 0;
-            p.ServerMode = 1;
+            p.ServerMode = (int)Config.Configuration["ServerMode"];
             p.Dimension = 0;
-            p.Unknown = 2;
+            p.Unknown = 1;
             p.WorldHeight = 128;
             p.MaxPlayers = (byte)(int)Config.Configuration["MaxPlayers"];
             p.BuildPacket();

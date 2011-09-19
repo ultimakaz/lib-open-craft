@@ -32,7 +32,7 @@ namespace LibOpenCraft.ChunkHandler
         {
         }
 
-        public void LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
+        public PacketHandler LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
         {
             base.RunModuleCache();
             _client = cm;
@@ -44,7 +44,9 @@ namespace LibOpenCraft.ChunkHandler
             {
                 base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, (PacketHandler)_p, ref cm);
             }
-            SendChunks(4, 30);
+            System.Threading.Thread.Sleep(1000);
+            SendChunks(4, 5);
+            return _p;
         }
 
         public void RunPreChunkInitialization()
@@ -63,9 +65,9 @@ namespace LibOpenCraft.ChunkHandler
                     p.y = y;
                     p.load = 1;
                     p.BuildPacket();
-                    _client.SendPacket(p, _client.id, false, null, true);
+                    _client.SendPacket(p, _client.id);
                     //System.Threading.Thread.Sleep(5);
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id, false, null, true);
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id);
                     GC.Collect();
                 }
             }
@@ -88,7 +90,7 @@ namespace LibOpenCraft.ChunkHandler
                     _client.SendPacket(p, _client.id, false, null, true);
                     //System.Threading.Thread.Sleep(5);
                     
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id, false, null, (y >= count ? false : true));
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id);
                     GC.Collect();
                 }
             }

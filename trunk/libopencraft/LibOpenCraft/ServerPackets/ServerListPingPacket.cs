@@ -27,7 +27,7 @@ namespace LibOpenCraft.ServerPackets
 
         public override bool BuildPacket()
         {
-            this.AddString(ServerDescription + "§" + NumberOfUsers + "§" + NumberOfSlots);
+            this.AddString(ServerDescription + "§" + NumberOfUsers + "§" + NumberOfSlots + "§");
             return true;
         }
 

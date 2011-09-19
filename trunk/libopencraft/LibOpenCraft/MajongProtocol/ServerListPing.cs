@@ -24,6 +24,7 @@ namespace LibOpenCraft.MajongProtocol
         {
             base.Start();
             ModuleHandler.AddEventModule(PacketType.ServerListPing, new ModuleCallback(OnServerListPing));
+            ModuleHandler.AddEventModule(PacketType.ServerListPingBack, new ModuleCallback(OnDisconnect));
             base.RunModuleCache();
         }
 
@@ -33,11 +34,18 @@ namespace LibOpenCraft.MajongProtocol
             ServerListPingPacket p = new ServerListPingPacket();
             p.NumberOfSlots = (int)Config.Configuration["MaxPlayers"];
             p.ServerDescription = (string)Config.Configuration["ServerDescription"];
-            p.NumberOfUsers = GridServer.player_list.Count;
+            p.NumberOfUsers = GridServer.player_list.Count - 1;
             p.BuildPacket();
             _client.SendPacket(p, _client.id, true, _client);
             GridServer.player_list.Remove(_client.id);
             p = null;
+        }
+
+        public void OnDisconnect(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
+        {
+            GridServer.player_list[_client.id]._stream.Close();
+            GridServer.player_list.Remove(_client.id);
+            _client.Stop(true);
         }
 
         public override void Stop()
