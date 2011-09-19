@@ -94,6 +94,8 @@
     <Compile Include="ServerPackets\BlockChangePacket.cs" />
     <Compile Include="ServerPackets\ChunkPacket.cs" />
     <Compile Include="ServerPackets\EntityMetadataPacket.cs" />
+    <Compile Include="ServerPackets\EntityRelativeMovePacket.cs" />
+    <Compile Include="ServerPackets\NamedEntitySpawnPacket.cs" />
     <Compile Include="ServerPackets\PlayerBlockPlacementPacket.cs" />
     <Compile Include="ServerPackets\PlayerDiggingPacket.cs" />
     <Compile Include="ServerPackets\PlayerPositionAndLookPacket.cs" />

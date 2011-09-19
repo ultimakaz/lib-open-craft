@@ -46,6 +46,45 @@ namespace LibOpenCraft.ChunkHandler
             }
             System.Threading.Thread.Sleep(1000);
             SendChunks(4, 5);
+            #region SendSpawn
+            int index = 0;
+            try
+            {
+                index = Chunk.GetIndex((int)_client._player.position.X / 16, (int)_client._player.position.Y / 16);
+            }
+            catch (Exception)
+            {
+
+            }
+            NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
+            EntitySpawn.X = (int)cm._player.position.X;
+            EntitySpawn.Y = (int)cm._player.position.Y;
+            EntitySpawn.Z = (int)cm._player.position.Z;
+            EntitySpawn.EntityID = cm.id;
+            EntitySpawn.PlayerName = cm._player.name;
+            EntitySpawn.CurrentItem = cm._player.Current_Item;
+            EntitySpawn.Pitch = (byte)(int)cm._player.Pitch;
+            EntitySpawn.Rotation = (byte)(int)cm._player.stance;
+            EntitySpawn.BuildPacket();
+            int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
+
+
+            foreach (ClientManager remote_client in GridServer.player_list.Values)// unsafeif a player joins or leaves
+            {
+                NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
+                t_EntitySpawn.X = (int)remote_client._player.position.X;
+                t_EntitySpawn.Y = (int)remote_client._player.position.Y;
+                t_EntitySpawn.Z = (int)remote_client._player.position.Z;
+                t_EntitySpawn.EntityID = remote_client.id;
+                t_EntitySpawn.PlayerName = remote_client._player.name;
+                t_EntitySpawn.CurrentItem = remote_client._player.Current_Item;
+                t_EntitySpawn.Pitch = (byte)(int)remote_client._player.Pitch;
+                t_EntitySpawn.Rotation = (byte)(int)remote_client._player.stance;
+                t_EntitySpawn.BuildPacket();
+                cm.SendPacket(t_EntitySpawn, remote_client.id);
+                remote_client.SendPacket(EntitySpawn, remote_client.id);
+            }
+            #endregion SendSpawn
             return _p;
         }
 

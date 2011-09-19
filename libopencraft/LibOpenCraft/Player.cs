@@ -7,6 +7,9 @@ namespace LibOpenCraft
 {
     public class PlayerClass
     {
+        public int[] inventory = new int[368];//contains amount left
+        public short Current_Item = 0x00;
+        public short Current_Slot = 9;
         public Dictionary<string, object> customerVariables;
         public string name;
         public Vector3D position;
