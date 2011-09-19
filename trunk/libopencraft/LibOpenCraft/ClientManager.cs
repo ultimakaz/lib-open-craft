@@ -22,7 +22,7 @@ namespace LibOpenCraft
         #endregion Misc Variables
         #region Networking and Threading
         public NetworkStream _stream;
-        protected TcpClient _client;
+        public TcpClient _client;
         private Thread recieved;
         private ParameterizedThreadStart recieve_start;
         private AsyncCallback recieve_async;
@@ -40,7 +40,7 @@ namespace LibOpenCraft
                 recieve_async = new AsyncCallback(AsyncResult_recieve);
                 recieve_start = new ParameterizedThreadStart(Recieve);
                 recieved = new Thread(recieve_start);
-                customAttributes.Add("PayLoad", null);
+                customAttributes.Add("PayLoad", id);
                 _player.customerVariables.Add("BeforeFirstPosition", null);
                 if (recieved == null) recieved = new Thread(recieve_start);
                 recieved.Start(id);
@@ -123,7 +123,7 @@ namespace LibOpenCraft
             {
                 _stream.Close();
                 _client.Close();
-                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source);
+                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
                 Random r = new Random();
                 GridServer.player_list.Remove(id);
                 Stop(true);
@@ -154,13 +154,14 @@ namespace LibOpenCraft
                         _recieveClient.Stop(true);
                         break;
                     }
-                    if (_recieveClient.WaitToRead == false && _recieveClient._stream != null && !_recieveClient.customAttributes.ContainsKey("InPrechunk") && _recieveClient._client.Available > 0)
+                    if (_recieveClient._stream != null && !_recieveClient.customAttributes.ContainsKey("InPrechunk") && _recieveClient._client.Available > 0)
                     {
+                        System.Threading.Thread.Sleep(1);
                         _recieveClient.WaitToRead = true;
                         PacketType p_type = (PacketType)p_reader.ReadByte();
                         if (ModuleHandler.Eventmodules.ContainsKey(p_type))
                         {
-                            ModuleHandler.Eventmodules[p_type](ref p_reader, p_type, ref _recieveClient);
+                            ModuleHandler.Eventmodules[p_type].Invoke(ref p_reader, p_type, ref _recieveClient);
                             _recieveClient.WaitToRead = false;
                         }
                         else
@@ -172,7 +173,7 @@ namespace LibOpenCraft
                         if (_recieveClient._stream != null && DateTime.Now.Minute > _recieveClient.keep_alive.Minute || _recieveClient.keep_alive.Second + 1 < DateTime.Now.Second)
                         {
                             Random r = new Random(1789);
-                            _recieveClient.customAttributes["PayLoad"] = r.Next(1024, 4096);
+                            _recieveClient.customAttributes["PayLoad"] = (object)r.Next(1024, 4096);
                             LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
                             p.ID = (int)_recieveClient.customAttributes["PayLoad"];
                             p.BuildPacket();
@@ -203,7 +204,7 @@ namespace LibOpenCraft
                     if (_recieveClient._client != null)
                         _recieveClient._client.Close();
                     GridServer.player_list.Remove(id);
-                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source);
+                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
                     _recieveClient.Stop(true);
                     break;
                 }

@@ -13,6 +13,7 @@ namespace LibOpenCraft
         public Dictionary<string, object> customerVariables;
         public string name;
         public Vector3D position;
+        public Vector3D rel_position;
         public double stance;
         public byte onGround;
 
@@ -26,9 +27,9 @@ namespace LibOpenCraft
             name = "";
             stance = 0;
             onGround = 0x01;
-            position = new Vector3D(0.0, 8, 0.0);
+            position = new Vector3D(0.0, 92, 0.0);
             position.X = 15.0;
-            position.Y = 127.0;
+            position.Y = 92.0;
             position.Z = 15.0;
             customerVariables = new Dictionary<string, object>();
             CurrentSlot = 0;
