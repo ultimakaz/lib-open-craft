@@ -71,6 +71,7 @@
     <Compile Include="MajongProtocol\Animation.cs" />
     <Compile Include="MajongProtocol\BlockChange.cs" />
     <Compile Include="MajongProtocol\ClientListener.cs" />
+    <Compile Include="MajongProtocol\CloseWindow.cs" />
     <Compile Include="MajongProtocol\CreativeInventoryAction.cs" />
     <Compile Include="MajongProtocol\EntityAction.cs" />
     <Compile Include="MajongProtocol\PlayerBlockPlacement.cs" />
