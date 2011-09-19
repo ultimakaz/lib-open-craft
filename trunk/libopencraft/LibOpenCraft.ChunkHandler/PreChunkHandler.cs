@@ -85,7 +85,7 @@ namespace LibOpenCraft.ChunkHandler
                     if (cm.id != remote_client.id)
                         cm.SendPacket(t_EntitySpawn, remote_client.id);
                     if (cm.id != remote_client.id)
-                    GridServer.player_list[remote_client.id].SendPacket(EntitySpawn, remote_client.id);
+                    remote_client.SendPacket(EntitySpawn, remote_client.id);
                 }
             }
             #endregion SendSpawn
@@ -102,7 +102,6 @@ namespace LibOpenCraft.ChunkHandler
             {
                 for (y = 0; y < count; y++)
                 {
-                    GC.Collect();
                     PreChunkPacket p = new PreChunkPacket(PacketType.PreChunk);
                     p.x = x;
                     p.y = y;
@@ -124,7 +123,6 @@ namespace LibOpenCraft.ChunkHandler
             {
                 for (y = 0; y < count; y++)
                 {
-                    GC.Collect();
                     PreChunkPacket p = new PreChunkPacket(PacketType.PreChunk);
                     p.x = x;
                     p.y = y;
@@ -151,7 +149,7 @@ namespace LibOpenCraft.ChunkHandler
             using (MemoryStream memStream = new MemoryStream())
             {
 
-                using (ZOutputStream compressor = new ZOutputStream(memStream, zlibConst.Z_BEST_COMPRESSION))
+                using (ZOutputStream compressor = new ZOutputStream(memStream, zlibConst.Z_BEST_SPEED))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
