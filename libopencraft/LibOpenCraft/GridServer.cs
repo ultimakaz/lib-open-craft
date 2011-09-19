@@ -16,7 +16,8 @@ namespace LibOpenCraft
     {
         private CompositionContainer _container;
 
-        public static Dictionary<Vector2D, Chunk> chunks = new Dictionary<Vector2D, Chunk>();
+        public static List<Chunk> chunk_b = new List<Chunk>();
+        public static Chunk[] chunks;
         #region Player data networking code
         public static Dictionary<int, ClientManager> player_list = new Dictionary<int, ClientManager>();
 

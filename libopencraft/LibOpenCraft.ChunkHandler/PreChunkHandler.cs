@@ -44,7 +44,7 @@ namespace LibOpenCraft.ChunkHandler
             {
                 base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, (PacketHandler)_p, ref cm);
             }
-            SendChunks(4, 10);
+            SendChunks(4, 30);
         }
 
         public void RunPreChunkInitialization()
@@ -102,34 +102,37 @@ namespace LibOpenCraft.ChunkHandler
             _cPacket.SIZE_X = 15;
             _cPacket.SIZE_Y = 127;
             _cPacket.SIZE_Z = 15;
+            int index = Chunk.GetIndex(_x, _y);
             using (MemoryStream memStream = new MemoryStream())
             {
 
-                using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_COMPRESSION))
+                using (ZOutputStream compressor = new ZOutputStream(memStream, zlibConst.Z_BEST_SPEED))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
-                        compressor.WriteByte(GridServer.chunks[new Vector2D(_x, _y)].GetBlocktype(i));
+                        compressor.WriteByte(GridServer.chunks[Chunk.GetIndex(_x, _y)].GetBlocktype(i));
                     }
 
                     // Write MetaData
-                    for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+                    for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        compressor.WriteByte(((GridServer.chunks[new Vector2D(_x, _y)].GetData((i * 2) + 1) & 0x0F) << 4) | (GridServer.chunks[new Vector2D(_x, _y)].GetData((i * 2) + 0) & 0x0F));
+                        //System.Threading.Thread.Sleep(1);
+                        compressor.WriteByte((byte)(((GridServer.chunks[index].GetData((i) + 1) & 0x0F) << 4) | (GridServer.chunks[index].GetData((i) + 0) & 0x0F)));
                     }
 
                     // Write BlockLight
-                    for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+                    for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        compressor.WriteByte(((GridServer.chunks[new Vector2D(_x, _y)].GetBlockLight((i * 2) + 1) & 0x0F) << 4) | (GridServer.chunks[new Vector2D(_x, _y)].GetBlockLight((i * 2) + 0) & 0x0F));
+                        compressor.WriteByte((byte)(((GridServer.chunks[index].GetBlockLight((i) + 1) & 0x0F) << 4) | (GridServer.chunks[index].GetBlockLight((i) + 0) & 0x0F)));
                     }
 
                     // Write SkyLight
-                    for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+                    for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        compressor.WriteByte(((GridServer.chunks[new Vector2D(_x, _y)].GetSkyLight((i * 2) + 1) & 0x0F) << 4) | (GridServer.chunks[new Vector2D(_x, _y)].GetSkyLight((i * 2) + 0) & 0x0F));
+                        compressor.WriteByte((byte)(((GridServer.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (GridServer.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
                     }
                 }
+                System.Threading.Thread.Sleep(1);
                 _cPacket.ChunkData = memStream.ToArray();
                 memStream.Flush();
                 memStream.Close();

@@ -129,8 +129,12 @@ namespace LibOpenCraft
         }
         protected void Recieve(object obj)
         {
-            int id = (int)obj;
-            _recieveClient = GridServer.player_list[id];
+            int _id = (int)obj;
+            if (!GridServer.player_list.ContainsKey(_id))
+                _id = this.id;
+            if (!GridServer.player_list.ContainsKey(_id))
+                return;
+            _recieveClient = GridServer.player_list[_id];
             PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(_recieveClient._stream));
             bool connected = true;
             while (connected == true)
