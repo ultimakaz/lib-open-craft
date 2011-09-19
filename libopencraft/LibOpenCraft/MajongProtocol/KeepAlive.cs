@@ -31,13 +31,31 @@ namespace LibOpenCraft.MajongProtocol
 
         public void OnKeepAlive(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
-            if (_pReader.ReadInt() != (int)_client.customAttributes["PayLoad"])
+            if (_client._client == null || _client._client.Connected == false)
             {
+                if (GridServer.player_list.ContainsKey(_client.id))
+                {
+                    GridServer.player_list.Remove(_client.id);
+                    _client.Stop(true);
+                }
+            }
+            if (_client.customAttributes.ContainsKey("PayLoad"))
+            {
+                if (_client.customAttributes["PayLoad"] == null)
+                    _pReader.ReadInt();
+                else if (_pReader.ReadInt() != (int)_client.customAttributes["PayLoad"])
+                {
 
+                }
+                else
+                {
+
+                }
             }
             else
             {
-                
+                _client.customAttributes.Add("PayLoad", (object)_pReader.ReadInt());
+
             }
             
         }

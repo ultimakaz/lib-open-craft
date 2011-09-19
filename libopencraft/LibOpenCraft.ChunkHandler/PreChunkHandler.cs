@@ -24,7 +24,7 @@ namespace LibOpenCraft.ChunkHandler
             : base()
         {
             ModuleHandler.InvokeAddModuleAddon(PacketType.LoginRequest, LoginPreChunkHandler);
-            ModuleHandler.AddEventModule(PacketType.PreChunk, OnPreChunkRequested);
+            //ModuleHandler.AddEventModule(PacketType.PreChunk, OnPreChunkRequested);
             base._ptype = PacketType.PreMapChunkDone;
         }
 
@@ -42,43 +42,54 @@ namespace LibOpenCraft.ChunkHandler
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
-                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, (PacketHandler)_p, ref cm);
+                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, _p, ref cm);
             }
 
-            SendChunks(4, 5);
+            //SendChunks(11, 13);
             #region SendSpawn
             NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-            EntitySpawn.X = (int)cm._player.position.X;
-            EntitySpawn.Y = (int)cm._player.position.Y;
-            EntitySpawn.Z = (int)cm._player.position.Z;
+            EntitySpawn.X = (int)Math.Abs(Math.Round(cm._player.position.X));
+            EntitySpawn.Y = (int)Math.Abs(Math.Round(cm._player.position.Y));
+            EntitySpawn.Z = (int)Math.Abs(Math.Round(cm._player.position.Z));
             EntitySpawn.EntityID = cm.id;
             EntitySpawn.PlayerName = cm._player.name;
             EntitySpawn.CurrentItem = cm._player.Current_Item;
             EntitySpawn.Pitch = (byte)cm._player.Pitch;
             EntitySpawn.Rotation = (byte)cm._player.stance;
             EntitySpawn.BuildPacket();
-            int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
-
+            //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
+            System.Threading.Thread.Sleep(1);
+            ClientManager[] player;
             lock (GridServer.player_list.Values)
             {
-                foreach (ClientManager remote_client in GridServer.player_list.Values)// unsafeif a player joins or leaves
-                {
-                    NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-                    t_EntitySpawn.X = (int)remote_client._player.position.X;
-                    t_EntitySpawn.Y = (int)remote_client._player.position.Y;
-                    t_EntitySpawn.Z = (int)remote_client._player.position.Z;
-                    t_EntitySpawn.EntityID = remote_client.id;
-                    t_EntitySpawn.PlayerName = remote_client._player.name;
-                    t_EntitySpawn.CurrentItem = remote_client._player.Current_Item;
-                    t_EntitySpawn.Pitch = (byte)(int)remote_client._player.Pitch;
-                    t_EntitySpawn.Rotation = (byte)(int)remote_client._player.stance;
-                    t_EntitySpawn.BuildPacket();
-                    if (cm.id != remote_client.id)
-                        cm.SendPacket(t_EntitySpawn, remote_client.id);
-                    if (cm.id != remote_client.id)
-                    remote_client.SendPacket(EntitySpawn, remote_client.id);
-                }
+                player = GridServer.player_list.Values.ToArray();
             }
+            foreach (ClientManager remote_client in player)// unsafeif a player joins or leaves
+            {
+                if (cm._client == null || cm._client.Connected == false)
+                {
+                    if (GridServer.player_list.ContainsKey(cm.id))
+                    {
+                        cm.Stop(true);
+                        GridServer.player_list.Remove(cm.id);
+                    }
+                }
+                NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
+                t_EntitySpawn.X = (int)Math.Abs(Math.Round(remote_client._player.position.X));
+                t_EntitySpawn.Y = (int)Math.Abs(Math.Round(remote_client._player.position.Y));
+                t_EntitySpawn.Z = (int)Math.Abs(Math.Round(remote_client._player.position.Z));
+                t_EntitySpawn.EntityID = remote_client.id;
+                t_EntitySpawn.PlayerName = remote_client._player.name;
+                t_EntitySpawn.CurrentItem = remote_client._player.Current_Item;
+                t_EntitySpawn.Pitch = (byte)(int)remote_client._player.Pitch;
+                t_EntitySpawn.Rotation = (byte)(int)remote_client._player.stance;
+                t_EntitySpawn.BuildPacket();
+                if (cm.id != remote_client.id)
+                    cm.SendPacket(t_EntitySpawn, cm.id);
+                if (cm.id != remote_client.id)
+                    remote_client.SendPacket(EntitySpawn, remote_client.id);
+            }
+
             #endregion SendSpawn
             return _p;
         }
@@ -86,7 +97,7 @@ namespace LibOpenCraft.ChunkHandler
         public void RunPreChunkInitialization()
         {
             _client.PreChunkRan = 1;
-            int count = 3;
+            int count = 10;
             int x = 0;
             int y = 0;
             for (x = 0; x < count; x++)
@@ -140,7 +151,7 @@ namespace LibOpenCraft.ChunkHandler
             using (MemoryStream memStream = new MemoryStream())
             {
 
-                using (ZOutputStream compressor = new ZOutputStream(memStream, zlibConst.Z_BEST_SPEED))
+                using (ZOutputStream compressor = new ZOutputStream(memStream, zlibConst.Z_BEST_COMPRESSION))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
@@ -166,7 +177,6 @@ namespace LibOpenCraft.ChunkHandler
                         compressor.WriteByte((byte)(((GridServer.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (GridServer.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
                     }
                 }
-                System.Threading.Thread.Sleep(1);
                 _cPacket.ChunkData = memStream.ToArray();
                 memStream.Flush();
                 memStream.Close();
