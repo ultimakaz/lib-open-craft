@@ -12,17 +12,20 @@ namespace LibOpenCraft
     {
         public static void LoadWorld()
         {
-            int count = 50;
+            int count = 20;
+            
             for (int x = 0; x < count; x++)
             {
                 for (int z = 0; z < count; z++)
                 {
                     GC.Collect();
-                    if (!GridServer.chunks.ContainsKey(new Vector2D(x, z)))
-                        GridServer.chunks.Add(new Vector2D(x, z), new Chunk((short)x, (short)z));
+                    GridServer.chunk_b.Add(new Chunk((short)x, (short)z));
                     GC.Collect();
                 }
             }
+            GridServer.chunks = new Chunk[GridServer.chunk_b.Count];
+            GridServer.chunks = GridServer.chunk_b.ToArray();
+            GridServer.chunk_b.Clear();
         }
     }
     public class Chunk
@@ -76,28 +79,49 @@ namespace LibOpenCraft
                             SetBlocktype(i, 0x09);
                         else if (block_y < 90)//Create Dirt
                             SetBlocktype(i, 0x03);
-                        else if (block_y > 90)//Create Air
+                        else if (block_y >= 91)//Create Air
                             SetBlocktype(i, 0x00);
                     }
                 }
             }
 
             // Write MetaData
-            for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+            for (int block_x = 0; block_x < 16; block_x++)
             {
-                SetData(i * 2, 0x00);
+                for (int block_z = 0; block_z < 16; block_z++)
+                {
+                    for (int block_y = 0; block_y < 128; block_y++)
+                    {
+                        int i = GetIndex(block_x, block_y, block_z);
+                        SetData(i, 0x00);
+                    }
+                }
             }
 
             // Write BlockLight
-            for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+            for (int block_x = 0; block_x < 16; block_x++)
             {
-                SetBlockLight(i * 2, 0x00);
+                for (int block_z = 0; block_z < 16; block_z++)
+                {
+                    for (int block_y = 0; block_y < 128; block_y++)
+                    {
+                        int i = GetIndex(block_x, block_y, block_z);
+                        SetBlockLight(i, 0x0F);
+                    }
+                }
             }
 
             // Write SkyLight
-            for (int i = 0; i < (16 * 16 * 128 / 2); i++)
+            for (int block_x = 0; block_x < 16; block_x++)
             {
-                SetSkyLight(i * 2, 0x0FF);
+                for (int block_z = 0; block_z < 16; block_z++)
+                {
+                    for (int block_y = 0; block_y < 128; block_y++)
+                    {
+                        int i = GetIndex(block_x, block_y, block_z);
+                        SetSkyLight(i, 0x00F);
+                    }
+                }
             }
         }
 
@@ -135,14 +159,14 @@ namespace LibOpenCraft
         }
 
         #region Manipulation
-        static int GetIndex(int x, int y, int z)
+        public static int GetIndex(int x, int y, int z)
         {
             x = (x % Width + Width) % Width;
             y = (y % Depth + Depth) % Depth;
             z = (z % Height + Height) % Height;
             return x * Depth * Height + y + z * Depth;
         }
-        static int GetIndex(int x, int z)
+        public static int GetIndex(int x, int z)
         {
             x = (x % Width + Width) % Width;
             z = (z % Height + Height) % Height;

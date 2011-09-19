@@ -68,6 +68,7 @@
     <Compile Include="ClientPackets\LoginHandlerPacket.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="GridServer.cs" />
+    <Compile Include="MajongProtocol\BlockChange.cs" />
     <Compile Include="MajongProtocol\ClientListener.cs" />
     <Compile Include="MajongProtocol\PlayerPositionAndLook.cs" />
     <Compile Include="MajongProtocol\PlayerPosition.cs" />
@@ -84,6 +85,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ServerPackets\BlockChangePacket.cs" />
     <Compile Include="ServerPackets\ChunkPacket.cs" />
     <Compile Include="ServerPackets\PlayerPositionAndLookPacket.cs" />
     <Compile Include="ServerPackets\PlayerPositionPacket.cs" />
