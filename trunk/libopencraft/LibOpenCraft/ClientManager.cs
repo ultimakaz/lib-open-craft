@@ -84,12 +84,12 @@ namespace LibOpenCraft
         {
             recieved.Start(id);
         }
-        public void SendPacket(PacketHandler p, int id, ref ClientManager cm, bool PingType = false, bool Waitread = false)
+        public void SendPacket(PacketHandler p, int id, ref ClientManager cm, bool PingType, bool Waitread)
         {
             try
             {
                 byte[] t_byte = p.GetBytes();
-                if (PingType == false)
+                if (PingType == null || PingType == false)
                 {
                     cm._stream.Write(t_byte, 0, t_byte.Length);
                     cm._stream.Flush();
@@ -178,7 +178,7 @@ namespace LibOpenCraft
                             LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
                             p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
                             p.BuildPacket();
-                            SendPacket(p, id, ref GridServer.player_list[_id]);
+                            SendPacket(p, id, ref GridServer.player_list[_id], false, false);
                         }
                     }
                     else
@@ -201,7 +201,7 @@ namespace LibOpenCraft
                                         LibOpenCraft.ServerPackets.EntityPacket e = new LibOpenCraft.ServerPackets.EntityPacket(PacketType.Entity);
                                         e.EntityID = id;
                                         e.BuildPacket();
-                                        player[i].SendPacket(e, player[i].id, ref player[i]);
+                                        player[i].SendPacket(e, player[i].id, ref player[i], false, false);
                                         GridServer.player_list[_id]._player.EntityUpdateCount++;
                                     }
                                 }

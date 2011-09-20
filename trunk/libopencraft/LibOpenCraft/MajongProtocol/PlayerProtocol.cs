@@ -131,7 +131,7 @@ namespace LibOpenCraft.MajongProtocol
                             teleport.Pitch = (byte)_client._player.Pitch;
                             teleport.BuildPacket();
                             _client._player.position /= 32;
-                            GridServer.player_list[player[i].id].SendPacket(teleport, player[i].id, ref player[i]);
+                            GridServer.player_list[player[i].id].SendPacket(teleport, player[i].id, ref player[i], false, false);
                             _client._player.fullPositionUpdateCounter = 0;
                         }
                         else
@@ -144,7 +144,7 @@ namespace LibOpenCraft.MajongProtocol
                             move.Z = (byte)t.Abs(t).Z;
                             move.EntityID = _client.id;
                             move.BuildPacket();
-                            GridServer.player_list[player[i].id].SendPacket(move, player[i].id, ref player[i]);
+                            GridServer.player_list[player[i].id].SendPacket(move, player[i].id, ref player[i], false, false);
                             _client._player.fullPositionUpdateCounter++;
                         }
                     }
@@ -159,7 +159,7 @@ namespace LibOpenCraft.MajongProtocol
                         teleport.Yaw = (byte)_client._player.Yaw;
                         teleport.Pitch = (byte)_client._player.Pitch;
                         teleport.BuildPacket();
-                        GridServer.player_list[player[i].id].SendPacket(teleport, player[i].id, ref player[i]);
+                        GridServer.player_list[player[i].id].SendPacket(teleport, player[i].id, ref player[i], false, false);
                         _client._player.fullPositionUpdateCounter = 0;
                     }
                 }

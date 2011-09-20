@@ -48,7 +48,7 @@ namespace LibOpenCraft.Chat
                     {
                         PacketHandler ChatMessage = new PacketHandler(PacketType.ChatMessage);
                         ChatMessage.AddString(_client._player.name + ": " + message);
-                        player[i].SendPacket(ChatMessage, player[i].id, ref player[i]);
+                        player[i].SendPacket(ChatMessage, player[i].id, ref player[i], false, false);
                     }
                 }
             }

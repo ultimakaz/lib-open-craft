@@ -57,7 +57,7 @@ namespace LibOpenCraft.MajongProtocol
             {
                 PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
                 kick.AddString("Server has kicked you for illegal packet!!");
-                _client.SendPacket(kick, _client.id, ref _client);
+                _client.SendPacket(kick, _client.id, ref _client, false, false);
             }
             block_change.X = X;
             block_change.Y = Y;
@@ -92,7 +92,7 @@ namespace LibOpenCraft.MajongProtocol
                 else
                 {
                     if (player[i]._client != null && player[i]._client.Connected == true)
-                        player[i].SendPacket(block_change, player[i].id, ref player[i]);
+                        player[i].SendPacket(block_change, player[i].id, ref player[i], false, false);
                     else if (player[i]._client == null || player[i]._client.Connected == false)
                     {
 
@@ -161,7 +161,7 @@ namespace LibOpenCraft.MajongProtocol
                     else
                     {
                         if (player[i]._client != null && player[i]._client.Connected == true)
-                            player[i].SendPacket(block_change, player[i].id, ref player[i]);
+                            player[i].SendPacket(block_change, player[i].id, ref player[i], false, false);
                         else if (player[i]._client == null || player[i]._client.Connected == false)
                         {
 
@@ -184,7 +184,7 @@ namespace LibOpenCraft.MajongProtocol
                     else
                     {
                         if (player[i]._client != null && player[i]._client.Connected == true)
-                            player[i].SendPacket(block_change, player[i].id, ref player[i]);
+                            player[i].SendPacket(block_change, player[i].id, ref player[i], false, false);
                         else if (player[i]._client == null || player[i]._client.Connected == false)
                         {
 

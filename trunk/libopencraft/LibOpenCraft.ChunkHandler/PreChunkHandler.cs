@@ -87,9 +87,9 @@ namespace LibOpenCraft.ChunkHandler
                         t_EntitySpawn.Rotation = (byte)(int)player[i]._player.stance;
                         t_EntitySpawn.BuildPacket();
                         if (cm.id != player[i].id)
-                            cm.SendPacket(t_EntitySpawn, cm.id, ref cm);
+                            cm.SendPacket(t_EntitySpawn, cm.id, ref cm, false, false);
                         if (cm.id != player[i].id)
-                            player[i].SendPacket(EntitySpawn, player[i].id, ref player[i]);
+                            player[i].SendPacket(EntitySpawn, player[i].id, ref player[i], false, false);
                     }
                 }
             }
@@ -113,9 +113,9 @@ namespace LibOpenCraft.ChunkHandler
                     p.y = y;
                     p.load = 1;
                     p.BuildPacket();
-                    _client.SendPacket(p, _client.id, ref _client);
+                    _client.SendPacket(p, _client.id, ref _client, false, false);
                     //System.Threading.Thread.Sleep(5);
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client);
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client, false, false);
                     //GC.Collect();
                 }
             }
@@ -134,10 +134,10 @@ namespace LibOpenCraft.ChunkHandler
                     p.y = y;
                     p.load = 1;
                     p.BuildPacket();
-                    _client.SendPacket(p, _client.id, ref _client);
+                    _client.SendPacket(p, _client.id, ref _client, false, false);
                     //System.Threading.Thread.Sleep(5);
-                    
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client);
+
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client, false, false);
                     //GC.Collect();
                 }
             }
