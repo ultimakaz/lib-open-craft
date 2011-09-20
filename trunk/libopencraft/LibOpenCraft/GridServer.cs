@@ -58,7 +58,8 @@ namespace LibOpenCraft
         {
             #region Module Container Loading
             List<ComposablePartCatalog> compose = new List<ComposablePartCatalog>();
-            AssemblyCatalog assemblyCatalog = new AssemblyCatalog(Assembly.GetEntryAssembly());
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            AssemblyCatalog assemblyCatalog = new AssemblyCatalog(assembly);
             DirectoryCatalog directoryCatalog = new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, "LibOpenCraft.*.dll");
             #region Make Catalog
             compose.Add(assemblyCatalog);
