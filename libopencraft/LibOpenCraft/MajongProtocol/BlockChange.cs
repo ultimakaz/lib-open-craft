@@ -49,20 +49,24 @@ namespace LibOpenCraft.MajongProtocol
             {
                 index = Chunk.GetIndex(X / 16, Z / 16);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
             }
-            
+            if (_p.BlockID == (byte)255)
+            {
+                PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
+                kick.AddString("Server has kicked you for illegal packet!!");
+                _client.SendPacket(kick, _client.id, ref _client);
+            }
             block_change.X = X;
             block_change.Y = Y;
             block_change.Z = Z;
-            block_change.BlockType = _p.BlockID;
+            block_change.BlockType = (byte)_p.BlockID;
             block_change.Metadata = 0x00;
             block_change.BuildPacket();
-
-            #region Login Handler Packet
-
+            System.Threading.Thread.Sleep(3);
+            #region Login Handler Packet;
             try
             {
                 int i = 0;
@@ -73,22 +77,25 @@ namespace LibOpenCraft.MajongProtocol
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR: " + e.Message);
+                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
             }
 
             GridServer.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
             GridServer.chunks[index].SetData(X, Y, Z, block_change.Metadata);
-            ClientManager[] player = GridServer.player_list.Values.ToArray();
-            foreach (ClientManager cm in player)
+            ClientManager[] player = GridServer.player_list;
+            for (int i = 0; i < player.Length; i++)
             {
-                if (cm._client != null && cm._client.Connected == true)
-                    cm.SendPacket(block_change, cm.id);
-                else if (cm._client == null || cm._client.Connected == false)
+                if (player[i] == null)
                 {
-                    if (GridServer.player_list.ContainsKey(cm.id))
+
+                }
+                else
+                {
+                    if (player[i]._client != null && player[i]._client.Connected == true)
+                        player[i].SendPacket(block_change, player[i].id, ref player[i]);
+                    else if (player[i]._client == null || player[i]._client.Connected == false)
                     {
-                        cm.Stop(true);
-                        GridServer.player_list.Remove(cm.id);
+
                     }
                 }
             }
@@ -107,9 +114,9 @@ namespace LibOpenCraft.MajongProtocol
             {
                 index = Chunk.GetIndex(X / 16, Z / 16);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
             }
             block_change.X = X;
             block_change.Y = Y;
@@ -144,17 +151,20 @@ namespace LibOpenCraft.MajongProtocol
                 //int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
                 GridServer.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
                 GridServer.chunks[index].SetData(X, Y, Z, block_change.Metadata);
-                ClientManager[] player = GridServer.player_list.Values.ToArray();
-                foreach (ClientManager cm in player)
+                ClientManager[] player = GridServer.player_list;
+                for (int i = 0; i < player.Length; i++)
                 {
-                    if (cm._client != null && cm._client.Connected == true)
-                        cm.SendPacket(block_change, cm.id);
-                    else if (cm._client == null || cm._client.Connected == false)
+                    if (player[i] == null)
                     {
-                        if (GridServer.player_list.ContainsKey(cm.id))
+
+                    }
+                    else
+                    {
+                        if (player[i]._client != null && player[i]._client.Connected == true)
+                            player[i].SendPacket(block_change, player[i].id, ref player[i]);
+                        else if (player[i]._client == null || player[i]._client.Connected == false)
                         {
-                            cm.Stop(true);
-                            GridServer.player_list.Remove(cm.id);
+
                         }
                     }
                 }
@@ -164,17 +174,20 @@ namespace LibOpenCraft.MajongProtocol
                 int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
                 GridServer.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
                 GridServer.chunks[index].SetData(X, Y, Z, block_change.Metadata);
-                ClientManager[] player = GridServer.player_list.Values.ToArray();
-                foreach (ClientManager cm in player)
+                ClientManager[] player = GridServer.player_list;
+                for (int i = 0; i < player.Length; i++)
                 {
-                    if (cm._client != null && cm._client.Connected == true)
-                        cm.SendPacket(block_change, cm.id);
-                    else if (cm._client == null || cm._client.Connected == false)
+                    if (player[i] == null)
                     {
-                        if (GridServer.player_list.ContainsKey(cm.id))
+
+                    }
+                    else
+                    {
+                        if (player[i]._client != null && player[i]._client.Connected == true)
+                            player[i].SendPacket(block_change, player[i].id, ref player[i]);
+                        else if (player[i]._client == null || player[i]._client.Connected == false)
                         {
-                            cm.Stop(true);
-                            GridServer.player_list.Remove(cm.id);
+
                         }
                     }
                 }

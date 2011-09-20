@@ -10,6 +10,7 @@ namespace LibOpenCraft
         public static void Main(string[] args)
         {
             GridServer g = new GridServer();
+            
             char c;
             while ((c = (char)Console.Read()) != '\n')
             {

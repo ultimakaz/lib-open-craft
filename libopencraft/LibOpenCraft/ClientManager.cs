@@ -24,12 +24,13 @@ namespace LibOpenCraft
         public NetworkStream _stream;
         public TcpClient _client;
         private Thread recieved;
-        private ParameterizedThreadStart recieve_start;
-        private AsyncCallback recieve_async;
+        private ThreadStart recieve_start;
         #endregion Networking and Threading
 
-        private ClientManager _recieveClient;
-
+        public ClientManager()
+        {
+            customAttributes = new Dictionary<string, object>();
+        }
         public ClientManager(TcpClient client, int _id)
         {
             try
@@ -37,13 +38,15 @@ namespace LibOpenCraft
                 id = _id;
                 _client = client;
                 _stream = client.GetStream();
-                recieve_async = new AsyncCallback(AsyncResult_recieve);
-                recieve_start = new ParameterizedThreadStart(Recieve);
+
+                recieve_start = new ThreadStart(Recieve);
+                
                 recieved = new Thread(recieve_start);
                 customAttributes.Add("PayLoad", id);
                 _player.customerVariables.Add("BeforeFirstPosition", null);
                 if (recieved == null) recieved = new Thread(recieve_start);
-                recieved.Start(id);
+                recieved.Start();
+                //Recieve((object)id);
             }
             catch (Exception e)
             {
@@ -54,9 +57,9 @@ namespace LibOpenCraft
         {
             if (ClearData == true)
             {
+                GridServer.player_list[id] = null;
                 if (recieved != null)
                     recieved.Abort();
-                recieve_async = null;
                 recieve_start = null;
                 recieved = null;
                 _stream = null;
@@ -65,15 +68,14 @@ namespace LibOpenCraft
             }
             else
             {
-                recieved.Abort();
+                //recieved.Abort();
             }
         }
         public void Start(TcpClient client)
         {
             _client = client;
             _stream = client.GetStream();
-            recieve_async = new AsyncCallback(AsyncResult_recieve);
-            recieve_start = new ParameterizedThreadStart(Recieve);
+            recieve_start = new ThreadStart(Recieve);
             recieved = new Thread(recieve_start);
             recieved.Start(id);
         }
@@ -82,21 +84,17 @@ namespace LibOpenCraft
         {
             recieved.Start(id);
         }
-        private void AsyncResult_recieve(IAsyncResult IAR)
-        {
-        }
-        public void SendPacket(PacketHandler p, int id, bool PingType = false, ClientManager _cm = null, bool Waitread = false)
+        public void SendPacket(PacketHandler p, int id, ref ClientManager cm, bool PingType = false, bool Waitread = false)
         {
             try
             {
                 byte[] t_byte = p.GetBytes();
-                if (GridServer.player_list.ContainsKey(id) && PingType == false)
+                if (PingType == false)
                 {
-                    ClientManager cm = GridServer.player_list[id];
                     cm._stream.Write(t_byte, 0, t_byte.Length);
+                    cm._stream.Flush();
                     GridServer.player_list[id].keep_alive = DateTime.Now;
                     cm.WaitToRead = Waitread;
-                    cm._stream.Flush();
                     Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     t_byte = null;
                     p = null;
@@ -105,9 +103,9 @@ namespace LibOpenCraft
                 {
                     byte[] temp = new byte[256];
                     t_byte.CopyTo(temp, 0);
-                    _cm._stream.Write(temp, 0, temp.Length);
-                    _cm._stream.Flush();
-                    _cm._client.Close();
+                    cm._stream.Write(temp, 0, temp.Length);
+                    cm._stream.Flush();
+                    cm._client.Close();
                     Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     t_byte = null;
                     p = null;
@@ -125,97 +123,119 @@ namespace LibOpenCraft
                 _client.Close();
                 Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
                 Random r = new Random();
-                GridServer.player_list.Remove(id);
+                GridServer.player_list[id] = null;
                 Stop(true);
             }
         }
-        protected void Recieve(object obj)
+        public void Recieve()
         {
-            int _id = (int)obj;
-            if (!GridServer.player_list.ContainsKey(_id))
-                _id = this.id;
-            if (!GridServer.player_list.ContainsKey(_id))
-                return;
-            _recieveClient = GridServer.player_list[_id];
-            PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(_recieveClient._stream));
+            int _id = id;
+
+            System.GC.KeepAlive(GridServer.player_list[_id]);
+            GridServer.player_list[_id]._stream = new NetworkStream(GridServer.player_list[_id]._client.Client);
+            PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(GridServer.player_list[_id]._stream));
             bool connected = true;
             while (connected == true)
             {
                 try
                 {
-                    if (_recieveClient._client == null || id == -1)
+                    if (GridServer.player_list[_id]._client == null || id == -1)
                     {
-                        _recieveClient.Stop(true);
+                        GridServer.player_list[_id].Stop(true);
                         break;
                     }
-                    if (!_recieveClient._client.Connected == true)
+                    if (!GridServer.player_list[_id]._client.Connected == true)
                     {
-                        _recieveClient._client.Close();
-                        _recieveClient.Stop(true);
+                        GridServer.player_list[_id]._client.Close();
+                        GridServer.player_list[_id].Stop(true);
                         break;
                     }
-                    if (_recieveClient._stream != null && !_recieveClient.customAttributes.ContainsKey("InPrechunk") && _recieveClient._client.Available > 0)
+                    if (GridServer.player_list[_id]._stream != null && !GridServer.player_list[_id].customAttributes.ContainsKey("InPrechunk") && GridServer.player_list[_id]._client.Available > 0)
                     {
-                        System.Threading.Thread.Sleep(1);
-                        _recieveClient.WaitToRead = true;
+                        //System.Threading.Thread.Sleep(1);
+                        GridServer.player_list[_id].WaitToRead = true;
                         PacketType p_type = (PacketType)p_reader.ReadByte();
                         if (ModuleHandler.Eventmodules.ContainsKey(p_type))
                         {
-                            ModuleHandler.Eventmodules[p_type].Invoke(ref p_reader, p_type, ref _recieveClient);
-                            _recieveClient.WaitToRead = false;
+                            ModuleHandler.Eventmodules[p_type](ref p_reader, p_type, ref GridServer.player_list[_id]);
+                            GridServer.player_list[_id].WaitToRead = false;
                         }
                         else
                         {
                             System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
                             //System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
-                            _recieveClient.WaitToRead = false;
+                            //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
+                            //kick.AddString("Server has kicked you for illegal packet!!");
+                            //GridServer.player_list[_id].SendPacket(kick, _id, ref GridServer.player_list[_id]);
+
+                            GridServer.player_list[_id].WaitToRead = false;
+
                         }
-                        if (_recieveClient._stream != null && DateTime.Now.Minute > _recieveClient.keep_alive.Minute || _recieveClient.keep_alive.Second + 1 < DateTime.Now.Second)
+                        if (GridServer.player_list[_id]._stream != null && DateTime.Now.Minute > GridServer.player_list[_id].keep_alive.Minute || GridServer.player_list[_id].keep_alive.Second + 1 < DateTime.Now.Second)
                         {
                             Random r = new Random(1789);
-                            _recieveClient.customAttributes["PayLoad"] = (object)r.Next(1024, 4096);
+                            GridServer.player_list[_id].customAttributes["PayLoad"] = (object)r.Next(1024, 4096);
                             LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
-                            p.ID = (int)_recieveClient.customAttributes["PayLoad"];
+                            p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
                             p.BuildPacket();
-                            SendPacket(p, id);
+                            SendPacket(p, id, ref GridServer.player_list[_id]);
                         }
                     }
                     else
                     {
-                        /*if (_recieveClient._stream != null && DateTime.Now.Minute > _recieveClient.keep_alive.Minute || _recieveClient.keep_alive.Second + 1 < DateTime.Now.Second)
-                        {
-                            Random r = new Random(1789);
-                            _recieveClient.keep_alive = DateTime.Now;
-                            _recieveClient.customAttributes["PayLoad"] = r.Next(1024, 4096);
-                            LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
-                            p.AddInt(id);
-                            SendPacket(p, id);
-                        }*/
                         if (_player.name == "")
-                            Thread.Sleep(10);
+                            Thread.Sleep(50);
                         else
-                            Thread.Sleep(3);
+                        {
+                            if (GridServer.player_list[_id]._player.EntityUpdateCount < (int)Config.Configuration["EntityUpdate"])
+                            {
+                                ClientManager[] player = GridServer.player_list;
+                                for (int i = 0; i < player.Count(); i++)
+                                {
+                                    if (player[i] == null && player[i].id == id || player[i].PreChunkRan != 1)
+                                    {
+
+                                    }
+                                    else
+                                    {
+                                        LibOpenCraft.ServerPackets.EntityPacket e = new LibOpenCraft.ServerPackets.EntityPacket(PacketType.Entity);
+                                        e.EntityID = id;
+                                        e.BuildPacket();
+                                        player[i].SendPacket(e, player[i].id, ref player[i]);
+                                        GridServer.player_list[_id]._player.EntityUpdateCount++;
+                                    }
+                                }
+                            }
+                            else
+                                GridServer.player_list[_id]._player.EntityUpdateCount = 0;
+                        }
                     }
                 }
+
                 catch (Exception e)
                 {
-                    if (_recieveClient._stream != null)
-                        _recieveClient._stream.Close();
-                    if (_recieveClient._client != null)
-                        _recieveClient._client.Close();
-                    GridServer.player_list.Remove(id);
-                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
-                    _recieveClient.Stop(true);
-                    break;
+                    /*try
+                    {
+                        if (GridServer.player_list[_id]._stream != null)
+                            GridServer.player_list[_id]._stream.Close();
+                        if (GridServer.player_list[_id]._client != null)
+                            GridServer.player_list[_id]._client.Close();
+                        Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
+                        GridServer.player_list[_id].Stop(true);
+                    }
+                    catch (Exception de)
+                    {
+                        Console.WriteLine("ERROR: " + de.Message + " Source:" + de.Source + " Method:" + de.TargetSite + " Data:" + de.Data);
+                    }
+                    break;*/
                 }
             }
-            if (_recieveClient._stream != null)
-                _recieveClient._stream.Close();
-            if (_recieveClient._client != null)
-                _recieveClient._client.Close();
-            GridServer.player_list.Remove(id);
+            if (GridServer.player_list[_id]._stream != null)
+                GridServer.player_list[_id]._stream.Close();
+            if (GridServer.player_list[_id]._client != null)
+                GridServer.player_list[_id]._client.Close();
             Console.WriteLine("Connection Closed.");
-            _recieveClient.Stop(true);
+            GridServer.player_list[_id].Stop(true);
         }
     }
 }

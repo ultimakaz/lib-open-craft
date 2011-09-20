@@ -36,7 +36,7 @@ namespace LibOpenCraft.MajongProtocol
             HandshakePacket p = new HandshakePacket(PacketType.Handshake);
             p.ConnectionHash = (string)Config.Configuration["Handshake"];
             p.BuildPacket();
-            _client.SendPacket(p, _client.id);
+            _client.SendPacket(p, _client.id, ref _client);
             try
             {
                 int i = 0;
@@ -47,7 +47,7 @@ namespace LibOpenCraft.MajongProtocol
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR: " + e.Message);
+                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
             }
             p = null;
             #endregion Building Packet

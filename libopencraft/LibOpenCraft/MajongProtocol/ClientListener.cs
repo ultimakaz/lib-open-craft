@@ -52,18 +52,13 @@ namespace LibOpenCraft.MajongProtocol
             if (IAR.AsyncState == (object)"New Connection")
             {
                 Random r = new Random();
-                
-                int id;
-                while(GridServer.player_list.ContainsKey((id = r.Next(0, 1024)))) Thread.Sleep(1);
-                GridServer.player_list.Add(id, new ClientManager(_listener.EndAcceptTcpClient(IAR), id));
-                if (GridServer.player_list.ContainsKey(id))
-                {
 
-                }
-                else
+                int id = r.Next(0, (int)Config.Configuration["MaxPlayers"]);
+                while (GridServer.ContainsPlayer(id) == true)
                 {
-
+                    id = r.Next(0, (int)Config.Configuration["MaxPlayers"]);
                 }
+                GridServer.player_list[id] = new ClientManager(_listener.EndAcceptTcpClient(IAR), id);
             }
         }
         protected void Listener(object obj)
@@ -75,7 +70,7 @@ namespace LibOpenCraft.MajongProtocol
                 if (_listener.Pending())
                     _listener.BeginAcceptTcpClient(new AsyncCallback(AsyncResult_newcon), (object)"New Connection");
                 else
-                    Thread.Sleep(10);
+                    Thread.Sleep(1);
             }
             
         }

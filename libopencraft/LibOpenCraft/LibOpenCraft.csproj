@@ -72,6 +72,7 @@
     <Compile Include="MajongProtocol\BlockChange.cs" />
     <Compile Include="MajongProtocol\ClientListener.cs" />
     <Compile Include="MajongProtocol\CloseWindow.cs" />
+    <Compile Include="MajongProtocol\HoldingChanged.cs" />
     <Compile Include="MajongProtocol\CreativeInventoryAction.cs" />
     <Compile Include="MajongProtocol\EntityAction.cs" />
     <Compile Include="MajongProtocol\EntityTeleportPacket.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="MajongProtocol\PlayerDigging.cs" />
     <Compile Include="MajongProtocol\PlayerProtocol.cs" />
     <Compile Include="MajongProtocol\PlayerPositionAndLook.cs" />
+    <Compile Include="MajongProtocol\RemoveEntityEffect.cs" />
     <Compile Include="MajongProtocol\ServerListPing.cs" />
     <Compile Include="MajongProtocol\Handshake.cs" />
     <Compile Include="MajongProtocol\KeepAlive.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="ServerPackets\BlockChangePacket.cs" />
     <Compile Include="ServerPackets\ChunkPacket.cs" />
     <Compile Include="ServerPackets\EntityMetadataPacket.cs" />
+    <Compile Include="ServerPackets\EntityPacket.cs" />
     <Compile Include="ServerPackets\EntityRelativeMovePacket.cs" />
     <Compile Include="ServerPackets\NamedEntitySpawnPacket.cs" />
     <Compile Include="ServerPackets\PlayerBlockPlacementPacket.cs" />

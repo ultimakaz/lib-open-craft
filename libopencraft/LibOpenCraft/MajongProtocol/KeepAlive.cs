@@ -33,9 +33,9 @@ namespace LibOpenCraft.MajongProtocol
         {
             if (_client._client == null || _client._client.Connected == false)
             {
-                if (GridServer.player_list.ContainsKey(_client.id))
+                if (GridServer.player_list[_client.id] != null)
                 {
-                    GridServer.player_list.Remove(_client.id);
+                    GridServer.player_list[_client.id] = null;
                     _client.Stop(true);
                 }
             }
