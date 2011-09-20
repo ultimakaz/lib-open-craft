@@ -39,8 +39,7 @@ namespace LibOpenCraft.ChunkHandler
             _client.customAttributes.Add("InPrechunk", null);
             RunPreChunkInitialization();
             _client.customAttributes.Remove("InPrechunk");
-            int i = 0;
-            for (; i < base.ModuleAddons.Count; i++)
+            for (int i = 0; i < base.ModuleAddons.Count; i++)
             {
                 base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, _p, ref cm);
             }
@@ -48,9 +47,9 @@ namespace LibOpenCraft.ChunkHandler
             //SendChunks(11, 13);
             #region SendSpawn
             NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-            EntitySpawn.X = (int)cm._player.position.X / 32;
-            EntitySpawn.Y = (int)cm._player.position.Y / 32;
-            EntitySpawn.Z = (int)cm._player.position.Z / 32;
+            EntitySpawn.X = (int)cm._player.position.X * 32;
+            EntitySpawn.Y = (int)cm._player.position.Y * 32;
+            EntitySpawn.Z = (int)cm._player.position.Z * 32;
             EntitySpawn.EntityID = cm.id;
             EntitySpawn.PlayerName = cm._player.name;
             EntitySpawn.CurrentItem = cm._player.Current_Item;
@@ -59,35 +58,40 @@ namespace LibOpenCraft.ChunkHandler
             EntitySpawn.BuildPacket();
             //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
             System.Threading.Thread.Sleep(1);
-            ClientManager[] player;
-            lock (GridServer.player_list.Values)
+            ClientManager[] player = GridServer.player_list;
+            for (int i = 0; i < player.Length; i++)
             {
-                player = GridServer.player_list.Values.ToArray();
-            }
-            foreach (ClientManager remote_client in player)// unsafeif a player joins or leaves
-            {
-                if (cm._client == null || cm._client.Connected == false)
+                if (player[i] == null)
                 {
-                    if (GridServer.player_list.ContainsKey(cm.id))
+
+                }
+                else
+                {
+                    if (cm._client == null || cm._client.Connected == false || player[i].PreChunkRan != 1)
                     {
-                        cm.Stop(true);
-                        GridServer.player_list.Remove(cm.id);
+                        if (player[i] != null)
+                        {
+                            return _p;
+                        }
+                    }
+                    else
+                    {
+                        NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
+                        t_EntitySpawn.X = (int)player[i]._player.position.X * 32;
+                        t_EntitySpawn.Y = (int)player[i]._player.position.Y * 32;
+                        t_EntitySpawn.Z = (int)player[i]._player.position.Z * 32;
+                        t_EntitySpawn.EntityID = player[i].id;
+                        t_EntitySpawn.PlayerName = player[i]._player.name;
+                        t_EntitySpawn.CurrentItem = player[i]._player.Current_Item;
+                        t_EntitySpawn.Pitch = (byte)(int)player[i]._player.Pitch;
+                        t_EntitySpawn.Rotation = (byte)(int)player[i]._player.stance;
+                        t_EntitySpawn.BuildPacket();
+                        if (cm.id != player[i].id)
+                            cm.SendPacket(t_EntitySpawn, cm.id, ref cm);
+                        if (cm.id != player[i].id)
+                            player[i].SendPacket(EntitySpawn, player[i].id, ref player[i]);
                     }
                 }
-                NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-                t_EntitySpawn.X = (int)remote_client._player.position.X / 32;
-                t_EntitySpawn.Y = (int)remote_client._player.position.Y / 32;
-                t_EntitySpawn.Z = (int)remote_client._player.position.Z / 32;
-                t_EntitySpawn.EntityID = remote_client.id;
-                t_EntitySpawn.PlayerName = remote_client._player.name;
-                t_EntitySpawn.CurrentItem = remote_client._player.Current_Item;
-                t_EntitySpawn.Pitch = (byte)(int)remote_client._player.Pitch;
-                t_EntitySpawn.Rotation = (byte)(int)remote_client._player.stance;
-                t_EntitySpawn.BuildPacket();
-                if (cm.id != remote_client.id)
-                    cm.SendPacket(t_EntitySpawn, cm.id);
-                if (cm.id != remote_client.id)
-                    remote_client.SendPacket(EntitySpawn, remote_client.id);
             }
 
             #endregion SendSpawn
@@ -109,10 +113,10 @@ namespace LibOpenCraft.ChunkHandler
                     p.y = y;
                     p.load = 1;
                     p.BuildPacket();
-                    _client.SendPacket(p, _client.id);
+                    _client.SendPacket(p, _client.id, ref _client);
                     //System.Threading.Thread.Sleep(5);
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id);
-                    GC.Collect();
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client);
+                    //GC.Collect();
                 }
             }
         }
@@ -130,11 +134,11 @@ namespace LibOpenCraft.ChunkHandler
                     p.y = y;
                     p.load = 1;
                     p.BuildPacket();
-                    _client.SendPacket(p, _client.id, false, null, true);
+                    _client.SendPacket(p, _client.id, ref _client);
                     //System.Threading.Thread.Sleep(5);
                     
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id);
-                    GC.Collect();
+                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client);
+                    //GC.Collect();
                 }
             }
         }
