@@ -7,3 +7,4 @@ C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\NBT.
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\ResolveAssemblyReference.cache
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\System.ComponentModel.Composition.dll

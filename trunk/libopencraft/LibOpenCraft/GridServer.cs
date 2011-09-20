@@ -61,7 +61,7 @@ namespace LibOpenCraft
             AggregateCatalog catalog = new AggregateCatalog();
 
             AssemblyCatalog assemblyCatalog = new AssemblyCatalog(System.Reflection.Assembly.GetExecutingAssembly());
-            DirectoryCatalog directoryCatalog = new DirectoryCatalog(".", "LibOpenCraft.*.dll");
+            DirectoryCatalog directoryCatalog = new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, "LibOpenCraft.*.dll");
 
             catalog.Catalogs.Add(assemblyCatalog);
             catalog.Catalogs.Add(directoryCatalog);
