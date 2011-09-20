@@ -48,9 +48,9 @@ namespace LibOpenCraft.ChunkHandler
             //SendChunks(11, 13);
             #region SendSpawn
             NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-            EntitySpawn.X = (int)Math.Abs(Math.Round(cm._player.position.X));
-            EntitySpawn.Y = (int)Math.Abs(Math.Round(cm._player.position.Y));
-            EntitySpawn.Z = (int)Math.Abs(Math.Round(cm._player.position.Z));
+            EntitySpawn.X = (int)cm._player.position.X / 32;
+            EntitySpawn.Y = (int)cm._player.position.Y / 32;
+            EntitySpawn.Z = (int)cm._player.position.Z / 32;
             EntitySpawn.EntityID = cm.id;
             EntitySpawn.PlayerName = cm._player.name;
             EntitySpawn.CurrentItem = cm._player.Current_Item;
@@ -75,9 +75,9 @@ namespace LibOpenCraft.ChunkHandler
                     }
                 }
                 NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-                t_EntitySpawn.X = (int)Math.Abs(Math.Round(remote_client._player.position.X));
-                t_EntitySpawn.Y = (int)Math.Abs(Math.Round(remote_client._player.position.Y));
-                t_EntitySpawn.Z = (int)Math.Abs(Math.Round(remote_client._player.position.Z));
+                t_EntitySpawn.X = (int)remote_client._player.position.X / 32;
+                t_EntitySpawn.Y = (int)remote_client._player.position.Y / 32;
+                t_EntitySpawn.Z = (int)remote_client._player.position.Z / 32;
                 t_EntitySpawn.EntityID = remote_client.id;
                 t_EntitySpawn.PlayerName = remote_client._player.name;
                 t_EntitySpawn.CurrentItem = remote_client._player.Current_Item;
