@@ -34,7 +34,7 @@ namespace LibOpenCraft
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public static object[] InvokeGetModuleAddon(int i, bool getKeyOnly = true)
+        public static object[] InvokeGetModuleAddon(int i, bool getKeyOnly)
         {
             if (getKeyOnly == true)
             {
