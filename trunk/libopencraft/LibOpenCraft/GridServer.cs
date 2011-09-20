@@ -57,15 +57,14 @@ namespace LibOpenCraft
         public void SetupModules()
         {
             #region Module Container Loading
-            AggregateCatalog catalog = new AggregateCatalog(new List<ComposablePartCatalog>());
-            
-
+            List<ComposablePartCatalog> compose = new List<ComposablePartCatalog>();
             AssemblyCatalog assemblyCatalog = new AssemblyCatalog(System.Reflection.Assembly.GetExecutingAssembly());
             DirectoryCatalog directoryCatalog = new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, "LibOpenCraft.*.dll");
-
-            catalog.Catalogs.Add(assemblyCatalog);
-            catalog.Catalogs.Add(directoryCatalog);
-
+            #region Make Catalog
+            compose.Add(assemblyCatalog);
+            compose.Add(directoryCatalog);
+            AggregateCatalog catalog = new AggregateCatalog(compose);
+            #endregion Make Catalog
             _container = new CompositionContainer(catalog, true);
 
             try
