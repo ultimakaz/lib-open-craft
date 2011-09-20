@@ -92,6 +92,7 @@
     </Compile>
     <Compile Include="ServerPackets\AnimationPacket.cs" />
     <Compile Include="ServerPackets\BlockChangePacket.cs" />
+    <Compile Include="ServerPackets\ChatMessagePacket.cs" />
     <Compile Include="ServerPackets\ChunkPacket.cs" />
     <Compile Include="ServerPackets\EntityMetadataPacket.cs" />
     <Compile Include="ServerPackets\EntityPacket.cs" />

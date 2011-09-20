@@ -53,7 +53,7 @@ namespace LibOpenCraft.MajongProtocol
             {
                 Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
             }
-            if (_p.BlockID == (byte)255)
+            if (_p.BlockID > 255)
             {
                 PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
                 kick.AddString("Server has kicked you for illegal packet!!");
@@ -65,7 +65,6 @@ namespace LibOpenCraft.MajongProtocol
             block_change.BlockType = (byte)_p.BlockID;
             block_change.Metadata = 0x00;
             block_change.BuildPacket();
-            System.Threading.Thread.Sleep(3);
             #region Login Handler Packet;
             try
             {
@@ -143,7 +142,6 @@ namespace LibOpenCraft.MajongProtocol
                 }
                 
             }*/
-            System.Threading.Thread.Sleep(1);
             if (_p.Status == 0 && (int)Config.Configuration["ServerMode"] == 1)// finished digging
             {
                 if (GridServer.chunks[index].GetBlocktype(X, Y, Z) == 0x00)
