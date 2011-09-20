@@ -21,7 +21,7 @@ namespace LibOpenCraft
         public int PreChunkRan = 0;
         #endregion Misc Variables
         #region Networking and Threading
-        public NetworkStream _stream;
+        public NetworkStream _stream = null;
         public TcpClient _client;
         private Thread recieved;
         private ThreadStart recieve_start;
@@ -37,8 +37,7 @@ namespace LibOpenCraft
             {
                 id = _id;
                 _client = client;
-                _stream = client.GetStream();
-
+                //_stream = new NetworkStream(client.Client);
                 recieve_start = new ThreadStart(Recieve);
                 
                 recieved = new Thread(recieve_start);
@@ -46,6 +45,7 @@ namespace LibOpenCraft
                 _player.customerVariables.Add("BeforeFirstPosition", null);
                 if (recieved == null) recieved = new Thread(recieve_start);
                 recieved.Start();
+                System.GC.KeepAlive(GridServer.player_list[_id]);
                 //Recieve((object)id);
             }
             catch (Exception e)
@@ -132,11 +132,13 @@ namespace LibOpenCraft
             int _id = id;
 
             System.GC.KeepAlive(GridServer.player_list[_id]);
-            GridServer.player_list[_id]._stream = new NetworkStream(GridServer.player_list[_id]._client.Client);
-            PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(GridServer.player_list[_id]._stream));
+            _stream = new NetworkStream(_client.Client);
+            NetworkStream stream = new NetworkStream(_client.Client);
+            PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(stream));
             bool connected = true;
             while (connected == true)
             {
+                System.Threading.Thread.Sleep(1);
                 try
                 {
                     if (GridServer.player_list[_id]._client == null || id == -1)
@@ -187,6 +189,7 @@ namespace LibOpenCraft
                             Thread.Sleep(50);
                         else
                         {
+                            System.Threading.Thread.Sleep(1);
                             if (GridServer.player_list[_id]._player.EntityUpdateCount < (int)Config.Configuration["EntityUpdate"])
                             {
                                 ClientManager[] player = GridServer.player_list;

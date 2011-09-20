@@ -31,14 +31,40 @@ namespace LibOpenCraft.Chat
         public void OnChatMessage(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
             string message = _pReader.ReadString();
-            ClientManager[] player = GridServer.player_list;
-            for (int i = 0; i < player.Length; i++)
+            ChatMessagePacket ChatMessage = new ChatMessagePacket(PacketType.ChatMessage);
+            ChatMessage.MessageRecieved = message;
+            if ('/' == message[0] && (bool)Config.Configuration["EnableEmbeddedChatCommands"])
             {
-                if (player[i] == null)
+                switch (message.Substring(1, message.Length))
                 {
-
+                    case "set -b 1":
+                        break;
+                    case "set -b 2":
+                        break;
+                    case "set -b 3":
+                        break;
+                    case "set -b 4":
+                        break;
                 }
-                else
+                try
+                {
+                    int i = 0;
+                    for (; i < base.ModuleAddons.Count; i++)
+                    {
+                        ChatMessage = (ChatMessagePacket)base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)ChatMessage, ref _client);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
+                }
+                ChatMessage.BuildPacket();
+                _client.SendPacket(ChatMessage, _client.id, ref _client, false, false);
+            }
+            else
+            {
+                ClientManager[] player = GridServer.player_list;
+                for (int i = 0; i < player.Length; i++)
                 {
                     if (player[i] == null)
                     {
@@ -46,9 +72,16 @@ namespace LibOpenCraft.Chat
                     }
                     else
                     {
-                        PacketHandler ChatMessage = new PacketHandler(PacketType.ChatMessage);
-                        ChatMessage.AddString(_client._player.name + ": " + message);
-                        player[i].SendPacket(ChatMessage, player[i].id, ref player[i], false, false);
+                        if (player[i] == null)
+                        {
+
+                        }
+                        else
+                        {
+                            ChatMessage.MessageSent = _client._player.name + ": " + message;
+                            ChatMessage.BuildPacket();
+                            player[i].SendPacket(ChatMessage, player[i].id, ref player[i], false, false);
+                        }
                     }
                 }
             }
