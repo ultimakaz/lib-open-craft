@@ -1,8 +1,8 @@
 ﻿ServerName=libOpenCraft
 ServerDescription=LibOpenCraft test server
 MaxPlayers=100
-Port=25565
-IPAddress=192.168.1.103
+Port=25566
+IPAddress=0.0.0.0
 ServerMode=1
 Handshake=-
 Size_X=15
