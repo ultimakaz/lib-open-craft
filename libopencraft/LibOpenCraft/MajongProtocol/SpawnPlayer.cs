@@ -35,7 +35,7 @@ namespace LibOpenCraft.MajongProtocol
             p.Y = cm._player.position.Z;
             p.Z = cm._player.position.Y;
             p.BuildPacket();
-            cm.SendPacket(p, cm.id, ref cm);
+            cm.SendPacket(p, cm.id, ref cm, false, false);
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
@@ -53,7 +53,7 @@ namespace LibOpenCraft.MajongProtocol
             p.Z = _client._player.position.Y;
             p.BuildPacket();
             int i = 0;
-            _client.SendPacket(p, _client.id, ref _client);
+            _client.SendPacket(p, _client.id, ref _client, false, false);
             for (; i < base.ModuleAddons.Count; i++)
             {
                 base.ModuleAddons.ElementAt(i).Value(PacketType.SpwanPosition, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref _client);

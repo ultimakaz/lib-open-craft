@@ -36,7 +36,7 @@ namespace LibOpenCraft.MajongProtocol
             p.ServerDescription = (string)Config.Configuration["ServerDescription"];
             p.NumberOfUsers = GridServer.PlayerCount() - 1;
             p.BuildPacket();
-            _client.SendPacket(p, _client.id, ref _client, true);
+            _client.SendPacket(p, _client.id, ref _client, true, false);
             GridServer.player_list[_client.id] = null;
             p = null;
         }

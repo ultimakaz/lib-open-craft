@@ -47,11 +47,11 @@ namespace LibOpenCraft.MajongProtocol
                     int index_remote = Chunk.GetIndex((int)player[i]._player.position.X, (int)player[i]._player.position.Y, (int)player[i]._player.position.Z);
                     if (index_remote - 5 < index_me && index_remote + 5 > index_me && _client.id != player[i].id)
                     {
-                        player[i].SendPacket(p, player[i].id, ref player[i]);
+                        player[i].SendPacket(p, player[i].id, ref player[i], false, false);
                     }
                 }
             }
-            _client.SendPacket(p, _client.id, ref _client);
+            _client.SendPacket(p, _client.id, ref _client, false, false);
         }
 
         public override void Stop()

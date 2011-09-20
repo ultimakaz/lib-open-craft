@@ -41,7 +41,7 @@ namespace LibOpenCraft.MajongProtocol
                 p.Yaw = cm._player.Yaw;
                 p.OnGround = cm._player.onGround;
                 p.BuildPacket();
-                cm.SendPacket(p, cm.id, ref cm);
+                cm.SendPacket(p, cm.id, ref cm, false, false);
                 int i = 0;
                 for (; i < base.ModuleAddons.Count; i++)
                 {
@@ -61,7 +61,7 @@ namespace LibOpenCraft.MajongProtocol
                 p.Yaw = cm._player.Yaw;
                 p.OnGround = cm._player.onGround;
                 p.BuildPacket();
-                cm.SendPacket(p, cm.id, ref cm);
+                cm.SendPacket(p, cm.id, ref cm, false, false);
                 int i = 0;
                 for (; i < base.ModuleAddons.Count; i++)
                 {

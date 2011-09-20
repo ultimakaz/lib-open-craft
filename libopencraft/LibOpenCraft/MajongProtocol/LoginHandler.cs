@@ -60,7 +60,7 @@ namespace LibOpenCraft.MajongProtocol
             p.WorldHeight = 128;
             p.MaxPlayers = (byte)(int)Config.Configuration["MaxPlayers"];
             p.BuildPacket();
-            _client.SendPacket(p, _client.id, ref _client);
+            _client.SendPacket(p, _client.id, ref _client, false, false);
             try
             {
                 int i = 0;
