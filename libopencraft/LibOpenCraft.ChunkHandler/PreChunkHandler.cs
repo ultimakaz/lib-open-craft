@@ -6,7 +6,7 @@ using LibOpenCraft;
 using LibOpenCraft.ServerPackets;
 
 using System.IO.Compression;
-using zlib;
+using Ionic.Zlib;
 using System.IO;
 using System.Reflection;
 using System.ComponentModel.Composition;
@@ -155,7 +155,7 @@ namespace LibOpenCraft.ChunkHandler
             using (MemoryStream memStream = new MemoryStream())
             {
 
-                using (ZOutputStream compressor = new ZOutputStream(memStream, zlibConst.Z_BEST_COMPRESSION))
+                using (ZlibStream compressor = new ZlibStream(memStream, Ionic.Zlib.CompressionMode.Compress, CompressionLevel.BestCompression))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
