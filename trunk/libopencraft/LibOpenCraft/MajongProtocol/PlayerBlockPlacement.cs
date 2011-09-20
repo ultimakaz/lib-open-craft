@@ -36,7 +36,7 @@ namespace LibOpenCraft.MajongProtocol
             p.Y = _pReader.ReadByte();
             p.Z = _pReader.ReadInt();
             p.Face = _pReader.ReadByte();
-            p.BlockID = (byte)_pReader.ReadShort();
+            p.BlockID = _pReader.ReadShort();
             p.Amount = _pReader.ReadByte();
             p.Damage = _pReader.ReadShort();
 

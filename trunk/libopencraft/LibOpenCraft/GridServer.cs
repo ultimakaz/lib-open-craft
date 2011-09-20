@@ -19,13 +19,38 @@ namespace LibOpenCraft
         public static List<Chunk> chunk_b = new List<Chunk>();
         public static Chunk[] chunks;
         #region Player data networking code
-        public static Dictionary<int, ClientManager> player_list = new Dictionary<int, ClientManager>();
+        public static ClientManager[] player_list;
 
+        public static bool ContainsPlayer(int number)
+        {
+            int i = 0;
+            while (i < player_list.Length)
+            {
+                if (player_list[i] != null && player_list[i].id == number)
+                    return true;
+                i++;
+            }
+            return false;
+        }
+
+        public static int PlayerCount()
+        {
+            int i = 0;
+            int count = 0;
+            while (i < player_list.Length)
+            {
+                if (player_list[i] != null)
+                    count++;
+                i++;
+            }
+            return count;
+        }
 
         #endregion Player data networking code
         public GridServer()
         {
             Config.InitializeSettings();
+            player_list = new ClientManager[(int)Config.Configuration["MaxPlayers"] + 1];
             World.LoadWorld();
             SetupModules();
         }
@@ -79,7 +104,7 @@ namespace LibOpenCraft
                 }
             }
             Console.WriteLine("Starting Core Modules.....");
-            ModuleHandler.StartCoreEventModules();
+            ModuleHandler.StartCoreModules();
             Console.WriteLine("Core Modules Started.....");
         }
         public void SetupCoreEventModules()

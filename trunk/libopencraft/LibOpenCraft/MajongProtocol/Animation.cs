@@ -35,15 +35,23 @@ namespace LibOpenCraft.MajongProtocol
             p.Animation = _pReader.ReadByte();
             p.BuildPacket();
             int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
-            foreach (ClientManager cm in GridServer.player_list.Values)
+            ClientManager[] player = GridServer.player_list;
+            for (int i = 0; i < player.Length; i++)
             {
-                int index_remote = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
-                if (index_remote - 5 < index_me && index_remote + 5 > index_me && _client.id != cm.id)
+                if (player[i] == null)
                 {
-                    cm.SendPacket(p, cm.id);
+
+                }
+                else
+                {
+                    int index_remote = Chunk.GetIndex((int)player[i]._player.position.X, (int)player[i]._player.position.Y, (int)player[i]._player.position.Z);
+                    if (index_remote - 5 < index_me && index_remote + 5 > index_me && _client.id != player[i].id)
+                    {
+                        player[i].SendPacket(p, player[i].id, ref player[i]);
+                    }
                 }
             }
-            _client.SendPacket(p, _client.id);
+            _client.SendPacket(p, _client.id, ref _client);
         }
 
         public override void Stop()

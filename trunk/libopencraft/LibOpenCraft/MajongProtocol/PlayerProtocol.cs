@@ -72,10 +72,10 @@ namespace LibOpenCraft.MajongProtocol
         {
             #region Old Position Calculations
             Vector3D old_pos = _client._player.position;
-            old_pos /= 32;
-            old_pos = old_pos.Abs(old_pos);
-            old_pos = old_pos.Round(old_pos);
-            
+            //old_pos /= 32;
+            //old_pos = old_pos.Abs(old_pos);
+            //old_pos = old_pos.Round(old_pos);
+
             #endregion
             #region Recieve packets
             _client._player.position.X = _pReader.ReadDouble();
@@ -86,86 +86,89 @@ namespace LibOpenCraft.MajongProtocol
             #endregion
             #region New Position Calculations
             Vector3D new_pos = _client._player.position;
-            new_pos /= 32;
-            new_pos = new_pos.Abs(new_pos);
-            new_pos = new_pos.Round(new_pos);
+            //new_pos /= 32;
+            //
             #endregion
             #region Deal with addons
-            int i = 0;
-            for (; i < base.ModuleAddons.Count; i++)
+
+            for (int i = 0; i < base.ModuleAddons.Count; i++)
             {
                 base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref _pReader, new PacketHandler(), ref _client);
             }
-            System.Threading.Thread.Sleep(10);
-            Vector3D test;
-            if (_client._player.rel_position == 0)
-            {
-                test = new_pos;
-            }
-            else
-                test = new_pos;
-            
-            if (test.X > 0 || test.Y > 0 || test.Z > 0 || test.X < 0 || test.Y < 0 || test.Z < 0)
-            {
-                _client._player.rel_position = new_pos;
-            }
-            else
-            {
-                return;
-            }
             #endregion
             #region deal with entity relative move
-            ClientManager[] player;
-            lock (GridServer.player_list.Values)
+            //ClientManager[] player = GridServer.player_list;
+            if (_client._player.EntityUpdateCount < (int)Config.Configuration["EntityUpdate"])
             {
-                player = GridServer.player_list.Values.ToArray();
+
             }
-            foreach (ClientManager remote_client in player)// unsafeif a player joins or leaves
+            else
+                _client._player.EntityUpdateCount = 0;
+            ClientManager[] player = GridServer.player_list;
+            for (int i = 0; i < player.Length; i++)
             {
-                if (remote_client._client == null || remote_client._client.Connected == false)
+                if (player[i] == null)
                 {
-                    if (GridServer.player_list.ContainsKey(remote_client.id))
-                    {
-                        remote_client.Stop(true);
-                        GridServer.player_list.Remove(remote_client.id);
-                    }
+
                 }
-                if (_client.id != remote_client.id)
+                else
                 {
-                    if (!remote_client._client.Connected)
+                    if (player[i]._client == null || player[i]._client.Connected == false && player[i].PreChunkRan != 1 || player[i].id == _client.id)
                     {
-                        remote_client._stream.Close();
-                        remote_client.Stop(true);
-                        GridServer.player_list.Remove(remote_client.id);
-                        return;
+
                     }
-                    if (new_pos >= 4)
+                    else if (new_pos.Abs(new_pos - old_pos) <= 4)
+                    {
+                        if (_client._player.fullPositionUpdateCounter >= (int)Config.Configuration["PlayerUpdateInterval"])
+                        {
+                            EntityTeleportPacket teleport = new EntityTeleportPacket(PacketType.EntityTeleport);
+                            _client._player.position *= 32;
+                            teleport.X = (int)(_client._player.position.X);
+                            teleport.Y = (int)(_client._player.position.Y);
+                            teleport.Z = (int)(_client._player.position.Z);
+                            teleport.EntityID = _client.id;
+                            teleport.Yaw = (byte)_client._player.Yaw;
+                            teleport.Pitch = (byte)_client._player.Pitch;
+                            teleport.BuildPacket();
+                            _client._player.position /= 32;
+                            GridServer.player_list[player[i].id].SendPacket(teleport, player[i].id, ref player[i]);
+                            _client._player.fullPositionUpdateCounter = 0;
+                        }
+                        else
+                        {
+                            EntityRelativeMovePacket move = new EntityRelativeMovePacket(PacketType.EntityRelativeMove);
+                            Vector3D t = new_pos * 32;
+                            //new_pos = new_pos.Round(new_pos);
+                            move.X = (byte)t.Abs(t).X;
+                            move.Y = (byte)t.Abs(t).Y;
+                            move.Z = (byte)t.Abs(t).Z;
+                            move.EntityID = _client.id;
+                            move.BuildPacket();
+                            GridServer.player_list[player[i].id].SendPacket(move, player[i].id, ref player[i]);
+                            _client._player.fullPositionUpdateCounter++;
+                        }
+                    }
+                    else
                     {
                         EntityTeleportPacket teleport = new EntityTeleportPacket(PacketType.EntityTeleport);
-                        teleport.X = (int)Math.Round(_client._player.position.X);
-                        teleport.Y = (int)Math.Round(_client._player.position.Y);
-                        teleport.Z = (int)Math.Round(_client._player.position.Z);
+                        Vector3D t = new_pos * 32;
+                        teleport.X = (int)t.Abs(t).X;
+                        teleport.Y = (int)t.Abs(t).Y;
+                        teleport.Z = (int)t.Abs(t).Z;
                         teleport.EntityID = _client.id;
                         teleport.Yaw = (byte)_client._player.Yaw;
                         teleport.Pitch = (byte)_client._player.Pitch;
                         teleport.BuildPacket();
-                        GridServer.player_list[remote_client.id].SendPacket(teleport, remote_client.id);
-                    }
-                    else
-                    {
-                        EntityRelativeMovePacket move = new EntityRelativeMovePacket(PacketType.EntityRelativeMove);
-                        move.X = (byte)(new_pos).X;
-                        move.Y = (byte)(new_pos).Y;
-                        move.Z = (byte)(new_pos).Z;
-                        move.EntityID = _client.id;
-                        move.BuildPacket();
-                        GridServer.player_list[remote_client.id].SendPacket(move, remote_client.id);
+                        GridServer.player_list[player[i].id].SendPacket(teleport, player[i].id, ref player[i]);
+                        _client._player.fullPositionUpdateCounter = 0;
                     }
                 }
 
             }
-            #endregion
         }
+    
+            #endregion
+    
 
         public override void Stop()
         {
@@ -210,3 +213,11 @@ namespace LibOpenCraft.MajongProtocol
         }
     }
 }
+/*
+ * if (new_pos.Abs(new_pos - old_pos) <= 0.4)
+            {
+                _client._player.position = old_pos;
+            }
+            else
+            {
+ * */

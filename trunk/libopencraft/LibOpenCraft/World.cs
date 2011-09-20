@@ -12,7 +12,7 @@ namespace LibOpenCraft
     {
         public static void LoadWorld()
         {
-            int count = 30;
+            int count = 20;
             
             for (int x = 0; x < count; x++)
             {

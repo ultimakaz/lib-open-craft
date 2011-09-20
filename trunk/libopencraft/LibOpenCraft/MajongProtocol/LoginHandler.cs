@@ -60,7 +60,7 @@ namespace LibOpenCraft.MajongProtocol
             p.WorldHeight = 128;
             p.MaxPlayers = (byte)(int)Config.Configuration["MaxPlayers"];
             p.BuildPacket();
-            _client.SendPacket(p, _client.id);
+            _client.SendPacket(p, _client.id, ref _client);
             try
             {
                 int i = 0;
@@ -71,7 +71,7 @@ namespace LibOpenCraft.MajongProtocol
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR: " + e.Message);
+                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
             }
             #endregion Login Handler Packet
         }

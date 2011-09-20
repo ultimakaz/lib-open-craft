@@ -16,9 +16,9 @@ namespace LibOpenCraft
         public Vector3D rel_position;
         public double stance;
         public byte onGround;
-
+        public int fullPositionUpdateCounter = 0;
         public int CurrentSlot;
-
+        public int EntityUpdateCount = 0;
         public float Yaw = 0.0f;
         public float Pitch = 0.0f;
 

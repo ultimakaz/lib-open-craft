@@ -30,6 +30,7 @@ namespace LibOpenCraft
             return base.Equals(obj);
         }
         #region bool operators
+        #region int
         public static bool operator ==(Vector3D v1, int v)
         {
             if (v1.X == v)
@@ -108,6 +109,167 @@ namespace LibOpenCraft
             else
                 return false;
         }
+        #endregion
+        #region double
+        public static bool operator ==(Vector3D v1, double v)
+        {
+            if (v1.X == v)
+                if (v1.Y == v)
+                    if (v1.Z == v)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator !=(Vector3D v1, double v)
+        {
+            if (v1.X != v)
+                if (v1.Y != v)
+                    if (v1.Z != v)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator <(Vector3D v1, double v)
+        {
+            if (v1.X < v)
+                if (v1.Y < v)
+                    if (v1.Z < v)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator <=(Vector3D v1, double v)
+        {
+            if (v1.X <= v)
+                if (v1.Y <= v)
+                    if (v1.Z <= v)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator >(Vector3D v1, double v)
+        {
+            if (v1.X > v)
+                if (v1.Y > v)
+                    if (v1.Z > v)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator >=(Vector3D v1, double v)
+        {
+            if (v1.X >= v)
+                if (v1.Y >= v)
+                    if (v1.Z >= v)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        #endregion
+        #region Vector3D
+        public static bool operator ==(Vector3D v1, Vector3D v)
+        {
+            if (v1.X == v.X)
+                if (v1.Y == v.Y)
+                    if (v1.Z == v.Z)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator !=(Vector3D v1, Vector3D v)
+        {
+            if (v1.X != v.X)
+                if (v1.Y != v.Y)
+                    if (v1.Z != v.Z)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator <(Vector3D v1, Vector3D v)
+        {
+            if (v1.X < v.X)
+                if (v1.Y < v.Y)
+                    if (v1.Z < v.Z)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator <=(Vector3D v1, Vector3D v)
+        {
+            if (v1.X <= v.X)
+                if (v1.Y <= v.Y)
+                    if (v1.Z <= v.Z)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator >(Vector3D v1, Vector3D v)
+        {
+            if (v1.X > v.X)
+                if (v1.Y > v.Y)
+                    if (v1.Z > v.Z)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        public static bool operator >=(Vector3D v1, Vector3D v)
+        {
+            if (v1.X >= v.X)
+                if (v1.Y >= v.Y)
+                    if (v1.Z >= v.Z)
+                        return true;
+                    else
+                        return false;
+                else
+                    return false;
+            else
+                return false;
+        }
+        #endregion
         #endregion
         #region Vector Operators
         public static Vector3D operator +(Vector3D v1, Vector3D v2)
