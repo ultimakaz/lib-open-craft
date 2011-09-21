@@ -45,7 +45,6 @@ namespace LibOpenCraft
                 _player.customerVariables.Add("BeforeFirstPosition", null);
                 if (recieved == null) recieved = new Thread(recieve_start);
                 recieved.Start();
-                System.GC.KeepAlive(GridServer.player_list[_id]);
                 //Recieve((object)id);
             }
             catch (Exception e)
@@ -58,8 +57,15 @@ namespace LibOpenCraft
             if (ClearData == true)
             {
                 GridServer.player_list[id] = null;
-                if (recieved != null)
-                    recieved.Abort();
+                try
+                {
+                    if (recieved != null)
+                        recieved.Abort();
+                }
+                catch (Exception)
+                {
+
+                }
                 recieve_start = null;
                 recieved = null;
                 _stream = null;
@@ -71,19 +77,7 @@ namespace LibOpenCraft
                 //recieved.Abort();
             }
         }
-        public void Start(TcpClient client)
-        {
-            _client = client;
-            _stream = client.GetStream();
-            recieve_start = new ThreadStart(Recieve);
-            recieved = new Thread(recieve_start);
-            recieved.Start(id);
-        }
         public bool WaitToRead = false;
-        public void Start()
-        {
-            recieved.Start(id);
-        }
         public void SendPacket(PacketHandler p, int id, ref ClientManager cm, bool PingType, bool Waitread)
         {
             try
@@ -138,18 +132,16 @@ namespace LibOpenCraft
             bool connected = true;
             while (connected == true)
             {
-                System.Threading.Thread.Sleep(1);
+                Thread.Sleep(0001);
                 try
                 {
                     if (GridServer.player_list[_id]._client == null || id == -1)
                     {
-                        GridServer.player_list[_id].Stop(true);
                         break;
                     }
-                    if (!GridServer.player_list[_id]._client.Connected == true)
+                    if (GridServer.player_list[_id]._client.Connected == false)
                     {
                         GridServer.player_list[_id]._client.Close();
-                        GridServer.player_list[_id].Stop(true);
                         break;
                     }
                     if (GridServer.player_list[_id]._stream != null && !GridServer.player_list[_id].customAttributes.ContainsKey("InPrechunk") && GridServer.player_list[_id]._client.Available > 0)
@@ -189,7 +181,7 @@ namespace LibOpenCraft
                             Thread.Sleep(50);
                         else
                         {
-                            System.Threading.Thread.Sleep(1);
+                            Thread.Sleep(0001);
                             if (GridServer.player_list[_id]._player.EntityUpdateCount < (int)Config.Configuration["EntityUpdate"])
                             {
                                 ClientManager[] player = GridServer.player_list;
@@ -217,20 +209,6 @@ namespace LibOpenCraft
 
                 catch (Exception e)
                 {
-                    /*try
-                    {
-                        if (GridServer.player_list[_id]._stream != null)
-                            GridServer.player_list[_id]._stream.Close();
-                        if (GridServer.player_list[_id]._client != null)
-                            GridServer.player_list[_id]._client.Close();
-                        Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
-                        GridServer.player_list[_id].Stop(true);
-                    }
-                    catch (Exception de)
-                    {
-                        Console.WriteLine("ERROR: " + de.Message + " Source:" + de.Source + " Method:" + de.TargetSite + " Data:" + de.Data);
-                    }
-                    break;*/
                 }
             }
             if (GridServer.player_list[_id]._stream != null)
@@ -238,6 +216,8 @@ namespace LibOpenCraft
             if (GridServer.player_list[_id]._client != null)
                 GridServer.player_list[_id]._client.Close();
             Console.WriteLine("Connection Closed.");
+            GridServer.player_list[_id] = null;
+            GC.Collect();
             GridServer.player_list[_id].Stop(true);
         }
     }

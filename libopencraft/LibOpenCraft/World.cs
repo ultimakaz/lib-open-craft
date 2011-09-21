@@ -19,6 +19,7 @@ namespace LibOpenCraft
                 for (int z = 0; z < count; z++)
                 {
                     GC.Collect();
+                    System.Threading.Thread.Sleep(0001);
                     GridServer.chunk_b.Add(new Chunk((short)x, (short)z));
                     GC.Collect();
                 }
@@ -81,6 +82,7 @@ namespace LibOpenCraft
                             SetBlocktype(i, 0x03);
                         else if (block_y >= 91)//Create Air
                             SetBlocktype(i, 0x00);
+                        //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
@@ -94,6 +96,7 @@ namespace LibOpenCraft
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetData(i, 0x00);
+                        //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
@@ -107,6 +110,7 @@ namespace LibOpenCraft
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetBlockLight(i, 0x0F);
+                        //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
@@ -120,6 +124,7 @@ namespace LibOpenCraft
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetSkyLight(i, 0x00F);
+                        //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
