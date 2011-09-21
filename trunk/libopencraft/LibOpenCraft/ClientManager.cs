@@ -74,7 +74,6 @@ namespace LibOpenCraft
             }
             else
             {
-                //recieved.Abort();
             }
         }
         public bool WaitToRead = false;
