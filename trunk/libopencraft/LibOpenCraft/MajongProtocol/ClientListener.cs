@@ -70,7 +70,7 @@ namespace LibOpenCraft.MajongProtocol
                 if (_listener.Pending())
                     _listener.BeginAcceptTcpClient(new AsyncCallback(AsyncResult_newcon), (object)"New Connection");
                 else
-                    Thread.Sleep(1);
+                    Thread.Sleep(0001);
             }
             
         }

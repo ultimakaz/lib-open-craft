@@ -6,7 +6,6 @@ using LibOpenCraft;
 using LibOpenCraft.ServerPackets;
 
 using System.IO.Compression;
-using Ionic.Zlib;
 using System.IO;
 using System.Reflection;
 using System.ComponentModel.Composition;
@@ -57,7 +56,7 @@ namespace LibOpenCraft.ChunkHandler
             EntitySpawn.Rotation = (byte)cm._player.stance;
             EntitySpawn.BuildPacket();
             //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
-            System.Threading.Thread.Sleep(1);
+            System.Threading.Thread.Sleep(0001);
             ClientManager[] player = GridServer.player_list;
             for (int i = 0; i < player.Length; i++)
             {
@@ -143,7 +142,7 @@ namespace LibOpenCraft.ChunkHandler
             }
         }
 
-        public ChunkPacket MakeChunkArray(int _x, int _y)
+        unsafe public ChunkPacket MakeChunkArray(int _x, int _y)
         {
             ChunkPacket _cPacket = new ChunkPacket();
             _cPacket.X = _x * 16;
@@ -152,10 +151,15 @@ namespace LibOpenCraft.ChunkHandler
             _cPacket.SIZE_Y = 127;
             _cPacket.SIZE_Z = 15;
             int index = Chunk.GetIndex(_x, _y);
-            using (MemoryStream memStream = new MemoryStream())
-            {
+            //[128698]	19	byte 139324
 
-                using (ZlibStream compressor = new ZlibStream(memStream, Ionic.Zlib.CompressionMode.Compress, CompressionLevel.BestCompression))
+            byte[] buffer = new byte[87978];
+            IntPtr memIntPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(buffer.Length);
+            byte* memBytePtr = (byte*)memIntPtr.ToPointer();
+            // Write the data.
+            using (UnmanagedMemoryStream memStream = new UnmanagedMemoryStream(memBytePtr, buffer.Length, buffer.Length, FileAccess.Write))
+            {
+                using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_COMPRESSION))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
@@ -181,11 +185,15 @@ namespace LibOpenCraft.ChunkHandler
                         compressor.WriteByte((byte)(((GridServer.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (GridServer.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
                     }
                 }
-                _cPacket.ChunkData = memStream.ToArray();
-                memStream.Flush();
+                UnmanagedMemoryStream readStream = new UnmanagedMemoryStream(memBytePtr, buffer.Length, buffer.Length, FileAccess.Read);
+                _cPacket.ChunkData = new byte[buffer.Length];
+                readStream.Read(_cPacket.ChunkData, 0, buffer.Length);
+                readStream.Close();
                 memStream.Close();
-                memStream.Dispose();
+                System.Runtime.InteropServices.Marshal.FreeHGlobal(memIntPtr);
             }
+            
+            buffer = null;
             _cPacket.Compressed_Size = _cPacket.ChunkData.Count();
             _cPacket.BuildPacket();
             return _cPacket;
