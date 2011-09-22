@@ -94,7 +94,14 @@ namespace LibOpenCraft.ChunkHandler
                     }
                 }
             }
+            try
+            {
+                send.Abort();
+            }
+            catch (Exception)
+            {
 
+            }
             #endregion SendSpawn
         }
         public PacketHandler LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
