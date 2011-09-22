@@ -39,7 +39,7 @@ namespace LibOpenCraft.MajongProtocol
             p.BlockID = _pReader.ReadShort();
             p.Amount = _pReader.ReadByte();
             p.Damage = _pReader.ReadShort();
-
+            GridServer.player_list[_client.id].WaitToRead = false;
             PacketReader pr = new PacketReader(new System.IO.BinaryReader(new System.IO.MemoryStream(p.GetBytes())));
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)

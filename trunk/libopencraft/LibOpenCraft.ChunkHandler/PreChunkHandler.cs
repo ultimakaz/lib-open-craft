@@ -11,6 +11,7 @@ using System.Reflection;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
+using System.Threading;
 
 namespace LibOpenCraft.ChunkHandler
 {
@@ -18,7 +19,11 @@ namespace LibOpenCraft.ChunkHandler
     [ExportMetadata("Name", "Pre Chunk, Chunk Handler")]
     public class PreChunkHandler : CoreModule
     {
+        private Thread send;
+        private ThreadStart send_start;
+        int id;
         private ClientManager _client;
+        private PacketReader pr;
         public PreChunkHandler()
             : base()
         {
@@ -30,30 +35,27 @@ namespace LibOpenCraft.ChunkHandler
         public void OnPreChunkRequested(ref PacketReader packet_reader, PacketType p_type, ref ClientManager cm)
         {
         }
-
-        public PacketHandler LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
+        public void DoChunks()
         {
-            base.RunModuleCache();
-            _client = cm;
             _client.customAttributes.Add("InPrechunk", null);
             RunPreChunkInitialization();
             _client.customAttributes.Remove("InPrechunk");
             for (int i = 0; i < base.ModuleAddons.Count; i++)
             {
-                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref packet_reader, _p, ref cm);
+                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
             }
 
-            //SendChunks(11, 13);
+            SendChunks(6, 25);
             #region SendSpawn
             NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-            EntitySpawn.X = (int)cm._player.position.X * 32;
-            EntitySpawn.Y = (int)cm._player.position.Y * 32;
-            EntitySpawn.Z = (int)cm._player.position.Z * 32;
-            EntitySpawn.EntityID = cm.id;
-            EntitySpawn.PlayerName = cm._player.name;
-            EntitySpawn.CurrentItem = cm._player.Current_Item;
-            EntitySpawn.Pitch = (byte)cm._player.Pitch;
-            EntitySpawn.Rotation = (byte)cm._player.stance;
+            EntitySpawn.X = (int)_client._player.position.X * 32;
+            EntitySpawn.Y = (int)_client._player.position.Y * 32;
+            EntitySpawn.Z = (int)_client._player.position.Z * 32;
+            EntitySpawn.EntityID = _client.id;
+            EntitySpawn.PlayerName = _client._player.name;
+            EntitySpawn.CurrentItem = _client._player.Current_Item;
+            EntitySpawn.Pitch = (byte)_client._player.Pitch;
+            EntitySpawn.Rotation = (byte)_client._player.stance;
             EntitySpawn.BuildPacket();
             //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
             System.Threading.Thread.Sleep(0001);
@@ -66,11 +68,11 @@ namespace LibOpenCraft.ChunkHandler
                 }
                 else
                 {
-                    if (cm._client == null || cm._client.Connected == false || player[i].PreChunkRan != 1)
+                    if (_client._client == null || _client._client.Connected == false || player[i].PreChunkRan != 1)
                     {
                         if (player[i] != null)
                         {
-                            return _p;
+                            //return _p;
                         }
                     }
                     else
@@ -85,22 +87,37 @@ namespace LibOpenCraft.ChunkHandler
                         t_EntitySpawn.Pitch = (byte)(int)player[i]._player.Pitch;
                         t_EntitySpawn.Rotation = (byte)(int)player[i]._player.stance;
                         t_EntitySpawn.BuildPacket();
-                        if (cm.id != player[i].id)
-                            cm.SendPacket(t_EntitySpawn, cm.id, ref cm, false, false);
-                        if (cm.id != player[i].id)
+                        if (_client.id != player[i].id)
+                            _client.SendPacket(t_EntitySpawn, _client.id, ref _client, false, false);
+                        if (_client.id != player[i].id)
                             player[i].SendPacket(EntitySpawn, player[i].id, ref player[i], false, false);
                     }
                 }
             }
 
             #endregion SendSpawn
+        }
+        public PacketHandler LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
+        {
+            base.RunModuleCache();
+            
+            GridServer.player_list[cm.id].WaitToRead = false;
+            send_start = new ThreadStart(DoChunks);
+            send = new Thread(send_start);
+
+            pr = packet_reader;
+            _client = cm;
+            id = cm.id;
+
+            send.Start();
+            
             return _p;
         }
 
         public void RunPreChunkInitialization()
         {
             _client.PreChunkRan = 1;
-            int count = 10;
+            int count = 5;
             int x = 0;
             int y = 0;
             for (x = 0; x < count; x++)
@@ -112,10 +129,10 @@ namespace LibOpenCraft.ChunkHandler
                     p.y = y;
                     p.load = 1;
                     p.BuildPacket();
-                    _client.SendPacket(p, _client.id, ref _client, false, false);
-                    //System.Threading.Thread.Sleep(5);
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client, false, false);
-                    //GC.Collect();
+                    _client._client.Client.Send(p.GetBytes());
+                    _client._client.Client.Send(MakeChunkArray(x, y).GetBytes());
+                    System.Threading.Thread.Sleep(1);
+                    GC.Collect();
                 }
             }
         }
@@ -133,10 +150,8 @@ namespace LibOpenCraft.ChunkHandler
                     p.y = y;
                     p.load = 1;
                     p.BuildPacket();
-                    _client.SendPacket(p, _client.id, ref _client, false, false);
-                    //System.Threading.Thread.Sleep(5);
-
-                    _client.SendPacket(MakeChunkArray(x, y), _client.id, ref _client, false, false);
+                    _client._client.Client.Send(p.GetBytes());
+                    _client._client.Client.Send(MakeChunkArray(x, y).GetBytes());
                     //GC.Collect();
                 }
             }
@@ -154,10 +169,8 @@ namespace LibOpenCraft.ChunkHandler
             //[128698]	19	byte 139324
 
             byte[] buffer = new byte[87978];
-            IntPtr memIntPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(buffer.Length);
-            byte* memBytePtr = (byte*)memIntPtr.ToPointer();
             // Write the data.
-            using (UnmanagedMemoryStream memStream = new UnmanagedMemoryStream(memBytePtr, buffer.Length, buffer.Length, FileAccess.Write))
+            using (MemoryStream memStream = new MemoryStream(buffer, true))
             {
                 using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_COMPRESSION))
                 {
@@ -185,12 +198,11 @@ namespace LibOpenCraft.ChunkHandler
                         compressor.WriteByte((byte)(((GridServer.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (GridServer.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
                     }
                 }
-                UnmanagedMemoryStream readStream = new UnmanagedMemoryStream(memBytePtr, buffer.Length, buffer.Length, FileAccess.Read);
+                MemoryStream readStream = new MemoryStream(buffer, false);
                 _cPacket.ChunkData = new byte[buffer.Length];
                 readStream.Read(_cPacket.ChunkData, 0, buffer.Length);
                 readStream.Close();
                 memStream.Close();
-                System.Runtime.InteropServices.Marshal.FreeHGlobal(memIntPtr);
             }
             
             buffer = null;

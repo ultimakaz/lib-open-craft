@@ -31,7 +31,7 @@ namespace LibOpenCraft.MajongProtocol
         public void OnHandshake(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
             _client._player.name = _pReader.ReadString();
-
+            GridServer.player_list[_client.id].WaitToRead = false;
             #region Building Packet
             HandshakePacket p = new HandshakePacket(PacketType.Handshake);
             p.ConnectionHash = (string)Config.Configuration["Handshake"];

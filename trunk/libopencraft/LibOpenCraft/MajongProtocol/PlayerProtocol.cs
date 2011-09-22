@@ -30,6 +30,7 @@ namespace LibOpenCraft.MajongProtocol
         public void OnPlayer(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
             _client._player.onGround = _pReader.ReadByte();// On Ground
+            GridServer.player_list[_client.id].WaitToRead = false;
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
@@ -83,6 +84,7 @@ namespace LibOpenCraft.MajongProtocol
             _client._player.stance = _pReader.ReadDouble();
             _client._player.position.Z = _pReader.ReadDouble();
             _client._player.onGround = _pReader.ReadByte();
+            GridServer.player_list[_client.id].WaitToRead = false;
             #endregion
             #region New Position Calculations
             Vector3D new_pos = _client._player.position;
@@ -199,6 +201,7 @@ namespace LibOpenCraft.MajongProtocol
             _client._player.Yaw = _pReader.ReadFloat();// Yaw
             _client._player.Pitch = _pReader.ReadFloat();// Pitch
             _client._player.onGround = _pReader.ReadByte();// On Ground
+            GridServer.player_list[_client.id].WaitToRead = false;
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {

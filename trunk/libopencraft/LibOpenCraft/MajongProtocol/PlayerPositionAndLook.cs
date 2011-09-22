@@ -30,6 +30,7 @@ namespace LibOpenCraft.MajongProtocol
 
         public PacketHandler OnPlayerPositionLookHandler(PacketType p_type, string CustomPacketType, ref PacketReader _pReader, PacketHandler _p, ref ClientManager cm)
         {
+            GridServer.player_list[cm.id].WaitToRead = false;
             if (cm._player.customerVariables.ContainsKey("BeforeFirstPosition"))
             {
                 PlayerPositionAndLookPacket p = new PlayerPositionAndLookPacket(PacketType.PlayerPositionLook);
@@ -81,6 +82,7 @@ namespace LibOpenCraft.MajongProtocol
             _client._player.Yaw = _pReader.ReadFloat();// Yaw
             _client._player.Pitch = _pReader.ReadFloat();// Pitch
             _client._player.onGround = _pReader.ReadByte();// On Ground
+            GridServer.player_list[_client.id].WaitToRead = false;
             /*if (_client._player.customerVariables.ContainsKey("BeforeFirstPosition"))
             {
                 PlayerPositionAndLookPacket p = new PlayerPositionAndLookPacket(PacketType.PlayerPositionLook);
