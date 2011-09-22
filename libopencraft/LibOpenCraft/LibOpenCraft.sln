@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibOpenCraft.ChunkHandler",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibOpenCraft.Chat", "..\LibOpenCraft.Chat\LibOpenCraft.Chat.csproj", "{FF9DD83D-435B-4422-A468-1E8F967AE7C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicWebServer", "..\DynamicWebServer\DynamicWebServer.csproj", "{778C6617-5906-4AA4-9EEA-1F270029BB7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{FF9DD83D-435B-4422-A468-1E8F967AE7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF9DD83D-435B-4422-A468-1E8F967AE7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF9DD83D-435B-4422-A468-1E8F967AE7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778C6617-5906-4AA4-9EEA-1F270029BB7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778C6617-5906-4AA4-9EEA-1F270029BB7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778C6617-5906-4AA4-9EEA-1F270029BB7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778C6617-5906-4AA4-9EEA-1F270029BB7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

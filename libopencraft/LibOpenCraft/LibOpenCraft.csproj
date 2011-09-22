@@ -159,6 +159,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DynamicWebServer\DynamicWebServer.csproj">
+      <Project>{778C6617-5906-4AA4-9EEA-1F270029BB7F}</Project>
+      <Name>DynamicWebServer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

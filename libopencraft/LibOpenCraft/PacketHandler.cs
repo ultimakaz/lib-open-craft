@@ -190,7 +190,7 @@ namespace LibOpenCraft
     public class PacketReader
     {
 
-        private BinaryReader reader;
+        public BinaryReader reader;
         #region Packet_Reader
         public PacketReader(BinaryReader _reader)
         {
