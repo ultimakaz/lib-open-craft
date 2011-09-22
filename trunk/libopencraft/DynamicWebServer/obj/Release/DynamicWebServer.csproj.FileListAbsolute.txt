@@ -23,3 +23,8 @@ C:\Users\geramyDtop\Documents\EcoLife-source\BearAPI\DynamicWebServer\bin\Releas
 C:\Users\geramyDtop\Documents\EcoLife-source\BearAPI\DynamicWebServer\obj\Release\ResolveAssemblyReference.cache
 C:\Users\geramyDtop\Documents\EcoLife-source\BearAPI\DynamicWebServer\obj\Release\DynamicWebServer.dll
 C:\Users\geramyDtop\Documents\EcoLife-source\BearAPI\DynamicWebServer\obj\Release\DynamicWebServer.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\bin\Release\DynamicWebServer.dll
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\bin\Release\DynamicWebServer.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\obj\Release\ResolveAssemblyReference.cache
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\obj\Release\DynamicWebServer.dll
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\obj\Release\DynamicWebServer.pdb
