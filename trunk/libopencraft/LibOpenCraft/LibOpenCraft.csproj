@@ -60,6 +60,7 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FastRandom.cs" />
     <Compile Include="ClientManager.cs" />
     <Compile Include="ClientPackets\LoginHandlerPacket.cs" />
     <Compile Include="Config.cs" />

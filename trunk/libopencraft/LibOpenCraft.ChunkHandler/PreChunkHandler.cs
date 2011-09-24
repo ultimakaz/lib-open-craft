@@ -164,7 +164,7 @@ namespace LibOpenCraft.ChunkHandler
             }
         }
 
-        unsafe public ChunkPacket MakeChunkArray(int _x, int _y)
+        public ChunkPacket MakeChunkArray(int _x, int _y)
         {
             ChunkPacket _cPacket = new ChunkPacket();
             _cPacket.X = _x * 16;
