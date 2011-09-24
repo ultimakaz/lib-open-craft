@@ -76,17 +76,21 @@ namespace LibOpenCraft
                     for (int block_y = 0; block_y < 128; block_y++)
                     {
                         int i = GetIndex(block_x, block_y, block_z);
-                        if (block_y < 65)//Create Water
-                            SetBlocktype(i, 0x09);
-                        else if (block_y < 90)//Create Dirt
+                        if (block_y == 1)//Create Bedrock
+                            SetBlocktype(i, 0x07);
+                        else if (block_y < 49)//Create Stone
+                            SetBlocktype(i, 0x01);
+                        else if (block_y < 64)//Create Dirt
                             SetBlocktype(i, 0x03);
-                        else if (block_y >= 91)//Create Air
+                        else if (block_y == 64)//Create Grass
+                            SetBlocktype(i, 0x02);
+                        else if (block_y >= 65)//Create Air
                             SetBlocktype(i, 0x00);
                         //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
-
+            
             // Write MetaData
             for (int block_x = 0; block_x < 16; block_x++)
             {

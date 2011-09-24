@@ -12,3 +12,11 @@ C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibO
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.exe.config
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\config.txt
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\World\temp.txt
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.exe
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.pdb
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\DynamicWebServer.dll
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\NBT.dll
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\DynamicWebServer.pdb
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\ResolveAssemblyReference.cache

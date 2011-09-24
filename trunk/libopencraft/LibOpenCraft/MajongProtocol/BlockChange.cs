@@ -55,9 +55,17 @@ namespace LibOpenCraft.MajongProtocol
             }
             if (_p.BlockID > 255)
             {
-                PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
-                kick.AddString("Server has kicked you for illegal packet!!");
-                _client.SendPacket(kick, _client.id, ref _client, false, false);
+                //exceptions
+                if (_p.BlockID == 326) //water
+                    _p.BlockID = 8;
+                else if (_p.BlockID == 326) //lava
+                    _p.BlockID = 8;
+                else //ban the hax0r!
+                {
+                    PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
+                    kick.AddString("Server has kicked you for illegal packet!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                }
             }
             block_change.X = X;
             block_change.Y = Y;

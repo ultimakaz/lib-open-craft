@@ -5,3 +5,10 @@ C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\LibO
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.Chat\obj\Release\ResolveAssemblyReference.cache
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.Chat\obj\Release\LibOpenCraft.Chat.dll
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.Chat\obj\Release\LibOpenCraft.Chat.pdb
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\config.txt
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\World\temp.txt
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.Chat.dll
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.Chat.pdb
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft.Chat\obj\Release\ResolveAssemblyReference.cache
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft.Chat\obj\Release\LibOpenCraft.Chat.dll
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft.Chat\obj\Release\LibOpenCraft.Chat.pdb
