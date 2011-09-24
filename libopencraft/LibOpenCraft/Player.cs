@@ -28,9 +28,9 @@ namespace LibOpenCraft
             stance = 0;
             onGround = 0x01;
             position = new Vector3D(0.0, 92, 0.0);
-            position.X = 15.0;
-            position.Y = 92.0;
-            position.Z = 15.0;
+            position.X = new Random().Next(128);//15.0;
+            position.Y = 127.0;
+            position.Z = new Random().Next(128);//15.0;
             customerVariables = new Dictionary<string, object>();
             CurrentSlot = 0;
         }
