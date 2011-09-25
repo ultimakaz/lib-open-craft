@@ -111,12 +111,21 @@ namespace LibOpenCraft
             }
             catch(Exception e)
             {
-                GridServer.player_list[cm.id]._stream.Close();
-                GridServer.player_list[cm.id]._client.Close();
-                Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
-                Random r = new Random();
-                GridServer.player_list[id] = null;
-                GridServer.player_list[cm.id].Stop(true);
+                if (GridServer.player_list[cm.id] != null)
+                {
+                    if (GridServer.player_list[cm.id]._stream != null)
+                        GridServer.player_list[cm.id]._stream.Close();
+                    if (GridServer.player_list[cm.id]._client != null)
+                    GridServer.player_list[cm.id]._client.Close();
+                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
+                    Random r = new Random();
+                    GridServer.player_list[id] = null;
+                    GridServer.player_list[cm.id].Stop(true);
+                }
+                else
+                {
+                    Stop(true);
+                }
             }
         }
         public void Recieve()
