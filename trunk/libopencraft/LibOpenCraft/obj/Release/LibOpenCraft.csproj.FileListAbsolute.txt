@@ -25,3 +25,4 @@ C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\config.txt
 C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\World\temp.txt
 C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.exe
 C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.pdb
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\bin\Release\LibOpenCraft.exe.config
