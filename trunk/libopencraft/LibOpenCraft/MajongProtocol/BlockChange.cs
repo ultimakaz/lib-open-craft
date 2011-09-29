@@ -11,15 +11,15 @@ using LibOpenCraft.ServerPackets;
 
 namespace LibOpenCraft.MajongProtocol
 {
-    [Export(typeof(CoreEventModule))]
+    [Export(typeof(CoreModule))]
     [ExportMetadata("Name", "BlockChange")]
-    public class BlockChange : CoreEventModule
+    public class BlockChange : CoreModule
     {
 
         //private PacketType _pt = PacketType.LoginRequest;
         string name = "";
         public BlockChange()
-            : base(PacketType.BlockChange)
+            : base()
         {
             ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerDigging, OnBlockDelete);
             ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnBlockChange);
@@ -29,7 +29,7 @@ namespace LibOpenCraft.MajongProtocol
         public override void Start()
         {
             base.Start();
-            //ModuleHandler.AddEventModule(PacketType.BlockChange, new ModuleCallback(OnBlockChange));
+            //ModuleHandler.AddEventModule(PacketType.BlockChange, OnBlockChange);
             base.RunModuleCache();
         }
         public PacketHandler OnBlockChange(PacketType p_type, string CustomPacketType, ref PacketReader _pReader, PacketHandler packet, ref ClientManager _client)
