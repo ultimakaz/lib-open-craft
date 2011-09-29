@@ -37,9 +37,9 @@ namespace LibOpenCraft.ChunkHandler
         }
         public void DoChunks()
         {
-            _client.customAttributes.Add("InPrechunk", null);
+            GridServer.player_list[id].Suspend();
             RunPreChunkInitialization();
-            _client.customAttributes.Remove("InPrechunk");
+            GridServer.player_list[id].Resume();
             for (int i = 0; i < base.ModuleAddons.Count; i++)
             {
                 base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
@@ -58,7 +58,7 @@ namespace LibOpenCraft.ChunkHandler
             EntitySpawn.Rotation = (byte)_client._player.stance;
             EntitySpawn.BuildPacket();
             //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
-            System.Threading.Thread.Sleep(0001);
+            Thread.SpinWait(1);
             ClientManager[] player = GridServer.player_list;
             for (int i = 0; i < player.Length; i++)
             {
@@ -179,7 +179,7 @@ namespace LibOpenCraft.ChunkHandler
             
             using (MemoryStream memStream = new MemoryStream(buffer, true))
             {
-                using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_COMPRESSION))
+                using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_SPEED))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {

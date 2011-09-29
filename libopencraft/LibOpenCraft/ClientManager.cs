@@ -128,6 +128,15 @@ namespace LibOpenCraft
                 }
             }
         }
+        bool Suspendv = false;
+        public void Suspend()
+        {
+            Suspendv = true;
+        }
+        public void Resume()
+        {
+            Suspendv = false;
+        }
         public void Recieve()
         {
             int _id = id;
@@ -136,80 +145,74 @@ namespace LibOpenCraft
             _stream = new NetworkStream(_client.Client);
             NetworkStream stream = new NetworkStream(_client.Client);
             PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(stream));
-            bool connected = true;
-            while (connected == true)
+            //bool connected = true;
+            while (true)
             {
-                Thread.Sleep(0001);
+                Thread.SpinWait(1);
                 try
                 {
-                    if (GridServer.player_list[_id]._client == null || id == -1)
+                    if (Suspendv == false)
                     {
-                        break;
-                    }
-                    if (GridServer.player_list[_id]._client.Connected == false)
-                    {
-                        GridServer.player_list[_id]._client.Close();
-                        break;
-                    }
-                    if (GridServer.player_list[_id]._stream != null && !GridServer.player_list[_id].customAttributes.ContainsKey("InPrechunk") && GridServer.player_list[_id]._client.Available > 0)
-                    {
-                        //System.Threading.Thread.Sleep(1);
-                        GridServer.player_list[_id].WaitToRead = true;
-                        PacketType p_type = (PacketType)p_reader.ReadByte();
-                        if (ModuleHandler.Eventmodules.ContainsKey(p_type))
+                        if (GridServer.player_list[_id]._client.Client.Available > 0)
                         {
-                            ModuleHandler.Eventmodules[p_type].DynamicInvoke(new object[3] { p_reader, p_type, GridServer.player_list[_id] });
-                            //GridServer.player_list[_id].WaitToRead = false;
-                        }
-                        else
-                        {
-                            System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
-                            //System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
-                            //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
-                            //kick.AddString("Server has kicked you for illegal packet!!");
-                            //GridServer.player_list[_id].SendPacket(kick, _id, ref GridServer.player_list[_id]);
-
-                            GridServer.player_list[_id].WaitToRead = false;
-
-                        }
-                        if (GridServer.player_list[_id]._stream != null && DateTime.Now.Minute > GridServer.player_list[_id].keep_alive.Minute || GridServer.player_list[_id].keep_alive.Second + 1 < DateTime.Now.Second)
-                        {
-                            Random r = new Random(1789);
-                            GridServer.player_list[_id].customAttributes["PayLoad"] = (object)r.Next(1024, 4096);
-                            LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
-                            p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
-                            p.BuildPacket();
-                            SendPacket(p, id, ref GridServer.player_list[_id], false, false);
-                        }
-                    }
-                    else
-                    {
-                        if (_player.name == "")
-                            Thread.Sleep(50);
-                        else
-                        {
-                            Thread.Sleep(0001);
-                            if (GridServer.player_list[_id]._player.EntityUpdateCount < (int)Config.Configuration["EntityUpdate"])
+                            //System.Threading.Thread.Sleep(1);
+                            GridServer.player_list[_id].WaitToRead = true;
+                            PacketType p_type = (PacketType)p_reader.ReadByte();
+                            if (ModuleHandler.Eventmodules.Keys.Contains(p_type))
                             {
-                                ClientManager[] player = GridServer.player_list;
-                                for (int i = 0; i < player.Count(); i++)
-                                {
-                                    if (player[i] == null && player[i].id == id || player[i].PreChunkRan != 1)
-                                    {
-
-                                    }
-                                    else
-                                    {
-                                        LibOpenCraft.ServerPackets.EntityPacket e = new LibOpenCraft.ServerPackets.EntityPacket(PacketType.Entity);
-                                        e.EntityID = id;
-                                        e.BuildPacket();
-                                        player[i].SendPacket(e, player[i].id, ref player[i], false, false);
-                                        GridServer.player_list[_id]._player.EntityUpdateCount++;
-                                    }
-                                }
+                                ModuleHandler.Eventmodules[p_type](ref p_reader, p_type, ref GridServer.player_list[_id]);
+                                //GridServer.player_list[_id].WaitToRead = false;
                             }
                             else
-                                GridServer.player_list[_id]._player.EntityUpdateCount = 0;
+                            {
+                                System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
+                                //System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
+                                //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
+                                //kick.AddString("Server has kicked you for illegal packet!!");
+                                //GridServer.player_list[_id].SendPacket(kick, _id, ref GridServer.player_list[_id]);
+
+                                GridServer.player_list[_id].WaitToRead = false;
+
+                            }
+                            if (GridServer.player_list[_id]._stream != null && DateTime.Now.Minute > GridServer.player_list[_id].keep_alive.Minute || GridServer.player_list[_id].keep_alive.Second + 1 < DateTime.Now.Second)
+                            {
+                                Random r = new Random(1789);
+                                GridServer.player_list[_id].customAttributes["PayLoad"] = (object)r.Next(1024, 4096);
+                                LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
+                                p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
+                                p.BuildPacket();
+                                SendPacket(p, id, ref GridServer.player_list[_id], false, false);
+                            }
+                        }
+                        else
+                        {
+                            if (_player.name == "")
+                                Thread.Sleep(50);
+                            else
+                            {
+                                Thread.Sleep(0001);
+                                if (GridServer.player_list[_id]._player.EntityUpdateCount < (int)Config.Configuration["EntityUpdate"])
+                                {
+                                    ClientManager[] player = GridServer.player_list;
+                                    for (int i = 0; i < player.Length; i++)
+                                    {
+                                        if (player[i] == null || player[i].id == id || player[i].PreChunkRan != 1)
+                                        {
+
+                                        }
+                                        else
+                                        {
+                                            LibOpenCraft.ServerPackets.EntityPacket e = new LibOpenCraft.ServerPackets.EntityPacket(PacketType.Entity);
+                                            e.EntityID = id;
+                                            e.BuildPacket();
+                                            player[i].SendPacket(e, player[i].id, ref player[i], false, false);
+                                            GridServer.player_list[_id]._player.EntityUpdateCount++;
+                                        }
+                                    }
+                                }
+                                else
+                                    GridServer.player_list[_id]._player.EntityUpdateCount = 0;
+                            }
                         }
                     }
                 }
