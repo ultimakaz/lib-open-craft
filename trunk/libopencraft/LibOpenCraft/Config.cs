@@ -21,8 +21,17 @@ namespace LibOpenCraft
                 string temp_r = _reader.ReadLine();
                 if (temp_r.Contains("="))
                 {
-                    string[] temp_vars = temp_r.Split(new char[1] { '=' }, 2);
-                    Configuration.Add(temp_vars[0], ReturnType(temp_vars[1]));
+                    string[] temp_vars = new string[2];
+                    if (temp_r.Contains("//"))
+                    {
+                        temp_vars = temp_r.Substring(0, temp_r.IndexOf('/') - 1).Split(new char[1] { '=' }, 2);
+                        Configuration.Add(temp_vars[0], ReturnType(temp_vars[1]));
+                    }
+                    else
+                    {
+                        temp_vars = temp_r.Split(new char[1] { '=' }, 2);
+                        Configuration.Add(temp_vars[0], ReturnType(temp_vars[1]));
+                    }
                 }
                 else
                 {

@@ -50,9 +50,25 @@ namespace LibOpenCraft
         public GridServer()
         {
             Config.InitializeSettings();
+            DoSetupGCMode();
             player_list = new ClientManager[(int)Config.Configuration["MaxPlayers"] + 1];
             World.LoadWorld();
             SetupModules();
+        }
+        public void DoSetupGCMode()
+        {
+            switch ((string)Config.Configuration["GCMode"])
+            {
+                case "Batch":
+                    System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.Batch;
+                    break;
+                case "Interactive":
+                    System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.Interactive;
+                    break;
+                case "LowLatency":
+                    System.Runtime.GCSettings.LatencyMode = System.Runtime.GCLatencyMode.LowLatency;
+                    break;
+            }
         }
         public void SetupModules()
         {
