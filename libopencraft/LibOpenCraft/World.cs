@@ -18,8 +18,6 @@ namespace LibOpenCraft
             {
                 for (int z = 0; z < count; z++)
                 {
-                    GC.Collect();
-                    System.Threading.Thread.Sleep(0001);
                     GridServer.chunk_b.Add(new Chunk((short)x, (short)z));
                     GC.Collect();
                 }
@@ -27,6 +25,7 @@ namespace LibOpenCraft
             GridServer.chunks = new Chunk[GridServer.chunk_b.Count];
             GridServer.chunks = GridServer.chunk_b.ToArray();
             GridServer.chunk_b.Clear();
+            GC.Collect();
         }
     }
     public class Chunk

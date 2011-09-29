@@ -174,9 +174,9 @@ namespace LibOpenCraft.ChunkHandler
             _cPacket.SIZE_Z = 15;
             int index = Chunk.GetIndex(_x, _y);
             //[128698]	19	byte 139324
-
             byte[] buffer = new byte[87978];
             // Write the data.
+            
             using (MemoryStream memStream = new MemoryStream(buffer, true))
             {
                 using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_COMPRESSION))
