@@ -37,71 +37,78 @@ namespace LibOpenCraft.ChunkHandler
         }
         public void DoChunks()
         {
-            GridServer.player_list[id].Suspend();
-            RunPreChunkInitialization();
-            GridServer.player_list[id].Resume();
-            for (int i = 0; i < base.ModuleAddons.Count; i++)
+            try
             {
-                base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
-            }
-
-            SendChunks(6, 15);
-            #region SendSpawn
-            NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-            EntitySpawn.X = (int)_client._player.position.X * 32;
-            EntitySpawn.Y = (int)_client._player.position.Y * 32;
-            EntitySpawn.Z = (int)_client._player.position.Z * 32;
-            EntitySpawn.EntityID = _client.id;
-            EntitySpawn.PlayerName = _client._player.name;
-            EntitySpawn.CurrentItem = _client._player.Current_Item;
-            EntitySpawn.Pitch = (byte)_client._player.Pitch;
-            EntitySpawn.Rotation = (byte)_client._player.stance;
-            EntitySpawn.BuildPacket();
-            //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
-            Thread.SpinWait(1);
-            ClientManager[] player = GridServer.player_list;
-            for (int i = 0; i < player.Length; i++)
-            {
-                if (player[i] == null)
+                GridServer.player_list[id].Suspend();
+                RunPreChunkInitialization();
+                GridServer.player_list[id].Resume();
+                for (int i = 0; i < base.ModuleAddons.Count; i++)
                 {
-
+                    base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
                 }
-                else
+
+                SendChunks(6, 15);
+                #region SendSpawn
+                NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
+                EntitySpawn.X = (int)_client._player.position.X * 32;
+                EntitySpawn.Y = (int)_client._player.position.Y * 32;
+                EntitySpawn.Z = (int)_client._player.position.Z * 32;
+                EntitySpawn.EntityID = _client.id;
+                EntitySpawn.PlayerName = _client._player.name;
+                EntitySpawn.CurrentItem = _client._player.Current_Item;
+                EntitySpawn.Pitch = (byte)_client._player.Pitch;
+                EntitySpawn.Rotation = (byte)_client._player.stance;
+                EntitySpawn.BuildPacket();
+                //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
+                Thread.SpinWait(1);
+                ClientManager[] player = GridServer.player_list;
+                for (int i = 0; i < player.Length; i++)
                 {
-                    if (_client._client == null || _client._client.Connected == false || player[i].PreChunkRan != 1)
+                    if (player[i] == null)
                     {
-                        if (player[i] != null)
-                        {
-                            //return _p;
-                        }
+
                     }
                     else
                     {
-                        NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
-                        t_EntitySpawn.X = (int)player[i]._player.position.X * 32;
-                        t_EntitySpawn.Y = (int)player[i]._player.position.Y * 32;
-                        t_EntitySpawn.Z = (int)player[i]._player.position.Z * 32;
-                        t_EntitySpawn.EntityID = player[i].id;
-                        t_EntitySpawn.PlayerName = player[i]._player.name;
-                        t_EntitySpawn.CurrentItem = player[i]._player.Current_Item;
-                        t_EntitySpawn.Pitch = (byte)(int)player[i]._player.Pitch;
-                        t_EntitySpawn.Rotation = (byte)(int)player[i]._player.stance;
-                        t_EntitySpawn.BuildPacket();
-                        if (_client.id != player[i].id)
-                            _client.SendPacket(t_EntitySpawn, _client.id, ref _client, false, false);
-                        if (_client.id != player[i].id)
-                            player[i].SendPacket(EntitySpawn, player[i].id, ref player[i], false, false);
+                        if (_client._client == null || _client._client.Connected == false || player[i].PreChunkRan != 1)
+                        {
+                            if (player[i] != null)
+                            {
+                                //return _p;
+                            }
+                        }
+                        else
+                        {
+                            NamedEntitySpawnPacket t_EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
+                            t_EntitySpawn.X = (int)player[i]._player.position.X * 32;
+                            t_EntitySpawn.Y = (int)player[i]._player.position.Y * 32;
+                            t_EntitySpawn.Z = (int)player[i]._player.position.Z * 32;
+                            t_EntitySpawn.EntityID = player[i].id;
+                            t_EntitySpawn.PlayerName = player[i]._player.name;
+                            t_EntitySpawn.CurrentItem = player[i]._player.Current_Item;
+                            t_EntitySpawn.Pitch = (byte)(int)player[i]._player.Pitch;
+                            t_EntitySpawn.Rotation = (byte)(int)player[i]._player.stance;
+                            t_EntitySpawn.BuildPacket();
+                            if (_client.id != player[i].id)
+                                _client.SendPacket(t_EntitySpawn, _client.id, ref _client, false, false);
+                            if (_client.id != player[i].id)
+                                player[i].SendPacket(EntitySpawn, player[i].id, ref player[i], false, false);
+                        }
                     }
                 }
-            }
-            GC.Collect();
-            try
-            {
-                send.Abort();
+                GC.Collect();
+                try
+                {
+                    send.Abort();
+                }
+                catch (Exception)
+                {
+                    send.Abort();
+                }
             }
             catch (Exception)
             {
-
+                send.Abort();
             }
             #endregion SendSpawn
         }

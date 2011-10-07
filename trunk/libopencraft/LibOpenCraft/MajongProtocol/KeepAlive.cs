@@ -35,7 +35,10 @@ namespace LibOpenCraft.MajongProtocol
             {
                 if (GridServer.player_list[_client.id] != null)
                 {
-                    GridServer.player_list[_client.id] = null;
+                    GridServer.player_list[_client.id].Stop(true);
+                }
+                else
+                {
                     _client.Stop(true);
                 }
             }

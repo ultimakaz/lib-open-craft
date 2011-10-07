@@ -24,7 +24,7 @@ namespace DynamicWebServer
         {
             myListener.Stop();
         }
-        public SimpleWebServer(int porT,ref Dictionary<string, FormToHtml.HtmlControl> HtmlItems)
+        public SimpleWebServer(int porT, ref Dictionary<string, FormToHtml.HtmlControl> HtmlItems)
         {
             HtmlFormItems = HtmlItems;
             System.IO.StreamWriter SW;
@@ -34,9 +34,18 @@ namespace DynamicWebServer
             string DFolderRoot = AppDomain.CurrentDomain.BaseDirectory + "www\\";
             if (!Directory.Exists("www")) { Directory.CreateDirectory("www"); }
             if (!Directory.Exists("data")) { Directory.CreateDirectory("data"); }
+            #region Get Main Page
+            //byte[] Tbytes = OnCommand(null, null);
+            #endregion
 
-            
-            string DefaultSite = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\"><meta name=\"GENERATOR\" content=\"Arachnophilia 3.9\"><meta name=\"description\" content=\"Comprehensive Documentation and information about HTML.\"><meta name=\"keywords\" content=\"HTML, tags, commands\"><title>ShaftCraft Manager</title><link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body>Test Test this is MCSharp <a href=\"index.html?ChangeRank=none\">Change Rank</a><br /><a href=\"index.html?GetButton\">Dynamicly Made Website.</a></body>";
+            string DefaultSite = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"><html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\"><meta name=\"GENERATOR\" content=\"Arachnophilia 3.9\"><meta name=\"description\" content=\"Comprehensive Documentation and information about HTML.\"><meta name=\"keywords\" content=\"HTML, tags, commands\"><title>LibOpenCraft Manager</title><link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\"></head><body></body>";
+            foreach (string str in HtmlFormItems.Keys)
+            {
+                if (HtmlFormItems.ContainsKey(str))
+                {
+                    DefaultSite = HtmlFormItems[str].GetPageCode(DefaultSite);
+                }
+            }
 
             if (!File.Exists(DFolderRoot + "index.html"))
             {
@@ -48,6 +57,12 @@ namespace DynamicWebServer
                 SW.Close();
                 SW.Dispose();
                 SW = null;
+            }
+            else
+            {
+                SW = new StreamWriter(DFolderRoot + "index.html", false);
+                SW.Write(DefaultSite);
+                SW.Close();
             }
             if (!File.Exists(DFolder + "Default.dat"))
             {
@@ -64,7 +79,7 @@ namespace DynamicWebServer
             {
                 SWW = new StreamWriter(DFolder + "Mime.dat");
                 Thread.Sleep(100);
-                SWW.Write(StringArrayToString( new string[] 
+                SWW.Write(StringArrayToString(new string[] 
                 { ".html; text/html", ".htm; text/html ", ".gif; image/gif", ".bmp; image/bmp", ".png; image/png", ".jpg; image/jpg"
                 
                 }));
@@ -77,8 +92,8 @@ namespace DynamicWebServer
             {
                 SWW = new StreamWriter(DFolder + "VDirs.dat");
                 Thread.Sleep(100);
-                
-                SWW.Write(StringArrayToString( new string[] 
+
+                SWW.Write(StringArrayToString(new string[] 
                 { "/; "+DFolderRoot//, "//test//; "+DFolderRoot
                 
                 }));
@@ -100,7 +115,7 @@ namespace DynamicWebServer
                     }
                     Ti++;
                 }
-                myListener = new TcpListener(IPAddress.Any ,port);
+                myListener = new TcpListener(IPAddress.Any, port);
                 myListener.Start();
                 Thread th = new Thread(new ThreadStart(StartListen));
                 th.Start();
@@ -157,8 +172,6 @@ namespace DynamicWebServer
 
                         //Convert Byte to String
                         string sBuffer = Encoding.ASCII.GetString(bReceive);
-
-                        Thread.Sleep(1);
                         //At present we will only deal with GET type
                         if (sBuffer.Substring(0, 3) != "GET")
                         {
@@ -182,8 +195,6 @@ namespace DynamicWebServer
 
                         //Replace backslash with Forward Slash, if Any
                         sRequest.Replace("\\", "/");
-
-                        Thread.Sleep(1);
                         //If file name is not supplied add forward slash to indicate 
                         //that it is a directory and then we will look for the 
                         //default file name..
@@ -208,7 +219,6 @@ namespace DynamicWebServer
                         // Identify the Physical Directory
 
                         /////////////////////////////////////////////////////////////////////
-                        Thread.Sleep(1);
                         if (sDirName == "/")
                             sLocalDir = sMyWebServerRoot;
                         else
@@ -224,7 +234,6 @@ namespace DynamicWebServer
                         //If the physical directory does not exists then
 
                         // dispaly the error message
-                        Thread.Sleep(1);
                         if (sLocalDir.Length == 0)
                         {
                             sErrorMessage = "<H2>Error!! Requested Directory does not exists</H2><Br>";
@@ -253,7 +262,6 @@ namespace DynamicWebServer
 
 
                         //If The file name is not supplied then look in the default file list
-                        Thread.Sleep(1);
                         if (sRequestedFile.Length == 0)
                         {
                             // Get the default filename
@@ -287,7 +295,6 @@ namespace DynamicWebServer
 
                         sPhysicalFilePath = sLocalDir + sRequestedFile;
                         Console.WriteLine("File Requested : " + sPhysicalFilePath);
-                        Thread.Sleep(1);
                         //Now the final steps of opening the requested file and sending it to the browser.
 
                         if (sPhysicalFilePath.IndexOf('?') != -1)

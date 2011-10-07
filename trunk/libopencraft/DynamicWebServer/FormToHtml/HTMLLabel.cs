@@ -44,7 +44,7 @@ namespace DynamicWebServer.FormToHtml
                 {
 
                     string BeforeBody = TempStr.Substring(0, (TempStr.IndexOf("<body>") - 1));
-                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><p class=" + this.Thiscontrol.Name + ">" + this.Thiscontrol.Text + "</p></div>" + "<body>";
+                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><p class=" + this.Thiscontrol.Name + ">" + this.Thiscontrol.Text + "</p></div>";// +"<body>";
 
                     string HtmlAfterCode = TempStr.Substring((TempStr.IndexOf("<body>") + 7));
 

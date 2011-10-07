@@ -33,3 +33,5 @@ C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\Dyn
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\DynamicWebServer\obj\Release\ResolveAssemblyReference.cache
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\DynamicWebServer\obj\Release\DynamicWebServer.dll
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\DynamicWebServer\obj\Release\DynamicWebServer.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\data\DynamicWebServer.dll
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\data\DynamicWebServer.pdb
