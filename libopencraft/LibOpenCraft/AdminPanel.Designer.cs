@@ -28,11 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.Restart = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // Restart
+            // 
+            this.Restart.Location = new System.Drawing.Point(13, 13);
+            this.Restart.Name = "Restart";
+            this.Restart.Size = new System.Drawing.Size(75, 23);
+            this.Restart.TabIndex = 0;
+            this.Restart.Text = "Restart";
+            this.Restart.UseVisualStyleBackColor = true;
+            this.Restart.Click += new System.EventHandler(this.Restart_Click);
+            // 
+            // AdminPanel
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.Restart);
+            this.Name = "AdminPanel";
             this.Text = "AdminPanel";
+            this.Load += new System.EventHandler(this.AdminPanel_Load);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        public System.Windows.Forms.Button Restart;
     }
 }

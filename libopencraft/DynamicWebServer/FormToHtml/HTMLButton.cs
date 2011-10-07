@@ -12,6 +12,7 @@ namespace DynamicWebServer.FormToHtml
         public event ResponseRequested OnResponseRequested;
         public CssScript cssScript = new CssScript();
         string HTMLCode = "";
+        
         public HTMLButton(System.Windows.Forms.Button control)
             : base(control)
         {
@@ -25,18 +26,29 @@ namespace DynamicWebServer.FormToHtml
             //this.Thiscontrol.ClientRectangle.X
             OnItemResponse += new FormItemResponse(HTMLTextBox_OnItemResponse);
         }
+        public override byte[] Response(string Variable, string Value)
+        {
+            if (Variable != null && Value != null)
+            {
+
+            }
+
+            //if (Variable != null && Value != null)
+                //return this.OnResponseRequested(Variable, Value);
+            return new byte[0] { };
+        }
         byte[] HTMLTextBox_OnItemResponse(string Variable, string Value)
         {
             // Example button1_Click_1(sender, e);
-            Button TempButton = (Button)(Thiscontrol);
-            TempButton.PerformClick();
-            return OnResponseRequested(Variable, Value);
+            if (Variable != null && Value != null)
+                ((Button)Thiscontrol).PerformClick();
+            return new byte[0] { };
         }
         public override string PrintAllHTML()
         {
             return base.PrintAllHTML();
         }
-        public string GetPageCode(string CurrentPage)
+        public override string GetPageCode(string CurrentPage)
         {
             string Javascript = "";
             string cssSRipt = Make_Special.MakeCssScript(cssScript);
@@ -45,11 +57,11 @@ namespace DynamicWebServer.FormToHtml
             {
                 if ((string)(this.Thiscontrol.Tag) == "")
                 {
-                    Javascript = ""; //Make_Special.MakeJavaScript("ReloadPage", (object[])(new Enum[] { CommonJs.location_href }), new string[] { this.Thiscontrol.Text.Split('*')[1] + "?" + this.Thiscontrol.Name });
+                    Javascript = Make_Special.MakeJavaScript("ReloadPage", (object[])(new Enum[] { CommonJs.location_href }), new string[] { this.Thiscontrol.Text.Split('*')[1] + "index.php?" + this.Thiscontrol.Name + "=Clicked" });
                 }
                 else
                 {
-                    Javascript = Make_Special.MakeJavaScript("ReloadPage" + this.Thiscontrol.Name, (object[])(new Enum[] { CommonJs.location_href }), new string[] { this.Thiscontrol.Tag + "?" + this.Thiscontrol.Name });
+                    Javascript = Make_Special.MakeJavaScript("ReloadPage" + this.Thiscontrol.Name, (object[])(new Enum[] { CommonJs.location_href }), new string[] { this.Thiscontrol.Tag + "index.php?" + this.Thiscontrol.Name + "=Clicked"  });
                 }
             }
 
@@ -60,9 +72,9 @@ namespace DynamicWebServer.FormToHtml
                 {
 
                     string BeforeBody = TempStr.Substring(0, (TempStr.IndexOf("<body>") - 1));
-                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=" + this.Thiscontrol.Name + " type=button value=" + this.Thiscontrol.Text + " onClick=\"ReloadPage" + this.Thiscontrol.Name + "();\" /></div>" + "<body>";
+                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=\"" + this.Thiscontrol.Name + "\" type=button value=\"" + this.Thiscontrol.Text + "\" onClick=\"ReloadPage" + this.Thiscontrol.Name + "();\" /></div>";// +"<body>";
 
-                    string HtmlAfterCode = TempStr.Substring((TempStr.IndexOf("<body>") + 7));
+                    string HtmlAfterCode = TempStr.Substring((TempStr.IndexOf("<body>") + 6));
 
                     TempStr = cssSRipt + Javascript + BeforeBody + AfterBodyCode + HtmlAfterCode;
                 }
@@ -70,8 +82,8 @@ namespace DynamicWebServer.FormToHtml
                 {
 
                     string BeforeBody = TempStr.Substring(0, TempStr.IndexOf("<body>") - 1);
-                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=" + this.Thiscontrol.Name + " type=button value=" + this.Thiscontrol.Text + " onClick=\"index.html?" + this.Thiscontrol.Name + "=Clicked\" /></div>" + "<body>";
-                    string HtmlAfterCode = TempStr.Substring(TempStr.IndexOf("<body>") + 7);
+                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=\"" + this.Thiscontrol.Name + "\" type=button value=\"" + this.Thiscontrol.Text + "\" onClick=\"index.html?" + this.Thiscontrol.Name + "=Clicked\" /></div>";// +"<body>";
+                    string HtmlAfterCode = TempStr.Substring(TempStr.IndexOf("<body>") + 6);
                     TempStr = cssSRipt + Javascript + BeforeBody + AfterBodyCode + HtmlAfterCode;
 
                 }

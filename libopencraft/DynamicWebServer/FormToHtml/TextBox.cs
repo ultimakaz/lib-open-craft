@@ -44,7 +44,7 @@ namespace DynamicWebServer.FormToHtml
                 int test = TempStr.IndexOf("<body>");
 
                 string BeforeBody = TempStr.Substring(0, (TempStr.IndexOf("<body>") - 1));
-                string AfterBodyCode = "<div class=" + Thiscontrol.Name + "><input class=" + Thiscontrol.Name + " type=" + FormTypes.textbox + " value=\"" + Thiscontrol.Text + "\" /></div>" + "<body>";
+                string AfterBodyCode = "<div class=" + Thiscontrol.Name + "><input class=" + Thiscontrol.Name + " type=" + FormTypes.textbox + " value=\"" + Thiscontrol.Text + "\" /></div>";// +"<body>";
 
                 string HtmlAfterCode = TempStr.Substring((TempStr.IndexOf("<body>") + 7));
 

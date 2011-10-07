@@ -28,8 +28,8 @@ namespace DynamicWebServer.FormToHtml
         byte[] HTMLTextBox_OnItemResponse(string Variable, string Value)
         {
             // Example button1_Click_1(sender, e);
-            Button TempButton = (Button)(Thiscontrol);
-            TempButton.PerformClick();
+            if (Variable != null && Value != null)
+                ((Button)Thiscontrol).PerformClick();
             return OnResponseRequested(Variable, Value);
         }
         public override string PrintAllHTML()
@@ -60,7 +60,7 @@ namespace DynamicWebServer.FormToHtml
                 {
 
                     string BeforeBody = TempStr.Substring(0, (TempStr.IndexOf("<body>") - 1));
-                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=" + this.Thiscontrol.Name + " type=button value=" + this.Thiscontrol.Text + " onClick=\"ReloadPage" + this.Thiscontrol.Name + "();\" /></div>" + "<body>";
+                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=" + this.Thiscontrol.Name + " type=button value=" + this.Thiscontrol.Text + " onClick=\"ReloadPage" + this.Thiscontrol.Name + "();\" /></div>";// +"<body>";
 
                     string HtmlAfterCode = TempStr.Substring((TempStr.IndexOf("<body>") + 7));
 
@@ -70,7 +70,7 @@ namespace DynamicWebServer.FormToHtml
                 {
 
                     string BeforeBody = TempStr.Substring(0, TempStr.IndexOf("<body>") - 1);
-                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=" + this.Thiscontrol.Name + " type=button value=" + this.Thiscontrol.Text + " onClick=\"index.html?"+this.Thiscontrol.Name+"=Clicked\" /></div>" + "<body>";
+                    string AfterBodyCode = "<div class=" + this.Thiscontrol.Name + "><input class=" + this.Thiscontrol.Name + " type=button value=" + this.Thiscontrol.Text + " onClick=\"index.html?" + this.Thiscontrol.Name + "=Clicked\" /></div>";// +"<body>";
                     string HtmlAfterCode = TempStr.Substring(TempStr.IndexOf("<body>") + 7);
                     TempStr = cssSRipt + Javascript + BeforeBody + AfterBodyCode + HtmlAfterCode;
 

@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace DynamicWebServer.FormToHtml
 {
-    public class HtmlControl
+    public abstract class HtmlControl
     {
         public delegate byte[] FormItemResponse(string Variable, string Value);
         public event FormItemResponse OnItemResponse;
@@ -35,7 +35,10 @@ namespace DynamicWebServer.FormToHtml
         {
             return OnItemResponse(Variable, Value);
         }
-
+        public virtual string GetPageCode(string CurrentPage)
+        {
+            return "";
+        }
         public virtual string PrintAllHTML()
         {
             return "";
