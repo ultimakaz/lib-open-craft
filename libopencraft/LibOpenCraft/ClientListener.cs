@@ -10,7 +10,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 
-namespace LibOpenCraft.MajongProtocol
+namespace LibOpenCraft
 {
     [Export(typeof(CoreModule))]
     [ExportMetadata("Name", "Client Listener")]
