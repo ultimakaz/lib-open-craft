@@ -89,7 +89,7 @@ namespace LibOpenCraft
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
-                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     t_byte = null;
                     p = null;
                 }
@@ -140,6 +140,8 @@ namespace LibOpenCraft
         {
             Suspendv = false;
         }
+        int count = 0;
+        
         public void Recieve()
         {
             //System.Diagnostics.
@@ -202,14 +204,14 @@ namespace LibOpenCraft
                                     ClientManager[] player = GridServer.player_list;
                                     for (int i = 0; i < player.Length; i++)
                                     {
-                                        if (player[i] == null || player[i].id == id || player[i].PreChunkRan != 1)
+                                        if (player[i] == null || player[i].id == _id || player[i].PreChunkRan != 1)
                                         {
 
                                         }
                                         else
                                         {
                                             LibOpenCraft.ServerPackets.EntityPacket e = new LibOpenCraft.ServerPackets.EntityPacket(PacketType.Entity);
-                                            e.EntityID = id;
+                                            e.EntityID = _id;
                                             e.BuildPacket();
                                             player[i].SendPacket(e, player[i].id, ref player[i], false, false);
                                             GridServer.player_list[_id]._player.EntityUpdateCount++;
@@ -225,10 +227,10 @@ namespace LibOpenCraft
 
                 catch (Exception e)
                 {
-                    if (GridServer.player_list[id] != null)
+                    if (GridServer.player_list[_id] != null)
                     {
                         
-                        GridServer.player_list[id].Stop(true);
+                        GridServer.player_list[_id].Stop(true);
                     }
                     else
                     {
