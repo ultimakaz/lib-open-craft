@@ -72,7 +72,7 @@ namespace LibOpenCraft
                 _stream = null;
                 _client = null;
                 GridServer.player_list[id] = null;
-                id = -1;
+                //id = -1;
             }
             else
             {
@@ -90,8 +90,6 @@ namespace LibOpenCraft
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
                     //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
-                    t_byte = null;
-                    p = null;
                 }
                 else if (PingType == true)
                 {
@@ -100,15 +98,12 @@ namespace LibOpenCraft
                     GridServer.player_list[cm.id]._client.Client.Send(temp);
                     GridServer.player_list[cm.id]._client.Close();
                     Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
-                    t_byte = null;
-                    p = null;
-                    GridServer.player_list[cm.id] = null;
+                    //t_byte = null;
+                    //p = null;
                     GridServer.player_list[cm.id].Stop(true);
                 }
                 else
                 {
-                    t_byte = null;
-                    p = null;
                 }
             }
             catch(Exception e)
@@ -158,7 +153,7 @@ namespace LibOpenCraft
                 {
                     if (Suspendv == false)
                     {
-                        if (GridServer.player_list[_id]._client.Connected == false) Stop(true);
+                        if (GridServer.player_list[_id]._client.Connected == false) GridServer.player_list[_id].Stop(true);
                         if (GridServer.player_list[_id]._client.Client.Available > 0)
                         {
                             //System.Threading.Thread.Sleep(1);
@@ -189,7 +184,7 @@ namespace LibOpenCraft
                                 LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
                                 p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
                                 p.BuildPacket();
-                                SendPacket(p, id, ref GridServer.player_list[_id], false, false);
+                                SendPacket(p, _id, ref GridServer.player_list[_id], false, false);
                             }
                         }
                         else
