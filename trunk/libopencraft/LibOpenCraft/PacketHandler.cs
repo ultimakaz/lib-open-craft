@@ -25,7 +25,7 @@ namespace LibOpenCraft
         }
         public virtual bool BuildPacket()
         {
-            return false;
+            return true;
         }
         #region PacketWriter
         public void AddByte(byte value)
