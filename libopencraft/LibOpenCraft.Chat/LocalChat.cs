@@ -59,10 +59,12 @@ namespace LibOpenCraft.Chat
                     Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
                 }
                 ChatMessage.BuildPacket();
-                _client.SendPacket(ChatMessage, _client.id, ref _client, false, false);
+                _client.SendPacket((PacketHandler)ChatMessage, _client.id, ref _client, false, false);
             }
             else
             {
+                ChatMessage.MessageSent = _client._player.name + ": " + message;
+                ChatMessage.BuildPacket();
                 ClientManager[] player = GridServer.player_list;
                 for (int i = 0; i < player.Length; i++)
                 {
@@ -78,9 +80,7 @@ namespace LibOpenCraft.Chat
                         }
                         else
                         {
-                            ChatMessage.MessageSent = _client._player.name + ": " + message;
-                            ChatMessage.BuildPacket();
-                            player[i].SendPacket(ChatMessage, player[i].id, ref player[i], false, false);
+                            player[i].SendPacket((PacketHandler)ChatMessage, player[i].id, ref player[i], false, false);
                         }
                     }
                 }

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
-using NBT;
 
 namespace LibOpenCraft
 {
@@ -146,24 +145,6 @@ namespace LibOpenCraft
         public void LoadChunk()
         {
 
-        }
-
-        public static Chunk Load(string path)
-        {
-            Tag tag = Tag.Load(path);
-            return Chunk.Load(tag["Level"]);
-        }
-        public static Chunk Load(Tag tag)
-        {
-            short x = (short)(int)tag["xPos"];
-            short z = (short)(int)tag["zPos"];
-            Chunk chunk = new Chunk(x, z);
-            chunk.Blocks = (byte[])tag["Blocks"];
-            chunk.Data = (byte[])tag["Data"];
-            chunk.BlockLight = (byte[])tag["BlockLight"];
-            chunk.SkyLight = (byte[])tag["SkyLight"];
-            chunk.HeightMap = (byte[])tag["HeightMap"];
-            return chunk;
         }
 
         #region Manipulation
