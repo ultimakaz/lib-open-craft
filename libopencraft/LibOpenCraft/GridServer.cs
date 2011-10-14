@@ -15,7 +15,6 @@ namespace LibOpenCraft
     public class GridServer
     {
         private CompositionContainer _container;
-
         public static List<Chunk> chunk_b = new List<Chunk>();
         public static Chunk[] chunks;
         #region Player data networking code
