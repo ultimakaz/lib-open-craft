@@ -59,11 +59,11 @@ namespace LibOpenCraft.BlockPhysics
             _client = cm;
             id = cm.id;
             block = new BlockChangePacket(PacketType.BlockChange);
-            block.BlockType = ((BlockChangePacket)_p).BlockType;
-            block.Metadata = ((BlockChangePacket)_p).Metadata;
-            block.X = ((BlockChangePacket)_p).X;
-            block.Y = ((BlockChangePacket)_p).Y;
-            block.Z = ((BlockChangePacket)_p).Z;
+            block.BlockType = (byte)((PlayerBlockPlacementPacket)_p).BlockID;
+            block.Metadata = 0x00;
+            block.X = ((PlayerBlockPlacementPacket)_p).X;
+            block.Y = ((PlayerBlockPlacementPacket)_p).Y;
+            block.Z = ((PlayerBlockPlacementPacket)_p).Z;
             HandlePhysics.Start();
 
             return _p;
