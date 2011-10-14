@@ -24,7 +24,7 @@ namespace LibOpenCraft.MajongProtocol
         public override void Start()
         {
             base.Start();
-            ModuleHandler.AddEventModule(PacketType.Animation, new ModuleCallback(OnEntityAction));
+            ModuleHandler.AddEventModule(PacketType.EntityAction, new ModuleCallback(OnEntityAction));
             base.RunModuleCache();
         }
 

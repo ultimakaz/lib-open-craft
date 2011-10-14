@@ -58,7 +58,12 @@ namespace LibOpenCraft.BlockPhysics
             HandlePhysics = new Thread(HandlePhysics_start);
             _client = cm;
             id = cm.id;
-            block = (BlockChangePacket)_p;
+            block = new BlockChangePacket(PacketType.BlockChange);
+            block.BlockType = ((BlockChangePacket)_p).BlockType;
+            block.Metadata = ((BlockChangePacket)_p).Metadata;
+            block.X = ((BlockChangePacket)_p).X;
+            block.Y = ((BlockChangePacket)_p).Y;
+            block.Z = ((BlockChangePacket)_p).Z;
             HandlePhysics.Start();
 
             return _p;

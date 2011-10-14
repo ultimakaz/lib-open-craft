@@ -87,6 +87,10 @@ namespace LibOpenCraft.MajongProtocol
             GridServer.player_list[_client.id].WaitToRead = false;
             #endregion
             #region New Position Calculations
+            if (_client._player.position.Round(_client._player.position) == old_pos.Round(old_pos))
+            {
+                return;
+            }
             Vector3D new_pos = _client._player.position;
             //new_pos /= 32;
             //

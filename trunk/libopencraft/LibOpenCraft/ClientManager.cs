@@ -84,7 +84,7 @@ namespace LibOpenCraft
             try
             {
                 byte[] t_byte = p.GetBytes();
-                if (PingType == null || PingType == false)
+                if (PingType == false)
                 {
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
@@ -104,6 +104,9 @@ namespace LibOpenCraft
                 }
                 else
                 {
+                    GridServer.player_list[cm.id]._client.Client.Send(t_byte);
+                    GridServer.player_list[cm.id].keep_alive = DateTime.Now;
+                    GridServer.player_list[cm.id].WaitToRead = Waitread;
                 }
             }
             catch(Exception e)
@@ -222,6 +225,7 @@ namespace LibOpenCraft
 
                 catch (Exception e)
                 {
+                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
                     if (GridServer.player_list[_id] != null)
                     {
                         

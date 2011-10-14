@@ -39,14 +39,18 @@ namespace LibOpenCraft.ChunkHandler
         {
             try
             {
+
+                Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 GridServer.player_list[id].Suspend();
+                Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 RunPreChunkInitialization();
+                Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 GridServer.player_list[id].Resume();
+                Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 for (int i = 0; i < base.ModuleAddons.Count; i++)
                 {
                     base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
                 }
-
                 SendChunks(6, 15);
                 #region SendSpawn
                 NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
@@ -165,6 +169,7 @@ namespace LibOpenCraft.ChunkHandler
                     p.load = 1;
                     p.BuildPacket();
                     _client._client.Client.Send(p.GetBytes());
+                    Thread.Sleep(1);// so we dont tangle.
                     _client._client.Client.Send(MakeChunkArray(x, y).GetBytes());
                     GC.Collect();
                 }
