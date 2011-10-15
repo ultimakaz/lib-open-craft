@@ -14,14 +14,20 @@ namespace LibOpenCraft
         public static List<Chunk> chunk_b = new List<Chunk>();
         private static Thread HandleWorld;
         private static ThreadStart HandleWorld_start;
-        public static System.Timers.Timer SaveWorldTimer = new System.Timers.Timer(1 * (60 * 1000));
+        public static System.Timers.Timer SaveWorldTimer;
         static int count = 20;
         public static void LoadWorld()
         {
+            SaveWorldTimer = new System.Timers.Timer((int)Config.Configuration["SaveTimer"] * (60 * 1000));
+            GC.KeepAlive(World.chunks);
+            GC.KeepAlive(World.SaveWorldTimer);
+            GC.KeepAlive(HandleWorld);
+            GC.KeepAlive(HandleWorld_start);
             if (File.Exists(Chunk.GetPath(0, 0)))
             {
-                World.chunks = new Chunk[0];
+                
                 World.OpenWorld();
+                Console.WriteLine("Done Loading");
             }
             else
             {
@@ -37,11 +43,11 @@ namespace LibOpenCraft
                 World.chunks = World.chunk_b.ToArray();
                 World.chunk_b.Clear();
                 SaveWorld();
-                GC.Collect();
-                HandleWorld_start = new ThreadStart(DoWorld);
-                HandleWorld = new Thread(HandleWorld_start);
-                HandleWorld.Start();
-            }
+            }//Never run two collections in a row.
+            GC.Collect();
+            HandleWorld_start = new ThreadStart(DoWorld);
+            HandleWorld = new Thread(HandleWorld_start);
+            HandleWorld.Start();
         }
         public static void DoWorld()
         {
@@ -55,6 +61,8 @@ namespace LibOpenCraft
                 new System.IO.StreamReader(Chunk.GetPath(0, 0));
             World.chunks = (Chunk[])reader.Deserialize(file);
             file.Close();
+            //reader = null;
+            //file = null;
         }
         public static void SaveWorld()
         {
@@ -63,10 +71,12 @@ namespace LibOpenCraft
                 new System.IO.StreamWriter(Chunk.GetPath(0, 0));
             writer.Serialize(file, World.chunks);
             file.Close();
+            //writer = null;
+            //file = null;
         }
         static void SaveWorldTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            SaveWorld();
+            World.SaveWorld();
         }
     }
     public class Chunk
