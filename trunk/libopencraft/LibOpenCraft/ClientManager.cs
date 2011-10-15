@@ -152,6 +152,7 @@ namespace LibOpenCraft
             while (true)
             {
                 Thread.Sleep(1);
+                Thread.SpinWait(1);
                 try
                 {
                     if (Suspendv == false)
