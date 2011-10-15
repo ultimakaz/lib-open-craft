@@ -197,46 +197,37 @@ namespace LibOpenCraft.ChunkHandler
             _cPacket.SIZE_Y = 127;
             _cPacket.SIZE_Z = 15;
             int index = Chunk.GetIndex(_x, _y);
-            //[128698]	19	byte 139324
-            byte[] buffer = new byte[87978];
-            // Write the data.
-            
-            using (MemoryStream memStream = new MemoryStream(buffer, true))
+            using (MemoryStream memStream = new MemoryStream())
             {
                 using (ZOutputStream compressor = new ZOutputStream(memStream, compression))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
-                        compressor.WriteByte(World.chunks[Chunk.GetIndex(_x, _y)].GetBlocktype(i));
+                        compressor.WriteByte((int)World.chunks[Chunk.GetIndex(_x, _y)].GetBlocktype(i));
                     }
 
                     // Write MetaData
                     for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
                         //System.Threading.Thread.Sleep(1);
-                        compressor.WriteByte((byte)(((World.chunks[index].GetData((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetData((i) + 0) & 0x0F)));
+                        compressor.WriteByte((int)(((World.chunks[index].GetData((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetData((i) + 0) & 0x0F)));
                     }
 
                     // Write BlockLight
                     for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        compressor.WriteByte((byte)(((World.chunks[index].GetBlockLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetBlockLight((i) + 0) & 0x0F)));
+                        compressor.WriteByte((int)(((World.chunks[index].GetBlockLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetBlockLight((i) + 0) & 0x0F)));
                     }
 
                     // Write SkyLight
                     for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        compressor.WriteByte((byte)(((World.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
+                        compressor.WriteByte((int)(((World.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
                     }
+                    
                 }
-                MemoryStream readStream = new MemoryStream(buffer, false);
-                _cPacket.ChunkData = new byte[buffer.Length];
-                readStream.Read(_cPacket.ChunkData, 0, buffer.Length);
-                readStream.Close();
-                memStream.Close();
+                _cPacket.ChunkData = memStream.ToArray();
             }
-            
-            buffer = null;
             _cPacket.Compressed_Size = _cPacket.ChunkData.Count();
             _cPacket.BuildPacket();
             return _cPacket;
