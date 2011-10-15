@@ -13,3 +13,7 @@ C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.dll
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.ChunkHandler\obj\Debug\LibOpenCraft.ChunkHandler.pdb
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Debug\libopencraft_db.sdf
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Debug\config.txt
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Debug\World\temp.txt
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Debug\LibOpenCraft.ChunkHandler.dll
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Debug\LibOpenCraft.ChunkHandler.pdb

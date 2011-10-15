@@ -10,54 +10,63 @@ namespace LibOpenCraft
 {
     public class World
     {
+        public static Chunk[] chunks;
+        public static List<Chunk> chunk_b = new List<Chunk>();
         private static Thread HandleWorld;
         private static ThreadStart HandleWorld_start;
         public static System.Timers.Timer SaveWorldTimer = new System.Timers.Timer(30 * (60 * 1000));
         static int count = 20;
         public static void LoadWorld()
         {
-            for (int x = 0; x < count; x++)
+            if (File.Exists(Chunk.GetPath(0, 0)))
             {
-                for (int z = 0; z < count; z++)
-                {
-                    GridServer.chunk_b.Add(Chunk.GetChunkClass(x, z));
-                    GC.Collect();
-                }
+                World.chunks = new Chunk[0];
+                World.OpenWorld();
             }
-            GridServer.chunks = new Chunk[GridServer.chunk_b.Count];
-            GridServer.chunks = GridServer.chunk_b.ToArray();
-            GridServer.chunk_b.Clear();
-            GC.Collect();
-            HandleWorld_start = new ThreadStart(DoWorld);
-            HandleWorld = new Thread(HandleWorld_start);
-            HandleWorld.Start();
+            else
+            {
+                for (int x = 0; x < count; x++)
+                {
+                    for (int z = 0; z < count; z++)
+                    {
+                        World.chunk_b.Add(new Chunk((short)x, (short)z));
+                        GC.Collect();
+                    }
+                }
+                World.chunks = new Chunk[World.chunk_b.Count];
+                World.chunks = World.chunk_b.ToArray();
+                World.chunk_b.Clear();
+                SaveWorld();
+                GC.Collect();
+                HandleWorld_start = new ThreadStart(DoWorld);
+                HandleWorld = new Thread(HandleWorld_start);
+                HandleWorld.Start();
+            }
         }
         public static void DoWorld()
         {
             SaveWorldTimer.Elapsed += new System.Timers.ElapsedEventHandler(SaveWorldTimer_Elapsed);
             SaveWorldTimer.Start();
         }
+        public static void OpenWorld()
+        {
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Chunk[]));
+            System.IO.StreamReader file =
+                new System.IO.StreamReader(Chunk.GetPath(0, 0));
+            World.chunks = (Chunk[])reader.Deserialize(file);
+            file.Close();
+        }
         public static void SaveWorld()
         {
-            GC.Collect();
-            for (int i = 0; i < GridServer.chunk_b.Count; i++)
-            {
-                GC.Collect();
-                GridServer.chunk_b[i].SaveChunk();
-                GC.Collect();
-            }
-            GC.Collect();
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Chunk[]));
+            System.IO.StreamWriter file =
+                new System.IO.StreamWriter(Chunk.GetPath(0, 0));
+            writer.Serialize(file, World.chunks);
+            file.Close();
         }
         static void SaveWorldTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            GC.Collect();
-            for (int i = 0; i < GridServer.chunk_b.Count; i++)
-            {
-                GC.Collect();
-                GridServer.chunk_b[i].SaveChunk();
-                GC.Collect();
-            }
-            GC.Collect();
+            SaveWorld();
         }
     }
     public class Chunk
@@ -68,13 +77,13 @@ namespace LibOpenCraft
 
         bool _cached1, _cached2;
 
-        public short X { get; private set; }
-        public short Z { get; private set; }
-        public byte[] Blocks { get; set; }
-        public byte[] Data { get; set; }
-        public byte[] BlockLight { get; set; }
-        public byte[] SkyLight { get; set; }
-        public byte[] HeightMap { get; set; }
+        public short X;
+        public short Z;
+        public byte[] Blocks;
+        public byte[] Data;
+        public byte[] BlockLight;
+        public byte[] SkyLight;
+        public byte[] HeightMap;
 
         public bool Cached
         {
@@ -175,9 +184,9 @@ namespace LibOpenCraft
             return AppDomain.CurrentDomain.BaseDirectory + "World\\" +
                 (string)Config.Configuration["WorldName"] + "_" + x + "_" + z + ".locf";
         }
-        public static Chunk GetChunkClass(int x, int z)
+        public static Chunk GetChunkClass(int x, int z, bool create_new)
         {
-            if (!File.Exists(GetPath(0, 0)))
+            if (!File.Exists(GetPath(0, 0)) || create_new == true)
             {
                 File.Create(GetPath(0, 0)).Close();
                 Chunk temp = new Chunk((short)x, (short)z);
@@ -186,7 +195,7 @@ namespace LibOpenCraft
             }
             else
             {
-                System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
+                System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.Read, GetPath(0, 0));
                 FileStream chunk = new FileStream(GetPath(0, 0), FileMode.Open);
                 //chunk.Unlock(82176 * GetIndex(x, z) * 2, chunk.Length);
                 Chunk t_chunk = new Chunk();
@@ -211,8 +220,8 @@ namespace LibOpenCraft
         }
         public void SaveChunk()
         {
-            System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
-            FileStream chunk = new FileStream(GetPath(0, 0), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Inheritable);
+            //System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
+            FileStream chunk = new FileStream(GetPath(0, 0), FileMode.Open);
             chunk.Position = 82176 * GetIndex(X, Z);
             chunk.Write(Blocks, 0, 32768);
             chunk.Position = (82176 * GetIndex(X, Z)) + 16384;

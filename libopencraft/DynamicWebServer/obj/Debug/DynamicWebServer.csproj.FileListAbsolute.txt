@@ -3,3 +3,8 @@ C:\Users\geramy\Documents\Programming\DynamicallyMade\DynamicWebServer\bin\Debug
 C:\Users\geramy\Documents\Programming\DynamicallyMade\DynamicWebServer\obj\Debug\ResolveAssemblyReference.cache
 C:\Users\geramy\Documents\Programming\DynamicallyMade\DynamicWebServer\obj\Debug\DynamicWebServer.dll
 C:\Users\geramy\Documents\Programming\DynamicallyMade\DynamicWebServer\obj\Debug\DynamicWebServer.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Debug\DynamicWebServer.dll
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Debug\DynamicWebServer.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\obj\Debug\DynamicWebServer.dll
+C:\Users\geramy\Documents\Programming\libopencraft\DynamicWebServer\obj\Debug\DynamicWebServer.pdb

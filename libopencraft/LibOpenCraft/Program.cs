@@ -58,8 +58,8 @@ namespace LibOpenCraft
             ModuleHandler._CoreModules = null;
             ModuleHandler._CoreEventModules = null;
             GridServer.player_list = null;
-            GridServer.chunks = null;
-            GridServer.chunk_b = null;
+            World.chunks = null;
+            World.chunk_b = null;
             g = new GridServer();
         }
     }
