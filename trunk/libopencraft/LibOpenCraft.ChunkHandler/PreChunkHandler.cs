@@ -19,6 +19,7 @@ namespace LibOpenCraft.ChunkHandler
     [ExportMetadata("Name", "Pre Chunk, Chunk Handler")]
     public class PreChunkHandler : CoreModule
     {
+        int compression = (int)Config.Configuration["Compression"];
         private Thread send;
         private ThreadStart send_start;
         int id;
@@ -39,19 +40,16 @@ namespace LibOpenCraft.ChunkHandler
         {
             try
             {
-
-                Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 GridServer.player_list[id].Suspend();
                 Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 RunPreChunkInitialization();
                 Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 GridServer.player_list[id].Resume();
-                Thread.Sleep(10); //Were sleeping because well the original client is to damn slow. LOL
                 for (int i = 0; i < base.ModuleAddons.Count; i++)
                 {
                     base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
                 }
-                SendChunks(6, 15);
+                //SendChunks(6, 15);
                 #region SendSpawn
                 NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
                 EntitySpawn.X = (int)_client._player.position.X * 32;
@@ -63,6 +61,7 @@ namespace LibOpenCraft.ChunkHandler
                 EntitySpawn.Pitch = (byte)_client._player.Pitch;
                 EntitySpawn.Rotation = (byte)_client._player.stance;
                 EntitySpawn.BuildPacket();
+                
                 foreach(string key in Config.Configuration.Keys)
                 {
                     if (key.Contains("WelcomeMessage"))
@@ -110,6 +109,7 @@ namespace LibOpenCraft.ChunkHandler
                         }
                     }
                 }
+                SendChunks(6, 15);
                 GC.Collect();
                 try
                 {
@@ -159,6 +159,7 @@ namespace LibOpenCraft.ChunkHandler
                     p.load = 1;
                     p.BuildPacket();
                     _client._client.Client.Send(p.GetBytes());
+                    GC.Collect();
                     _client._client.Client.Send(MakeChunkArray(x, y).GetBytes());
                     GC.Collect();
                 }
@@ -179,7 +180,7 @@ namespace LibOpenCraft.ChunkHandler
                     p.load = 1;
                     p.BuildPacket();
                     _client._client.Client.Send(p.GetBytes());
-                    Thread.Sleep(1);// so we dont tangle.
+                    GC.Collect();
                     _client._client.Client.Send(MakeChunkArray(x, y).GetBytes());
                     GC.Collect();
                 }
@@ -201,7 +202,7 @@ namespace LibOpenCraft.ChunkHandler
             
             using (MemoryStream memStream = new MemoryStream(buffer, true))
             {
-                using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, zlib.zlibConst.Z_BEST_SPEED))
+                using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, (compression == 1 ? zlib.zlibConst.Z_BEST_SPEED : (compression == 2 ? zlib.zlibConst.Z_DEFAULT_COMPRESSION : (compression == 3 ? zlib.zlibConst.Z_BEST_COMPRESSION : zlib.zlibConst.Z_BEST_COMPRESSION)))))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
