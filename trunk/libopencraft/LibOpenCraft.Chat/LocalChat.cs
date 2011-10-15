@@ -37,6 +37,9 @@ namespace LibOpenCraft.Chat
             {
                 switch (message.Substring(1, message.Length))
                 {
+                    case "save":
+                        World.SaveWorld();
+                        break;
                     case "set -b 1":
                         break;
                     case "set -b 2":
