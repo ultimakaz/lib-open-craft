@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicWebServer", "..\Dyna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibOpenCraft.BlockPhysics", "..\LibOpenCraft.BlockPhysics\LibOpenCraft.BlockPhysics.csproj", "{DCDCCB50-18B0-471E-9BC3-6BD13F3B4204}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibOpenCraft.Bukkit.Plugin", "..\LibOpenCraft.Bukkit.Plugin\LibOpenCraft.Bukkit.Plugin.csproj", "{F4367AF7-6075-45BD-80DF-039700E8808A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{DCDCCB50-18B0-471E-9BC3-6BD13F3B4204}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCDCCB50-18B0-471E-9BC3-6BD13F3B4204}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCDCCB50-18B0-471E-9BC3-6BD13F3B4204}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4367AF7-6075-45BD-80DF-039700E8808A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4367AF7-6075-45BD-80DF-039700E8808A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4367AF7-6075-45BD-80DF-039700E8808A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4367AF7-6075-45BD-80DF-039700E8808A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,3 +12,4 @@ PlayerUpdateInterval=0 //this is the EntityTeleport packet and how much it sends
 EntityUpdate=12 //this is the EntityRelativeMovement packet and how much it sends it out for every PlayerPosition packet
 EnableEmbeddedChatCommands=true // This is the built in chat commands made by the LibOpenCraft community
 GCMode=LowLatency // can be Batch, Interactive and LowLatency the setting now is for servers
+SaveTimer=30 //minutes
