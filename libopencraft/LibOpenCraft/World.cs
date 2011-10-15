@@ -37,7 +37,17 @@ namespace LibOpenCraft
             SaveWorldTimer.Elapsed += new System.Timers.ElapsedEventHandler(SaveWorldTimer_Elapsed);
             SaveWorldTimer.Start();
         }
-
+        public static void SaveWorld()
+        {
+            GC.Collect();
+            for (int i = 0; i < GridServer.chunk_b.Count; i++)
+            {
+                GC.Collect();
+                GridServer.chunk_b[i].SaveChunk();
+                GC.Collect();
+            }
+            GC.Collect();
+        }
         static void SaveWorldTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             GC.Collect();
@@ -178,7 +188,7 @@ namespace LibOpenCraft
             {
                 System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
                 FileStream chunk = new FileStream(GetPath(0, 0), FileMode.Open);
-                chunk.Unlock(82176 * GetIndex(x, z) * 2, chunk.Length);
+                //chunk.Unlock(82176 * GetIndex(x, z) * 2, chunk.Length);
                 Chunk t_chunk = new Chunk();
                 chunk.Position = 82176 * GetIndex(x, z);
                 chunk.Read(t_chunk.Blocks, 0, 32768);
@@ -203,8 +213,6 @@ namespace LibOpenCraft
         {
             System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
             FileStream chunk = new FileStream(GetPath(0, 0), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Inheritable);
-            chunk.Unlock(82176 * GetIndex(X, Z) * 2, chunk.Length);
-
             chunk.Position = 82176 * GetIndex(X, Z);
             chunk.Write(Blocks, 0, 32768);
             chunk.Position = (82176 * GetIndex(X, Z)) + 16384;
