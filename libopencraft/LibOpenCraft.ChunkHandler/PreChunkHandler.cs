@@ -12,6 +12,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Threading;
+using ComponentAce.Compression.Libs.zlib;
 
 namespace LibOpenCraft.ChunkHandler
 {
@@ -202,7 +203,7 @@ namespace LibOpenCraft.ChunkHandler
             
             using (MemoryStream memStream = new MemoryStream(buffer, true))
             {
-                using (zlib.ZOutputStream compressor = new zlib.ZOutputStream(memStream, (compression == 1 ? zlib.zlibConst.Z_BEST_SPEED : (compression == 2 ? zlib.zlibConst.Z_DEFAULT_COMPRESSION : (compression == 3 ? zlib.zlibConst.Z_BEST_COMPRESSION : zlib.zlibConst.Z_BEST_COMPRESSION)))))
+                using (ZOutputStream compressor = new ZOutputStream(memStream, compression))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
