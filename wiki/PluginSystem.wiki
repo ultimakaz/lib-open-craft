@@ -1,7 +1,7 @@
 #labels Featured,Phase-Implementation
 Very small example
 
-using System;
+'using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -59,4 +59,4 @@ namespace LibOpenCraft.Bukkit.Plugin
             ModuleHandler.RemoveEventModule(PacketType.ChatMessage);
         }
     }
-}
+}'
