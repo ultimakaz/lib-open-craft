@@ -4,26 +4,49 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Compression;
+using System.Threading;
 
 namespace LibOpenCraft
 {
     public class World
     {
+        private static Thread HandleWorld;
+        private static ThreadStart HandleWorld_start;
+        public static System.Timers.Timer SaveWorldTimer = new System.Timers.Timer(30 * (60 * 1000));
+        static int count = 20;
         public static void LoadWorld()
         {
-            int count = 20;
-            
             for (int x = 0; x < count; x++)
             {
                 for (int z = 0; z < count; z++)
                 {
-                    GridServer.chunk_b.Add(new Chunk((short)x, (short)z));
+                    GridServer.chunk_b.Add(Chunk.GetChunkClass(x, z));
                     GC.Collect();
                 }
             }
             GridServer.chunks = new Chunk[GridServer.chunk_b.Count];
             GridServer.chunks = GridServer.chunk_b.ToArray();
             GridServer.chunk_b.Clear();
+            GC.Collect();
+            HandleWorld_start = new ThreadStart(DoWorld);
+            HandleWorld = new Thread(HandleWorld_start);
+            HandleWorld.Start();
+        }
+        public static void DoWorld()
+        {
+            SaveWorldTimer.Elapsed += new System.Timers.ElapsedEventHandler(SaveWorldTimer_Elapsed);
+            SaveWorldTimer.Start();
+        }
+
+        static void SaveWorldTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            GC.Collect();
+            for (int i = 0; i < GridServer.chunk_b.Count; i++)
+            {
+                GC.Collect();
+                GridServer.chunk_b[i].SaveChunk();
+                GC.Collect();
+            }
             GC.Collect();
         }
     }
@@ -52,12 +75,6 @@ namespace LibOpenCraft
                 _cached2 = value;
             }
         }
-
-        public World World { get; set; }
-        public Chunk Right { get; internal set; }
-        public Chunk Left { get; internal set; }
-        public Chunk Front { get; internal set; }
-        public Chunk Back { get; internal set; }
 
         public Chunk(short x, short z)
         {
@@ -131,21 +148,77 @@ namespace LibOpenCraft
                 }
             }
         }
-
-        public void CreateChunk()
+        public Chunk()
         {
-
+            Blocks = new byte[32768];
+            Data = new byte[16384];
+            BlockLight = new byte[16384];
+            SkyLight = new byte[16384];
+            HeightMap = new byte[256];
+            //32768
+            //16384
         }
-
+        #region LoadChunk
+        public static int c_size = 128;
+        public static string GetPath(int x, int z)
+        {
+            return AppDomain.CurrentDomain.BaseDirectory + "World\\" +
+                (string)Config.Configuration["WorldName"] + "_" + x + "_" + z + ".locf";
+        }
+        public static Chunk GetChunkClass(int x, int z)
+        {
+            if (!File.Exists(GetPath(0, 0)))
+            {
+                File.Create(GetPath(0, 0)).Close();
+                Chunk temp = new Chunk((short)x, (short)z);
+                temp.SaveChunk();
+                return temp;
+            }
+            else
+            {
+                System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
+                FileStream chunk = new FileStream(GetPath(0, 0), FileMode.Open);
+                chunk.Unlock(82176 * GetIndex(x, z) * 2, chunk.Length);
+                Chunk t_chunk = new Chunk();
+                chunk.Position = 82176 * GetIndex(x, z);
+                chunk.Read(t_chunk.Blocks, 0, 32768);
+                chunk.Position = (82176 * GetIndex(x, z)) + 16384;
+                chunk.Read(t_chunk.Data, 0, 16384);
+                chunk.Position = (82176 * GetIndex(x, z)) + (16384 * 2);
+                chunk.Read(t_chunk.BlockLight, 0, 16384);
+                chunk.Position = (82176 * GetIndex(x, z)) + (16384 * 3);
+                chunk.Read(t_chunk.SkyLight, 0, 16384);
+                chunk.Position = (82176 * GetIndex(x, z)) + (16384 * 3) + 256;
+                chunk.Read(t_chunk.HeightMap, 0, 256);
+                chunk.Close();
+                GC.Collect();
+                return t_chunk;
+            }
+        }
+        public static long GetStartChunkBlock(int x, int z)
+        {
+            return ((32768 + (16384 * 3) + 256) * GetIndex(x, z)) - (16348 / 3) - 256;
+        }
         public void SaveChunk()
         {
+            System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
+            FileStream chunk = new FileStream(GetPath(0, 0), FileMode.OpenOrCreate, FileAccess.Write, FileShare.Inheritable);
+            chunk.Unlock(82176 * GetIndex(X, Z) * 2, chunk.Length);
 
+            chunk.Position = 82176 * GetIndex(X, Z);
+            chunk.Write(Blocks, 0, 32768);
+            chunk.Position = (82176 * GetIndex(X, Z)) + 16384;
+            chunk.Write(Data, 0, 16384);
+            chunk.Position = (82176 * GetIndex(X, Z)) + (16384 * 2);
+            chunk.Write(BlockLight, 0, 16384);
+            chunk.Position = (82176 * GetIndex(X, Z)) + (16384 * 3);
+            chunk.Write(SkyLight, 0, 16384);
+            chunk.Position = (82176 * GetIndex(X, Z)) + (16384 * 3) + 256;
+            chunk.Write(HeightMap, 0, 256);
+            chunk.Close();
+            GC.Collect();
         }
-
-        public void LoadChunk()
-        {
-
-        }
+        #endregion LoadChunk
 
         #region Manipulation
         public static int GetIndex(int x, int y, int z)

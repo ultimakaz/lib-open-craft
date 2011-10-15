@@ -1,0 +1,7 @@
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\config.txt
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\World\temp.txt
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.Bukkit.Plugin.dll
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.Bukkit.Plugin.pdb
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\ResolveAssemblyReference.cache
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\LibOpenCraft.Bukkit.Plugin.dll
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\LibOpenCraft.Bukkit.Plugin.pdb
