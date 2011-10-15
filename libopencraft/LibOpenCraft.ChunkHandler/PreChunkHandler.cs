@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,6 +63,17 @@ namespace LibOpenCraft.ChunkHandler
                 EntitySpawn.Pitch = (byte)_client._player.Pitch;
                 EntitySpawn.Rotation = (byte)_client._player.stance;
                 EntitySpawn.BuildPacket();
+
+                ChatMessagePacket chatMsg = new ChatMessagePacket(PacketType.ChatMessage);
+                foreach(string key in Config.Configuration.Keys)
+                {
+                    if (key.Contains("WelcomeMessage"))
+                    {
+                        chatMsg.MessageSent = "SERVER: " + ((string)Config.Configuration[key]).Replace("%USER", _client._player.name);
+                        chatMsg.BuildPacket();
+                        _client.SendPacket((PacketHandler)chatMsg, _client.id, ref _client, false, false);
+                    }
+                }
                 //int index_me = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
                 Thread.SpinWait(1);
                 ClientManager[] player = GridServer.player_list;
