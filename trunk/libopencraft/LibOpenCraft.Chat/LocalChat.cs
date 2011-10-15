@@ -33,11 +33,13 @@ namespace LibOpenCraft.Chat
             string message = _pReader.ReadString();
             ChatMessagePacket ChatMessage = new ChatMessagePacket(PacketType.ChatMessage);
             ChatMessage.MessageRecieved = message;
-            if ('/' == message[0] && (bool)Config.Configuration["EnableEmbeddedChatCommands"])
+            if (message[0] == '/' && (bool)Config.Configuration["EnableEmbeddedChatCommands"])
             {
-                switch (message.Substring(1, message.Length))
+                string command = message.Substring(1, message.Length - 1).ToLower();
+                switch (command)
                 {
                     case "save":
+                        ChatMessage.MessageSent = _client._player.name + ": " + "World Saved....";
                         World.SaveWorld();
                         break;
                     case "set -b 1":
@@ -61,8 +63,15 @@ namespace LibOpenCraft.Chat
                 {
                     Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
                 }
-                ChatMessage.BuildPacket();
-                _client.SendPacket((PacketHandler)ChatMessage, _client.id, ref _client, false, false);
+                if (ChatMessage.MessageSent == "")
+                {
+
+                }
+                else
+                {
+                    ChatMessage.BuildPacket();
+                    _client.SendPacket((PacketHandler)ChatMessage, _client.id, ref _client, false, false);
+                }
             }
             else
             {

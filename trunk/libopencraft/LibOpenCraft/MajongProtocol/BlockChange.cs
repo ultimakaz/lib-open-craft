@@ -189,8 +189,8 @@ namespace LibOpenCraft.MajongProtocol
                 Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
             }
 
-            GridServer.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
-            GridServer.chunks[index].SetData(X, Y, Z, block_change.Metadata);
+            World.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
+            World.chunks[index].SetData(X, Y, Z, block_change.Metadata);
             ClientManager[] player = GridServer.player_list;
             for (int i = 0; i < player.Length; i++)
             {
@@ -237,11 +237,11 @@ namespace LibOpenCraft.MajongProtocol
             #region Login Handler Packet
             /*if (_p.Status == 0 && (int)Config.Configuration["ServerMode"] == 1)// finished digging
             {
-                if (GridServer.chunks[index].GetBlocktype(X, Y, Z) == 0x00)
+                if (World.chunks[index].GetBlocktype(X, Y, Z) == 0x00)
                     return block_change;
                 int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
-                GridServer.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
-                GridServer.chunks[index].SetData(X, Y, Z, block_change.Metadata);
+                World.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
+                World.chunks[index].SetData(X, Y, Z, block_change.Metadata);
                 foreach (ClientManager cm in GridServer.player_list.Values)
                 {
                     int index_remote = Chunk.GetIndex((int)cm._player.position.X, (int)cm._player.position.Y, (int)cm._player.position.Z);
@@ -254,11 +254,11 @@ namespace LibOpenCraft.MajongProtocol
             }*/
             if (_p.Status == 0 && (int)Config.Configuration["ServerMode"] == 1)// finished digging
             {
-                if (GridServer.chunks[index].GetBlocktype(X, Y, Z) == 0x00)
+                if (World.chunks[index].GetBlocktype(X, Y, Z) == 0x00)
                     return block_change;
                 //int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
-                GridServer.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
-                GridServer.chunks[index].SetData(X, Y, Z, block_change.Metadata);
+                World.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
+                World.chunks[index].SetData(X, Y, Z, block_change.Metadata);
                 ClientManager[] player = GridServer.player_list;
                 for (int i = 0; i < player.Length; i++)
                 {
@@ -280,8 +280,8 @@ namespace LibOpenCraft.MajongProtocol
             else if (_p.Status == 2)// finished digging
             {
                 int index_me = Chunk.GetIndex((int)_client._player.position.X, (int)_client._player.position.Y, (int)_client._player.position.Z);
-                GridServer.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
-                GridServer.chunks[index].SetData(X, Y, Z, block_change.Metadata);
+                World.chunks[index].SetBlocktype(X, Y, Z, block_change.BlockType);
+                World.chunks[index].SetData(X, Y, Z, block_change.Metadata);
                 ClientManager[] player = GridServer.player_list;
                 for (int i = 0; i < player.Length; i++)
                 {
