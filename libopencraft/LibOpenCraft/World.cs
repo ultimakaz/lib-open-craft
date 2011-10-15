@@ -14,7 +14,7 @@ namespace LibOpenCraft
         public static List<Chunk> chunk_b = new List<Chunk>();
         private static Thread HandleWorld;
         private static ThreadStart HandleWorld_start;
-        public static System.Timers.Timer SaveWorldTimer = new System.Timers.Timer(30 * (60 * 1000));
+        public static System.Timers.Timer SaveWorldTimer = new System.Timers.Timer(1 * (60 * 1000));
         static int count = 20;
         public static void LoadWorld()
         {
