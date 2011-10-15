@@ -6,9 +6,6 @@ C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\LibO
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\DynamicWebServer.dll
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\NBT.dll
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\DynamicWebServer.pdb
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\ResolveAssemblyReference.cache
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.exe.config
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb
@@ -20,12 +17,12 @@ C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\Lib
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\NBT.dll
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\DynamicWebServer.pdb
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\ResolveAssemblyReference.cache
-C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.exe.config
+C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\bin\Release\LibOpenCraft.exe.config
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\ResolveAssemblyReference.cache
 C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\config.txt
 C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\World\temp.txt
+C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.exe.config
 C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.exe
 C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.pdb
-C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\bin\Release\LibOpenCraft.exe.config
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.AdminPanel.resources
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\GenerateResource.read.1.tlog
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\GenerateResource.write.1.tlog
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
+C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb

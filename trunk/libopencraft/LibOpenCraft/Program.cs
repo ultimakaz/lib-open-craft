@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DynamicWebServer;
-using DynamicWebServer.FormToHtml;
-using DynamicWebServer.special_html;
+//using DynamicWebServer;
+//using DynamicWebServer.FormToHtml;
+//using DynamicWebServer.special_html;
 
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
@@ -17,19 +17,19 @@ namespace LibOpenCraft
     public class Program
     {
         public static GridServer g;
-        public static AdminPanel panel;
-        public static DynamicWebServer.SimpleWebServer webserver;
-        public static FormUtility f_utility;
+        //public static AdminPanel panel;
+        //public static DynamicWebServer.SimpleWebServer webserver;
+        //public static FormUtility f_utility;
         public static Assembly[] this_functions = new Assembly[1];
         public static void Main(string[] args)
         {
             g = new GridServer();
-            panel = new AdminPanel();
-            f_utility = new FormUtility(panel.Controls);
+            //panel = new AdminPanel();
+            //f_utility = new FormUtility(panel.Controls);
             
-            webserver = new DynamicWebServer.SimpleWebServer(8080, ref f_utility.HtmlControls);
-            webserver.OnCommand += new SimpleWebServer.GotCommand(webserver_OnCommand);
-            panel.OnRestart += new NewEvent(panel_OnRestart);
+            //webserver = new DynamicWebServer.SimpleWebServer(8080, ref f_utility.HtmlControls);
+            //webserver.OnCommand += new SimpleWebServer.GotCommand(webserver_OnCommand);
+            //panel.OnRestart += new NewEvent(panel_OnRestart);
             /*List<Assembly> temp_a = new List<Assembly>();
             int i = 0;
             for (; i < f_utility.HtmlControls.Values.Count; i++)
