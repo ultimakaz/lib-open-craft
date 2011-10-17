@@ -35,7 +35,6 @@ namespace LibOpenCraft
                             break;
                         default:
                             return 0x00;
-                            Console.WriteLine("Default?", Face);
                             break;
                     }
                     break;
