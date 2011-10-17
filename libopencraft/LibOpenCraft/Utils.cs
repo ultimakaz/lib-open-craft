@@ -14,7 +14,7 @@ namespace LibOpenCraft
              * Yaw uses 0,1,2,3 order
              * Use default as 3
             */
-            int _RawYaw = (int)GridServer.player_list[_id]._player.Yaw*-1;
+            int _RawYaw = (int)GridServer.player_list[_id]._player.Yaw *-1;
             byte _Yaw = (byte)(_RawYaw < 90 ? 0 :
                 (_RawYaw < 180 ? 1 :
                 (_RawYaw < 270 ? 2 : 3)));
