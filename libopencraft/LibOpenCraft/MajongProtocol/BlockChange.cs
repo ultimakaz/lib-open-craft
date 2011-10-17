@@ -216,7 +216,7 @@ namespace LibOpenCraft.MajongProtocol
             block_change.Y = Y;
             block_change.Z = Z;
             block_change.BlockType = (byte)_p.BlockID;
-            block_change.Metadata = 0x00;
+            //block_change.Metadata = 0x00;
             block_change.BuildPacket();
             #region Send Block Changes
             try

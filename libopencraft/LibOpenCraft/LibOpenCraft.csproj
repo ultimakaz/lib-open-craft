@@ -70,6 +70,7 @@
     <Compile Include="MajongProtocol\HoldingChanged.cs" />
     <Compile Include="MajongProtocol\CreativeInventoryAction.cs" />
     <Compile Include="MajongProtocol\EntityAction.cs" />
+    <Compile Include="ServerPackets\AddObjectVehiclePacket.cs" />
     <Compile Include="ServerPackets\EntityTeleportPacket.cs" />
     <Compile Include="MajongProtocol\PlayerBlockPlacement.cs" />
     <Compile Include="MajongProtocol\PlayerDigging.cs" />
