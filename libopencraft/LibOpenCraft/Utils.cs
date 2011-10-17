@@ -25,11 +25,11 @@ namespace LibOpenCraft
             */
             long _RawYaw = (long)GridServer.player_list[_id]._player.Yaw;
             _RawYaw = Math.Abs(_RawYaw);
-            _RawYaw %= 360;
+            _RawYaw = (_RawYaw % 360);
             //_RawYaw = (_RawYaw > 360 ? _RawYaw - ((_RawYaw / 360) * 360) : (_RawYaw < 0 ? (_RawYaw *-360) : _RawYaw));
-            byte _Yaw = (byte)(_RawYaw < 100 ? 0 :
-                (_RawYaw < 190 ? 1 :
-                (_RawYaw < 280 ? 2 : 3)));
+            byte _Yaw = (byte)(_RawYaw <= 95 ? 2 :
+                (_RawYaw <= 171 ? 3 :
+                (_RawYaw <= 272 ? 1 : 2)));
             
             Console.WriteLine("Debug; Block {0} Placed", BlockID);
             switch (BlockID)
