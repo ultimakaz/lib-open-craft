@@ -23,19 +23,14 @@ namespace LibOpenCraft
                     {
                         case 5:
                             return 0x1;
-                            break;
                         case 4:
                             return 0x2;
-                            break;
                         case 3:
                             return 0x3;
-                            break;
                         case 2:
                             return 0x4;
-                            break;
                         default:
                             return 0x00;
-                            break;
                     }
                     break;
                 default:
