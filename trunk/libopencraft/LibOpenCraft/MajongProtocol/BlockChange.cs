@@ -36,8 +36,8 @@ namespace LibOpenCraft.MajongProtocol
         {
             PlayerBlockPlacementPacket _p = (PlayerBlockPlacementPacket)packet;
             BlockChangePacket block_change = new BlockChangePacket(PacketType.BlockChange);
-            //block_change.Metadata = Utils.GetMetadata(_p.BlockID);
-            block_change.Metadata = 0x00;
+            block_change.Metadata = Utils.GetMetadata(_p.BlockID, _p.Face);
+            //block_change.Metadata = 0x00;
             int X = _p.X;
             byte Y = _p.Y;
             int Z = _p.Z;
@@ -180,6 +180,7 @@ namespace LibOpenCraft.MajongProtocol
                         _client.SendPacket(kick, _client.id, ref _client, false, false);
                         break;
                     default:
+                        _p.BlockID = 0;
                         SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                 }
