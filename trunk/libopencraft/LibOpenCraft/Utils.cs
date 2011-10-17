@@ -31,11 +31,10 @@ namespace LibOpenCraft
                             return 0x4;
                         default:
                             return 0x00;
+                            break;
                     }
-                    break;
                 default:
                     return 0x00;
-                    break;
             }
         }
     }
