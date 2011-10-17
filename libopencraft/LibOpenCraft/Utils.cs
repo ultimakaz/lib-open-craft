@@ -7,6 +7,15 @@ namespace LibOpenCraft
 {
     class Utils
     {
+        public static long Clamp(long value, int max)
+        {
+            long new_value = value;
+            while (new_value > max)
+            {
+                new_value -= max;
+            }
+            return new_value;
+        }
         public static byte GetMetadata(short BlockID, int Face, int _id)
         {
             /*WARNING! For var Face COUNT BACKWARDS: 5,4,3,2,1
@@ -14,10 +23,13 @@ namespace LibOpenCraft
              * Yaw uses 0,1,2,3 order
              * Use default as 3
             */
-            int _RawYaw = (int)GridServer.player_list[_id]._player.Yaw *-1;
-            byte _Yaw = (byte)(_RawYaw < 90 ? 0 :
-                (_RawYaw < 180 ? 1 :
-                (_RawYaw < 270 ? 2 : 3)));
+            long _RawYaw = (long)GridServer.player_list[_id]._player.Yaw;
+            _RawYaw = Math.Abs(_RawYaw);
+            _RawYaw = Clamp(_RawYaw, 371);
+            //_RawYaw = (_RawYaw > 360 ? _RawYaw - ((_RawYaw / 360) * 360) : (_RawYaw < 0 ? (_RawYaw *-360) : _RawYaw));
+            byte _Yaw = (byte)(_RawYaw < 100 ? 0 :
+                (_RawYaw < 190 ? 1 :
+                (_RawYaw < 280 ? 2 : 3)));
             
             Console.WriteLine("Debug; Block {0} Placed", BlockID);
             switch (BlockID)
@@ -45,7 +57,7 @@ namespace LibOpenCraft
                 case 114: //nether brick steps
                     {
                         Console.WriteLine("Debug; RawYaw: {0}", _RawYaw);
-                        //Console.WriteLine("Debug; Yaw: {0}", _Yaw);
+                        Console.WriteLine("Debug; Yaw: {0}", _Yaw);
                         return _Yaw;
                     }
                 default:

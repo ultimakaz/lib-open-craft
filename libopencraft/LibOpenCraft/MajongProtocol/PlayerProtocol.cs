@@ -203,7 +203,7 @@ namespace LibOpenCraft.MajongProtocol
         public void OnPlayerLook(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
             _client._player.Yaw = _pReader.ReadFloat();// Yaw
-            _client._player.Pitch = _pReader.ReadFloat();// Pitch
+            _client._player.Pitch = _pReader.ReadFloat();
             _client._player.onGround = _pReader.ReadByte();// On Ground
             GridServer.player_list[_client.id].WaitToRead = false;
             int i = 0;
