@@ -36,7 +36,16 @@ namespace LibOpenCraft.MajongProtocol
         {
             PlayerBlockPlacementPacket _p = (PlayerBlockPlacementPacket)packet;
             BlockChangePacket block_change = new BlockChangePacket(PacketType.BlockChange);
-            
+            int X = _p.X;
+            byte Y = _p.Y;
+            int Z = _p.Z;
+            int index = 0;
+            int temp = (_p.Face == 0 ? Y-- :
+                (_p.Face == 1 ? Y++ :
+                (_p.Face == 2 ? Z-- :
+                (_p.Face == 3 ? Z++ :
+                (_p.Face == 4 ? X-- : X++)))));
+
             if (_p.BlockID > 255)
             {
                 PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick); //kick variable
@@ -45,72 +54,71 @@ namespace LibOpenCraft.MajongProtocol
                 {
                     case 43: //double stone slabs
                         _p.BlockID = 44;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 60: //farmland
                         _p.BlockID = 3;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 62: //lit furnace
                         _p.BlockID = 61;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 74: //glowing redstone ore
                         _p.BlockID = 73;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 95: //locked chest
                         _p.BlockID = 54;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 99: //huge brown mushroom
                         _p.BlockID = 39;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 100: //huge brown mushroom
                         _p.BlockID = 40;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 259: //flint and steel
                         _p.BlockID = 51;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 324: //wooden door
                         _p.BlockID = 64;
-                        if (World.chunks[Chunk.GetIndex(_p.X, _p.Z)].GetBlocktype(_p.X, _p.Y, _p.Z) != 64)
-                            SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 326: //water
                         _p.BlockID = 8;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 327: //lava
                         _p.BlockID = 10;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 330: //iron door
                         _p.BlockID = 71;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 331: //redstone
                         _p.BlockID = 55;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 338: //lava
                         _p.BlockID = 93;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 354: //cake
                         _p.BlockID = 92;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 355: //bed
                         _p.BlockID = 26;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     case 356: //repeater
                         _p.BlockID = 93;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                     //illegal items
                     case 8: //water
@@ -169,26 +177,32 @@ namespace LibOpenCraft.MajongProtocol
                         kick.AddString("There's a reason why there's a mushroom biome, my friend. :)");
                         _client.SendPacket(kick, _client.id, ref _client, false, false);
                         break;
-                    default :
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p);
+                    default:
+                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                 }
             }
-            
+            else
+            {
+                SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+            }
             return block_change;
             
         }
-        public BlockChangePacket SendBlockChange(BlockChangePacket block_change, ref ClientManager _client, ref PacketReader _pReader, PlayerBlockPlacementPacket _p)
+        public BlockChangePacket SendBlockChange(BlockChangePacket block_change, ref ClientManager _client, ref PacketReader _pReader, PlayerBlockPlacementPacket _p, bool calculate_xyz)
         {
             int X = _p.X;
             byte Y = _p.Y;
             int Z = _p.Z;
             int index = 0;
-            int temp = (_p.Face == 0 ? Y-- :
-                (_p.Face == 1 ? Y++ :
-                (_p.Face == 2 ? Z-- :
-                (_p.Face == 3 ? Z++ :
-                (_p.Face == 4 ? X-- : X++)))));
+            if (calculate_xyz == true)
+            {
+                int temp = (_p.Face == 0 ? Y-- :
+                    (_p.Face == 1 ? Y++ :
+                    (_p.Face == 2 ? Z-- :
+                    (_p.Face == 3 ? Z++ :
+                    (_p.Face == 4 ? X-- : X++)))));
+            }
             try
             {
                 index = Chunk.GetIndex(X / 16, Z / 16);
