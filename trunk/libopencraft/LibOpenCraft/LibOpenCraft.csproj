@@ -67,6 +67,7 @@
     <Compile Include="MajongProtocol\BlockChange.cs" />
     <Compile Include="ClientListener.cs" />
     <Compile Include="MajongProtocol\CloseWindow.cs" />
+    <Compile Include="MajongProtocol\UseEntity.cs" />
     <Compile Include="MajongProtocol\HoldingChanged.cs" />
     <Compile Include="MajongProtocol\CreativeInventoryAction.cs" />
     <Compile Include="MajongProtocol\EntityAction.cs" />
