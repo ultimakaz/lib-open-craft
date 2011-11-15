@@ -43,7 +43,6 @@ namespace LibOpenCraft.BlockPhysics
              * ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerDigging, OnBlockDelete);
              * ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnBlockChange);
              * 
-             * 
             */
 
         }
