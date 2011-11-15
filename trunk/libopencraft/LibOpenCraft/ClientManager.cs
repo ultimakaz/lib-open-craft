@@ -139,9 +139,10 @@ namespace LibOpenCraft
             Suspendv = false;
         }
         int count = 0;
-        
+
         public void Recieve()
         {
+            Nanosecond nano = new Nanosecond();
             //System.Diagnostics.
             int _id = id;
             System.GC.KeepAlive(GridServer.player_list[_id]);
@@ -151,8 +152,7 @@ namespace LibOpenCraft
             //bool connected = true;
             while (true)
             {
-                Thread.Sleep(1);
-                Thread.SpinWait(1);
+                if (nano.RunMiliSecond()) System.Threading.Thread.Sleep(1);
                 try
                 {
                     if (Suspendv == false)
@@ -197,7 +197,6 @@ namespace LibOpenCraft
                                 Thread.Sleep(50);
                             else
                             {
-                                Thread.Sleep(1);
                                 if (GridServer.player_list[_id]._player.EntityUpdateCount < (int)Config.Configuration["EntityUpdate"])
                                 {
                                     ClientManager[] player = GridServer.player_list;
