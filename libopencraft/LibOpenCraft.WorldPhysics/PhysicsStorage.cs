@@ -7,5 +7,6 @@ namespace LibOpenCraft.WorldPhysics
 {
     public static class PhysicsStorage
     {
+        public static List<PhysicalObject> objects = new List<PhysicalObject>();
     }
 }

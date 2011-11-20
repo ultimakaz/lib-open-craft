@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,10 +29,10 @@ namespace LibOpenCraft.Bukkit.Plugin
             base.RunModuleCache();
         }
 
-        /*public PacketHandler OnBlockChange(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
+        public PacketHandler OnBlockChange(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
         {
             return _p;
-        }*/
+        }
 
         public override void Stop()
         {
@@ -41,3 +41,4 @@ namespace LibOpenCraft.Bukkit.Plugin
         }
     }
 }
+*/
