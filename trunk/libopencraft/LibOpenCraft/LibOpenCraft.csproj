@@ -36,6 +36,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,6 +46,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -58,6 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Biomes\Biome.cs" />
+    <Compile Include="Biomes\Desert.cs" />
     <Compile Include="FastRandom.cs" />
     <Compile Include="ClientManager.cs" />
     <Compile Include="ClientPackets\LoginHandlerPacket.cs" />
@@ -67,6 +71,7 @@
     <Compile Include="MajongProtocol\BlockChange.cs" />
     <Compile Include="ClientListener.cs" />
     <Compile Include="MajongProtocol\CloseWindow.cs" />
+    <Compile Include="MajongProtocol\ListPlayer.cs" />
     <Compile Include="MajongProtocol\UseEntity.cs" />
     <Compile Include="MajongProtocol\HoldingChanged.cs" />
     <Compile Include="MajongProtocol\CreativeInventoryAction.cs" />
@@ -101,6 +106,7 @@
     <Compile Include="ServerPackets\NamedEntitySpawnPacket.cs" />
     <Compile Include="ServerPackets\PlayerBlockPlacementPacket.cs" />
     <Compile Include="ServerPackets\PlayerDiggingPacket.cs" />
+    <Compile Include="ServerPackets\PlayerListItemPacket.cs" />
     <Compile Include="ServerPackets\PlayerPositionAndLookPacket.cs" />
     <Compile Include="ServerPackets\PlayerPositionPacket.cs" />
     <Compile Include="ServerPackets\PreChunkPacket.cs" />
