@@ -30,3 +30,11 @@ C:\Users\geramy\Documents\Programming\libopencraft\bin\Release\LibOpenCraft.pdb
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb
 C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.csprojResolveAssemblyReference.cache
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.exe.config
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\LibOpenCraft\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\config.txt
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\World\temp.txt
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.exe
+C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.pdb

@@ -22,9 +22,9 @@ namespace LibOpenCraft.MajongProtocol
 
         public override void Start()
         {
-            base.Start();
-            ModuleHandler.AddEventModule(PacketType.ServerListPing, new ModuleCallback(OnPlayerListItem));
-            base.RunModuleCache();
+         //   base.Start();
+          //  ModuleHandler.AddEventModule(PacketType.ServerListPing, new ModuleCallback(OnPlayerListItem));
+          //  base.RunModuleCache();
         }
 
         public void OnPlayerListItem(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
