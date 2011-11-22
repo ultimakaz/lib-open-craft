@@ -6,16 +6,65 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
+using System.Data;
+
 namespace LibOpenCraft
 {
+    public enum BlockTypes
+    {
+        Air = 0,
+        Stone = 1,
+        DirtWithGrass= 2,
+        Dirt= 3,
+        CobbleStone=4,
+        Planks = 5,
+        Sapling = 6,
+        Bedrock = 7,
+        Water = 8,
+        Lava = 9,
+        Sand = 12,
+        Gravel = 13,
+        GoldOre = 14,
+        IronOre=15,
+        CoalOre=16,
+        Wood=17,
+        Leaves = 18,
+        Sponge = 19,
+        Glass = 20,
+        LapisLazuliOre = 21,
+        LapisLazuliBlock=22,
+        Dispenser = 23,
+        SandStone = 24,
+        NoteBlock = 25,
+        PoweredRail = 27,
+        DetectorRail = 28,
+        StickyPiston = 29,
+        Cobweb = 30,
+        Grass = 31,
+        DeadBush = 32,
+        Piston = 33,
+        Wool = 35
+
+        //to be continued
+    }
+
     public class World
     {
-        public static Chunk[] chunks;
-        public static List<Chunk> chunk_b = new List<Chunk>();
+                [System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Biome)),
+        System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Desert))]
+        public static Biomes.Biome[] chunks;// Chunk[] chunks;
+
+                [System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Biome)),
+        System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Desert))]
+        public static List<Biomes.Biome> chunk_b = new List<Biomes.Biome>(); // List<Chunk> chunk_b = new List<Chunk>();
+        
         private static Thread HandleWorld;
         private static ThreadStart HandleWorld_start;
         public static System.Timers.Timer SaveWorldTimer;
-        static int count = 20;
+        static int count = 10;
         public static void LoadWorld()
         {
             SaveWorldTimer = new System.Timers.Timer((int)Config.Configuration["SaveTimer"] * (60 * 1000));
@@ -35,11 +84,12 @@ namespace LibOpenCraft
                 {
                     for (int z = 0; z < count; z++)
                     {
-                        World.chunk_b.Add(new Chunk((short)x, (short)z));
+                      //  World.chunk_b.Add(new Chunk((short)x, (short)z));
+                        World.chunk_b.Add(new Biomes.Desert((short)x, (short)z));
                         GC.Collect();
                     }
                 }
-                World.chunks = new Chunk[World.chunk_b.Count];
+                World.chunks = new Biomes.Biome[World.chunk_b.Count]; // new Chunk[World.chunk_b.Count];
                 World.chunks = World.chunk_b.ToArray();
                 World.chunk_b.Clear();
                 SaveWorld();
@@ -56,17 +106,17 @@ namespace LibOpenCraft
         }
         public static void OpenWorld()
         {
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Chunk[]));
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(Biomes.Biome[]));
             System.IO.StreamReader file =
                 new System.IO.StreamReader(Chunk.GetPath(0, 0));
-            World.chunks = (Chunk[])reader.Deserialize(file);
+            World.chunks = (Biomes.Biome[])reader.Deserialize(file); // (Chunk[])reader.Deserialize(file);
             file.Close();
             //reader = null;
             //file = null;
         }
         public static void SaveWorld()
         {
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Chunk[]));
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Biomes.Biome[]));//Chunk[]));
             System.IO.StreamWriter file =
                 new System.IO.StreamWriter(Chunk.GetPath(0, 0));
             writer.Serialize(file, World.chunks);
@@ -79,6 +129,9 @@ namespace LibOpenCraft
             World.SaveWorld();
         }
     }
+
+    [XmlInclude(typeof(Biomes.Biome))]
+    [XmlInclude(typeof(Biomes.Desert))]
     public class Chunk
     {
         public const int Width = 16;
@@ -104,7 +157,9 @@ namespace LibOpenCraft
                 _cached2 = value;
             }
         }
+       
 
+        
         public Chunk(short x, short z)
         {
             X = x; Z = z;
@@ -113,6 +168,63 @@ namespace LibOpenCraft
             BlockLight = new byte[(16 * 16 * 128) / 2];
             SkyLight = new byte[(16 * 16 * 128) / 2];
             HeightMap = new byte[256];
+
+            Random rnd = new Random();
+
+            for (int block_y = 0; block_y < 128; block_y++)
+            {
+                for (int block_x = 0; block_x < 16; block_x++)
+                {
+                    for (int block_z = 0; block_z < 16; block_z++)
+                    {
+
+                        //Create Bedrocks
+                        if (block_y>0 & block_y <= 13)
+                        {
+                            if (rnd.Next(2) == 0)
+                            {
+                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
+                            }
+                            else
+                            {
+                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Bedrock);
+                            }
+                        }
+                        else if (block_y == 9)
+                        {
+                            SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Bedrock);
+                        }
+                                         
+                        //else if (block_y < 64)//Create Dirt
+                        //    SetBlocktype(i, 0x04);
+                        //else if (block_y == 64)//Create Grass
+                        //    SetBlocktype(i, 0x02);
+                        //else if (block_y >= 65)//Create Air
+                        //    SetBlocktype(i, 0x00);
+
+                        //int i = GetIndex(block_x, block_y, block_z);
+                        //if (block_y == 1)//Create Bedrock
+                        //    SetBlocktype(i, 0x07);
+                        //else if (block_y < 49)//Create Stone
+                        //    SetBlocktype(i, 0x01);
+                        //else if (block_y < 64)//Create Dirt
+                        //    SetBlocktype(i, 0x04);
+                        //else if (block_y == 64)//Create Grass
+                        //    SetBlocktype(i, 0x02);
+                        //else if (block_y >= 65)//Create Air
+                        //    SetBlocktype(i, 0x00);
+                        ////System.Threading.Thread.Sleep(0001);
+                    }
+                }
+            }
+            WriteMetaData();
+            WriteBlockLight();
+            WriteSkyLight();
+        }
+
+        public void WriteBlockLight()
+        {
+        // Write BlockLight
             for (int block_x = 0; block_x < 16; block_x++)
             {
                 for (int block_z = 0; block_z < 16; block_z++)
@@ -120,21 +232,15 @@ namespace LibOpenCraft
                     for (int block_y = 0; block_y < 128; block_y++)
                     {
                         int i = GetIndex(block_x, block_y, block_z);
-                        if (block_y == 1)//Create Bedrock
-                            SetBlocktype(i, 0x07);
-                        else if (block_y < 49)//Create Stone
-                            SetBlocktype(i, 0x01);
-                        else if (block_y < 64)//Create Dirt
-                            SetBlocktype(i, 0x03);
-                        else if (block_y == 64)//Create Grass
-                            SetBlocktype(i, 0x02);
-                        else if (block_y >= 65)//Create Air
-                            SetBlocktype(i, 0x00);
+                        SetBlockLight(i, 0x0F);
                         //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
-            
+        }
+
+        public void WriteMetaData()
+        {
             // Write MetaData
             for (int block_x = 0; block_x < 16; block_x++)
             {
@@ -148,21 +254,10 @@ namespace LibOpenCraft
                     }
                 }
             }
+        }
 
-            // Write BlockLight
-            for (int block_x = 0; block_x < 16; block_x++)
-            {
-                for (int block_z = 0; block_z < 16; block_z++)
-                {
-                    for (int block_y = 0; block_y < 128; block_y++)
-                    {
-                        int i = GetIndex(block_x, block_y, block_z);
-                        SetBlockLight(i, 0x0F);
-                        //System.Threading.Thread.Sleep(0001);
-                    }
-                }
-            }
-
+        public void WriteSkyLight()
+        {
             // Write SkyLight
             for (int block_x = 0; block_x < 16; block_x++)
             {
@@ -177,6 +272,7 @@ namespace LibOpenCraft
                 }
             }
         }
+
         public Chunk()
         {
             Blocks = new byte[32768];
