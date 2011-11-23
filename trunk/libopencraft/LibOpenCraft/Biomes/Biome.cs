@@ -169,20 +169,29 @@ namespace LibOpenCraft.Biomes
 
         public void CreateLakes(int start_heigth)
         {
-            if (RandomGenerator.Next(5) == 1)
+            if (RandomGenerator.Next(4) == 1)
             {
-                int x_start = RandomGenerator.Next(14);
-                int z_start = RandomGenerator.Next(14);
+                int x_start = RandomGenerator.Next(8);
+                int z_start = RandomGenerator.Next(8);
+
+                if (x_start < z_start)
+                {
+                    z_start = RandomGenerator.Next(x_start - 2, x_start + 2);
+                }
+                else
+                {
+                    x_start = RandomGenerator.Next(z_start - 2, z_start + 2);
+                }
 
                 int depth = RandomGenerator.Next(5);
 
-                for (int z = z_start; z < 16; z++)
+                for (int z = 0; z < z_start; z++)
                 {
-                    for (int x = x_start; x < 16; x++)
+                    for (int x = 0; x < x_start; x++)
                     {
-                        int current_depth = RandomGenerator.Next(5);
+                        int current_depth = RandomGenerator.Next(1,5);
 
-                        for (int y = 1; y < current_depth; y++)
+                        for (int y = 0; y < current_depth; y++)
                         {
                             SetBlocktype(x, start_heigth - y, z, (byte)BlockTypes.Water);
                         }     
