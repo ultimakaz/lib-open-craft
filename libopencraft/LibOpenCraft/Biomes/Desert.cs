@@ -83,8 +83,79 @@ namespace LibOpenCraft.Biomes
                     }
                 }
             }
-
             base.CreateChunk();
+        }
+
+        public void CreateCacti()
+        {
+            for (int x = 0; x < 16; x++)
+            {
+                for (int z = 0; z < 16; z++)
+                {
+                    if (RandomGenerator.Next(500) == 5)
+                    {
+                        
+
+                        int start_heigth = DefaultHeigth-5;
+
+                        while (Blocks[GetIndex(x, start_heigth, z)] != 0)
+                        {
+                            start_heigth++;
+                        }
+
+                        SetBlocktype(x, start_heigth, z, (byte)BlockTypes.Cactus);
+                        SetBlocktype(x, start_heigth+1, z, (byte)BlockTypes.Cactus);
+                        
+                        if (RandomGenerator.Next(2) == 1)
+                        {
+                            SetBlocktype(x, start_heigth + 2, z, (byte)BlockTypes.Cactus);
+                        }
+                    }
+                }
+            }
+
+        }
+
+        public void CreateHills()
+        {
+            if (RandomGenerator.Next(4) == 1)
+            {
+                int x_start = RandomGenerator.Next(4,10);
+                int z_start = RandomGenerator.Next(4,10);
+
+                if (x_start < z_start)
+                {
+                    z_start = RandomGenerator.Next(x_start - 2, x_start + 2);
+                }
+                else
+                {
+                    x_start = RandomGenerator.Next(z_start - 2, z_start + 2);
+                }
+
+                int depth = RandomGenerator.Next(5);
+
+                int current_heigth = DefaultHeigth;
+
+                while (Blocks[GetIndex(0, current_heigth, 0)] != 0)
+                {
+                    current_heigth++;
+                }
+
+                for (int z = 0; z < z_start; z++)
+                {
+                    for (int x = 0; x < x_start; x++)
+                    {                    
+                        SetBlocktype(x, current_heigth, z, (byte)BlockTypes.Sand);
+                    }
+                }
+                if (RandomGenerator.Next(2) == 1)
+                {
+                    SetBlocktype(x_start - 1, current_heigth, z_start - 1, (byte)BlockTypes.Air);
+                    SetBlocktype(-1, current_heigth, z_start, (byte)BlockTypes.Air);
+                }
+                SetBlocktype(x_start - 1, current_heigth, z_start, (byte)BlockTypes.Air);
+                SetBlocktype(-1, current_heigth, z_start - 1, (byte)BlockTypes.Air);
+            }      
         }
 
         public Desert(short x, short z, FastRandom rnd)
@@ -94,6 +165,8 @@ namespace LibOpenCraft.Biomes
            base.CreateChunk();
             base.CreateOres();
             base.CreateLakes(DefaultHeigth + 1);
+            CreateHills();
+            CreateCacti();
         }
 
         public Desert()
