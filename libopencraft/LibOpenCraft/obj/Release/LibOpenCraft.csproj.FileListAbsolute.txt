@@ -1,11 +1,3 @@
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\config.txt
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\World\temp.txt
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.exe.config
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.exe
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.pdb
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\DynamicWebServer.dll
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\NBT.dll
-C:\Users\geramy\Documents\Programming\libopencraft\LibOpenCraft\bin\Release\DynamicWebServer.pdb
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\bin\Release\LibOpenCraft.exe.config
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb
@@ -38,3 +30,11 @@ C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\
 C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\World\temp.txt
 C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.exe
 C:\Users\Roland\Documents\Visual Studio 2010\Projects\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.pdb
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\config.txt
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\World\temp.txt
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.exe.config
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.exe
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.pdb
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.csprojResolveAssemblyReference.cache
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.exe
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\LibOpenCraft\obj\Release\LibOpenCraft.pdb

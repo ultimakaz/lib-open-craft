@@ -15,7 +15,8 @@ namespace LibOpenCraft.Biomes
         public override void CreateChunk()
         {
             int helper = 0;
-            Random rnd = new Random(100);
+            FastRandom rnd = new FastRandom(100);
+            //Random rnd = new Random(100);
             for (int block_y = 0; block_y < 128; block_y++)
             {
                 for (int block_x = 0; block_x < 16; block_x++)

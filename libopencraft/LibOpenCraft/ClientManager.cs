@@ -45,6 +45,7 @@ namespace LibOpenCraft
                 recieved = new Thread(recieve_start);
                 customAttributes.Add("PayLoad", id);
                 _player.customerVariables.Add("BeforeFirstPosition", null);
+                customAttributes.Add("MSLatency", null);
                 if (recieved == null) recieved = new Thread(recieve_start);
                 recieved.Start();
                 //Recieve((object)id);
@@ -111,9 +112,9 @@ namespace LibOpenCraft
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                if (GridServer.player_list[cm.id] != null)
+                if (GridServer.player_list[id] != null)
                 {
                     if (GridServer.player_list[id] != null)
                     {
@@ -129,6 +130,7 @@ namespace LibOpenCraft
                 {
                     Stop(true);
                 }
+
             }
         }
         bool Suspendv = false;
