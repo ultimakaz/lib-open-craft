@@ -40,11 +40,12 @@ namespace LibOpenCraft.MajongProtocol
             p.Amount = _pReader.ReadByte();
             p.Damage = _pReader.ReadShort();
             GridServer.player_list[_client.id].WaitToRead = false;
+            p.BuildPacket();
             PacketReader pr = new PacketReader(new System.IO.BinaryReader(new System.IO.MemoryStream(p.GetBytes())));
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
-                base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref _client);
+                base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref pr, (PacketHandler)p, ref _client);
             }
         }
 

@@ -125,7 +125,7 @@ namespace LibOpenCraft
                     {
                         Stop(true);
                     }
-                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
+                    Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nInnerException:" + e.InnerException);
                 }
                 else
                 {
@@ -165,38 +165,46 @@ namespace LibOpenCraft
                         if (GridServer.player_list[_id]._client.Connected == false) GridServer.player_list[_id].Stop(true);
                         if (GridServer.player_list[_id]._client.Client.Available > 0)
                         {
-                            //System.Threading.Thread.Sleep(1);
-                            GridServer.player_list[_id].WaitToRead = true;
-                            PacketType p_type = (PacketType)p_reader.ReadByte();
-                            if (ModuleHandler.Eventmodules.Keys.Contains(p_type))
+                            try
                             {
-                                Thread.BeginCriticalRegion();
-                                ModuleHandler.Eventmodules[p_type](ref p_reader, p_type, ref GridServer.player_list[_id]);
-                                Thread.EndCriticalRegion();
-                                //GridServer.player_list[_id].WaitToRead = false;
-                            }
-                            else
-                            {
-                                System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
-                                //System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
-                                //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
-                                //kick.AddString("Server has kicked you for illegal packet!!");
-                                //GridServer.player_list[_id].SendPacket(kick, _id, ref GridServer.player_list[_id]);
+                                //System.Threading.Thread.Sleep(1);
+                                GridServer.player_list[_id].WaitToRead = true;
+                                byte read = p_reader.ReadByte();
+                                PacketType p_type = (PacketType)read;
+                                if (ModuleHandler.Eventmodules.Keys.Contains(p_type))
+                                {
+                                    Thread.BeginCriticalRegion();
+                                    ModuleHandler.Eventmodules[p_type](ref p_reader, p_type, ref GridServer.player_list[_id]);
+                                    Thread.EndCriticalRegion();
+                                    //GridServer.player_list[_id].WaitToRead = false;
+                                }
+                                else
+                                {
+                                    System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
+                                    //System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
+                                    //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
+                                    //kick.AddString("Server has kicked you for illegal packet!!");
+                                    //GridServer.player_list[_id].SendPacket(kick, _id, ref GridServer.player_list[_id]);
 
-                                GridServer.player_list[_id].WaitToRead = false;
+                                    GridServer.player_list[_id].WaitToRead = false;
 
+                                }
+                                if (GridServer.player_list[_id]._stream != null && DateTime.Now.Minute > GridServer.player_list[_id].keep_alive.Minute || GridServer.player_list[_id].keep_alive.Second + 1 < DateTime.Now.Second)
+                                {
+                                    Random r = new Random(1789);
+                                    GridServer.player_list[_id].customAttributes["PayLoad"] = (object)r.Next(1024, 4096);
+                                    LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
+                                    p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
+                                    p.BuildPacket();
+                                    #region ProcessLatency
+                                    ms_latency.Start();
+                                    #endregion ProcessLatency
+                                    SendPacket(p, _id, ref GridServer.player_list[_id], false, false);
+                                }
                             }
-                            if (GridServer.player_list[_id]._stream != null && DateTime.Now.Minute > GridServer.player_list[_id].keep_alive.Minute || GridServer.player_list[_id].keep_alive.Second + 1 < DateTime.Now.Second)
+                            catch (Exception e)
                             {
-                                Random r = new Random(1789);
-                                GridServer.player_list[_id].customAttributes["PayLoad"] = (object)r.Next(1024, 4096);
-                                LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
-                                p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
-                                p.BuildPacket();
-                                #region ProcessLatency
-                                ms_latency.Start();
-                                #endregion ProcessLatency
-                                SendPacket(p, _id, ref GridServer.player_list[_id], false, false);
+                                Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nInnerException:" + e.InnerException);
                             }
                         }
                         else
@@ -233,7 +241,7 @@ namespace LibOpenCraft
 
                 catch (Exception e)
                 {
-                    Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
+                    Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nInnerException:" + e.InnerException);
                     if (GridServer.player_list[_id] != null)
                     {
                         
