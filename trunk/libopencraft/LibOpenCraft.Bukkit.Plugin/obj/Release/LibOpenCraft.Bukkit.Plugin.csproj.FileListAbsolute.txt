@@ -12,3 +12,10 @@ C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\bin
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\ResolveAssemblyReference.cache
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\LibOpenCraft.Bukkit.Plugin.dll
 C:\Users\GrygrFlzr\Projects\loveless\C# Minecraft Server\source\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\LibOpenCraft.Bukkit.Plugin.pdb
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\config.txt
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\World\temp.txt
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.Bukkit.Plugin.dll
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\bin\Release\LibOpenCraft.Bukkit.Plugin.pdb
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\LibOpenCraft.Bukkit.Plugin.csprojResolveAssemblyReference.cache
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\LibOpenCraft.Bukkit.Plugin.dll
+C:\Users\geramy\Documents\Programming\LibOpenCraft\libopencraft\LibOpenCraft.Bukkit.Plugin\obj\Release\LibOpenCraft.Bukkit.Plugin.pdb
