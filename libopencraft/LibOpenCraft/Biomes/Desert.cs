@@ -15,9 +15,9 @@ namespace LibOpenCraft.Biomes
         public override void CreateChunk()
         {
             int helper = 0;
-            FastRandom rnd = new FastRandom(100);
+        //    FastRandom rnd = new FastRandom(100);
             //Random rnd = new Random(100);
-
+                        
             for (int block_y = 0; block_y < 128; block_y++)
             {
                 for (int block_x = 0; block_x < 16; block_x++)
@@ -30,7 +30,7 @@ namespace LibOpenCraft.Biomes
                             //            13
                             if (block_y > 35 & block_y <= DefaultHeigth)
                             {
-                                helper = rnd.Next(100);
+                                helper = RandomGenerator.Next(100);
 
                                 if (helper == 24 & block_y <= 126)
                                 {
@@ -58,9 +58,13 @@ namespace LibOpenCraft.Biomes
                                     SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
                                 }
                             }
+                            if (block_y == DefaultHeigth+1)
+                            {
+                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
+                            }
                             if (block_y > 13 & block_y <= 35)
                             {
-                                helper = rnd.Next(10);
+                                helper = RandomGenerator.Next(10);
                                 if (helper <= 6)
                                 {
                                     SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
@@ -83,12 +87,13 @@ namespace LibOpenCraft.Biomes
             base.CreateChunk();
         }
 
-        public Desert(short x, short z)
-            : base(x, z)
+        public Desert(short x, short z, FastRandom rnd)
+            : base(x, z, rnd)
         {
             CreateChunk();
-            base.CreateChunk();
+           base.CreateChunk();
             base.CreateOres();
+            base.CreateLakes(DefaultHeigth + 1);
         }
 
         public Desert()

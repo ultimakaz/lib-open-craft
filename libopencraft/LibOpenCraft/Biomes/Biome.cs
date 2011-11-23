@@ -44,11 +44,13 @@ namespace LibOpenCraft.Biomes
 
         public int Z_End { get; set; }
 
+        public FastRandom RandomGenerator { get; set; }
+
         public int DefaultHeigth { get; set; }
 
         public virtual void CreateChunk() { }
 
-        public Biome(short x, short z)
+        public Biome(short x, short z, FastRandom rnd)
             : base(x, z)
         {
             X_Start = x * 10 * 64;
@@ -56,6 +58,8 @@ namespace LibOpenCraft.Biomes
 
             X_End = (x + 1) * 10 * 64;
             Z_End = (z + 1) * 10 * 64;
+
+            RandomGenerator = rnd;
 
             DefaultHeigth = 64;
         }
@@ -99,8 +103,6 @@ namespace LibOpenCraft.Biomes
 
         public void CreateOres()
         {
-            //Three four of formations:
-            FastRandom rnd = new FastRandom();
             for (int block_y = 0; block_y < DefaultHeigth - 4; block_y++)
             {
                 for (int block_x = 0; block_x < 16; block_x++)
@@ -108,8 +110,8 @@ namespace LibOpenCraft.Biomes
                     for (int block_z = 0; block_z < 16; block_z++)
                     {
 
-                        int helper = rnd.Next(200000);
-                        int formathelper = rnd.Next(0, 3);
+                        int helper = RandomGenerator.Next(200000);
+                        int formathelper = RandomGenerator.Next(0, 3);
                         if (Blocks[GetIndex(block_x, block_y, block_z)] != ((byte)BlockTypes.RedstoneOre | (byte)BlockTypes.GoldOre | (byte)BlockTypes.LapisLazuliBlock | (byte)BlockTypes.IronOre | (byte)BlockTypes.DiamondOre))
                         {
                             if (block_y <= 24)
@@ -163,6 +165,30 @@ namespace LibOpenCraft.Biomes
                     }
                 }
             }
+        }
+
+        public void CreateLakes(int start_heigth)
+        {
+            if (RandomGenerator.Next(5) == 1)
+            {
+                int x_start = RandomGenerator.Next(14);
+                int z_start = RandomGenerator.Next(14);
+
+                int depth = RandomGenerator.Next(5);
+
+                for (int z = z_start; z < 16; z++)
+                {
+                    for (int x = x_start; x < 16; x++)
+                    {
+                        int current_depth = RandomGenerator.Next(5);
+
+                        for (int y = 1; y < current_depth; y++)
+                        {
+                            SetBlocktype(x, start_heigth - y, z, (byte)BlockTypes.Water);
+                        }     
+                    }
+                }
+            }      
         }
 
         public Biome()
