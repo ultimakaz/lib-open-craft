@@ -44,7 +44,7 @@ namespace LibOpenCraft.MajongProtocol
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
-                base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref pr, (PacketHandler)p, ref _client);
+                base.ModuleAddons.ElementAt(i).Value(pt, ModuleAddons.ElementAt(i).Key, ref _pReader, (PacketHandler)p, ref _client);
             }
         }
 
