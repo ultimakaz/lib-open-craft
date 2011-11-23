@@ -31,7 +31,22 @@ namespace LibOpenCraft
             }
             return false;
         }
+        public static void SendToAll(PacketHandler p)
+        {
+            for (int i = 0; i < GridServer.player_list.Length; i++)
+            {
+                if (GridServer.player_list[i] != null)
+                {
+                    GridServer.player_list[i].WaitToRead = false;
+                    GridServer.player_list[i].SendPacket(p, GridServer.player_list[i].id, ref GridServer.player_list[i], false, false);
+                }
+            }
+        }
 
+        public void SendToAll(PacketHandler p, int id)
+        {
+
+        }
         public static int PlayerCount()
         {
             int i = 0;

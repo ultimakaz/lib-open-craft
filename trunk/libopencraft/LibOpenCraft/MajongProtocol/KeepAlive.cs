@@ -32,19 +32,10 @@ namespace LibOpenCraft.MajongProtocol
 
         public void OnKeepAlive(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
-            if (!_client.customAttributes.ContainsKey("MSLatencyLatency"))
-            {
-                _client.customAttributes.Add("MSLatency", _client.ms_latency.ElapsedMilliseconds);
-                _client.ms_latency.Stop();
-                _client.ms_latency.Reset();
-            }
-            else
-            {
-                _client.customAttributes["MSLatency"] = _client.ms_latency.ElapsedMilliseconds;
-                _client.ms_latency.Stop();
-                _client.ms_latency.Reset();
-            }
-            
+            _client.ms_latency.Stop();
+            _client.customAttributes["MSLatency"] = (object)(short)_client.ms_latency.ElapsedMilliseconds;
+            _client.ms_latency.Reset();
+
             if (_client._client == null || _client._client.Connected == false)
             {
                 if (GridServer.player_list[_client.id] != null)

@@ -30,7 +30,10 @@ namespace LibOpenCraft
         #region PacketWriter
         public void AddBool(bool value)
         {
-            stream.WriteByte((byte)(value == true ? 0x01 : 0x00));
+            if (value == true)
+                stream.WriteByte(0x01);
+            else
+                stream.WriteByte(0x00);
         }
         public void AddByte(byte value)
         {
