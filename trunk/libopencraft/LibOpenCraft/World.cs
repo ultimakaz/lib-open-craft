@@ -151,6 +151,8 @@ namespace LibOpenCraft
         private static ThreadStart HandleWorld_start;
         public static System.Timers.Timer SaveWorldTimer;
         static int count = 10;
+        public static int Seed = 0;
+        public static FastRandom rnd = new FastRandom();
         public static void LoadWorld()
         {
             SaveWorldTimer = new System.Timers.Timer((int)Config.Configuration["SaveTimer"] * (60 * 1000));
@@ -166,16 +168,18 @@ namespace LibOpenCraft
             }
             else
             {
+                if (Seed == 0) { Seed = rnd.Next(); }
+                rnd = new FastRandom(Seed);
+
                 for (int x = 0; x < count; x++)
                 {
                     for (int z = 0; z < count; z++)
                     {
-                      //  World.chunk_b.Add(new Chunk((short)x, (short)z));
-                        World.chunk_b.Add(new Biomes.Desert((short)x, (short)z));
+                        World.chunk_b.Add(new Biomes.Desert((short)x, (short)z, rnd));
                         GC.Collect();
                     }
                 }
-                World.chunks = new Biomes.Biome[World.chunk_b.Count]; // new Chunk[World.chunk_b.Count];
+                World.chunks = new Biomes.Biome[World.chunk_b.Count];
                 World.chunks = World.chunk_b.ToArray();
                 World.chunk_b.Clear();
                 SaveWorld();
@@ -256,7 +260,7 @@ namespace LibOpenCraft
             HeightMap = new byte[256];
             FastRandom rnd = new FastRandom();
 
-            for (int block_y = 0; block_y < 128; block_y++)
+            for (int block_y = 0; block_y < 7; block_y++)
             {
                 for (int block_x = 0; block_x < 16; block_x++)
                 {
@@ -275,7 +279,7 @@ namespace LibOpenCraft
                                 SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Bedrock);
                             }
                         }
-                        else if (block_y == 9)
+                        else if (block_y == 0)
                         {
                             SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Bedrock);
                         }
