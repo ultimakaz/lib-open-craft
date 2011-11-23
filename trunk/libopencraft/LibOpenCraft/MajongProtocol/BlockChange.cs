@@ -50,148 +50,151 @@ namespace LibOpenCraft.MajongProtocol
 
             if (_p.BlockID > 255)
             {
-                PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick); //kick variable
+                //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick); //kick variable
                 //block replacement and bans
                 switch (_p.BlockID)
                 {
-                    case 43: //double stone slabs
-                        _p.BlockID = 44;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 60: //farmland
-                        _p.BlockID = 3;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 62: //lit furnace
-                        _p.BlockID = 61;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 74: //glowing redstone ore
-                        _p.BlockID = 73;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 95: //locked chest
-                        _p.BlockID = 54;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 99: //huge brown mushroom
-                        _p.BlockID = 39;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 100: //huge brown mushroom
-                        _p.BlockID = 40;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 259: //flint and steel
-                        _p.BlockID = 51;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 324: //wooden door
-                        _p.BlockID = 64;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 326: //water
-                        _p.BlockID = 8;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 327: //lava
-                        _p.BlockID = 10;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 330: //iron door
-                        _p.BlockID = 71;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 331: //redstone
-                        _p.BlockID = 55;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 338: //lava
-                        _p.BlockID = 93;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 354: //cake
-                        _p.BlockID = 92;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 355: //bed
-                        _p.BlockID = 26;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    case 356: //repeater
-                        _p.BlockID = 93;
-                        SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
-                        break;
-                    //illegal items
-                    case 8: //water
-                        kick.AddString("Illegal Water Placement, USE A BUCKET!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 9: //water
-                        kick.AddString("Illegal Water Placement, USE A BUCKET!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 10: //water
-                        kick.AddString("Illegal Lava Placement, USE A BUCKET!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 11: //water
-                        kick.AddString("Illegal Lava Placement, USE A BUCKET!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 34: //piston-head
-                        kick.AddString("You are not allowed to place glitch blocks!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 36: //piston moved block
-                        kick.AddString("You are not allowed to place glitch blocks!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 51: //fire
-                        kick.AddString("Illegal Fire placement!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 52: //spawner
-                        kick.AddString("You are not allowed to place monster spawners!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 75: //redstone torch-off
-                        kick.AddString("Why would you want to place an off redstone torch? :/");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 90: //portal
-                        kick.AddString("No friggin way, bub. Use some obsidian and flint and steel!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 94: //repeater-on
-                        kick.AddString("Use a redstone torch next time!!!");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 104: //pumpkin stem
-                        kick.AddString("*Sigh* You just had to hack the stem...");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 105: //melon stem
-                        kick.AddString("*Sigh* You just had to hack the stem...");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
-                    case 110: //mycelium
-                        kick.AddString("There's a reason why there's a mushroom biome, my friend. :)");
-                        _client.SendPacket(kick, _client.id, ref _client, false, false);
-                        break;
+                    /*
+                case 43: //double stone slabs
+                    _p.BlockID = 44;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 60: //farmland
+                    _p.BlockID = 3;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 62: //lit furnace
+                    _p.BlockID = 61;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 74: //glowing redstone ore
+                    _p.BlockID = 73;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 95: //locked chest
+                    _p.BlockID = 54;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 99: //huge brown mushroom
+                    _p.BlockID = 39;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 100: //huge brown mushroom
+                    _p.BlockID = 40;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 259: //flint and steel
+                    _p.BlockID = 51;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 324: //wooden door
+                    _p.BlockID = 64;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 326: //water
+                    _p.BlockID = 8;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 327: //lava
+                    _p.BlockID = 10;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 330: //iron door
+                    _p.BlockID = 71;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 331: //redstone
+                    _p.BlockID = 55;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 338: //lava
+                    _p.BlockID = 93;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 354: //cake
+                    _p.BlockID = 92;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 355: //bed
+                    _p.BlockID = 26;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                case 356: //repeater
+                    _p.BlockID = 93;
+                    SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                    break;
+                //illegal items
+                case 8: //water
+                    kick.AddString("Illegal Water Placement, USE A BUCKET!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 9: //water
+                    kick.AddString("Illegal Water Placement, USE A BUCKET!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 10: //water
+                    kick.AddString("Illegal Lava Placement, USE A BUCKET!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 11: //water
+                    kick.AddString("Illegal Lava Placement, USE A BUCKET!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 34: //piston-head
+                    kick.AddString("You are not allowed to place glitch blocks!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 36: //piston moved block
+                    kick.AddString("You are not allowed to place glitch blocks!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 51: //fire
+                    kick.AddString("Illegal Fire placement!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 52: //spawner
+                    kick.AddString("You are not allowed to place monster spawners!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 75: //redstone torch-off
+                    kick.AddString("Why would you want to place an off redstone torch? :/");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 90: //portal
+                    kick.AddString("No friggin way, bub. Use some obsidian and flint and steel!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 94: //repeater-on
+                    kick.AddString("Use a redstone torch next time!!!");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 104: //pumpkin stem
+                    kick.AddString("*Sigh* You just had to hack the stem...");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 105: //melon stem
+                    kick.AddString("*Sigh* You just had to hack the stem...");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                case 110: //mycelium
+                    kick.AddString("There's a reason why there's a mushroom biome, my friend. :)");
+                    _client.SendPacket(kick, _client.id, ref _client, false, false);
+                    break;
+                */
                     default:
-                        _p.BlockID = 0;
+                        //_p.BlockID = 0;
                         SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
                         break;
                 }
             }
-            else
+            else//This is a item ID
             {
-                SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
+                //SendBlockChange(block_change, ref _client, ref _pReader, _p, true);
             }
             return block_change;
             
         }
+        
         public BlockChangePacket SendBlockChange(BlockChangePacket block_change, ref ClientManager _client, ref PacketReader _pReader, PlayerBlockPlacementPacket _p, bool calculate_xyz)
         {
             int X = _p.X;
