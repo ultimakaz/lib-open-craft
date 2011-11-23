@@ -23,17 +23,20 @@ namespace LibOpenCraft.MajongProtocol
 
         public override void Start()
         {
-            UpdatePlayerLists_Timer = new System.Timers.Timer(20);
-            UpdatePlayerLists_Timer.Elapsed += new System.Timers.ElapsedEventHandler(UpdatePlayerLists_Timer_Elapsed);
-            UpdatePlayerLists_Timer.Start();
+            //UpdatePlayerLists_Timer = new System.Timers.Timer(10000);
+            //UpdatePlayerLists_Timer.Elapsed += new System.Timers.ElapsedEventHandler(UpdatePlayerLists_Timer_Elapsed);
+            //UpdatePlayerLists_Timer.Start();
             base.Start();
             
             //  base.RunModuleCache();
         }
-
+        /// <summary>
+        /// For some reason the client wont work if this sends more than once.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void UpdatePlayerLists_Timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            UpdatePlayerLists_Timer.Interval = 18;
             for (int i = 0; i < GridServer.player_list.Length; i++)
             {
 

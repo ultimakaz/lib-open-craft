@@ -37,7 +37,7 @@ namespace LibOpenCraft
             {
                 if (GridServer.player_list[i] != null)
                 {
-                    GridServer.player_list[i].WaitToRead = false;
+                    GridServer.player_list[i].WaitToRead = true;
                     GridServer.player_list[i].SendPacket(p, GridServer.player_list[i].id, ref GridServer.player_list[i], false, false);
                 }
             }

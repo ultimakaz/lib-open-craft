@@ -34,7 +34,7 @@ namespace LibOpenCraft.Bukkit.Plugin
         public override void Start()
         {
             base.Start();
-            ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnBlockChange);
+            //ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnBlockChange);
             base.RunModuleCache();
         }
 
@@ -46,7 +46,7 @@ namespace LibOpenCraft.Bukkit.Plugin
         public override void Stop()
         {
             base.Stop();
-            ModuleHandler.RemoveEventModule(PacketType.ChatMessage);
+            //ModuleHandler.RemoveEventModule(PacketType.ChatMessage);
         }
     }
 }

@@ -50,7 +50,7 @@ namespace LibOpenCraft.MajongProtocol
             if (_client.customAttributes.ContainsKey("PayLoad"))
             {
                 if (_client.customAttributes["PayLoad"] == null)
-                    _client.customAttributes["PayLoad"] = _pReader.ReadInt();
+                    _pReader.ReadInt();
 
                 else if (_pReader.ReadInt() != (int)_client.customAttributes["PayLoad"])
                 {

@@ -92,7 +92,7 @@ namespace LibOpenCraft
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
-                    //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                 }
                 else if (PingType == true)
                 {
@@ -110,6 +110,7 @@ namespace LibOpenCraft
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
+                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                 }
             }
             catch (Exception e)
