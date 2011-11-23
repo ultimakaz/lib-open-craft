@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Diagnostics;
 
 namespace LibOpenCraft
 {
@@ -13,6 +14,7 @@ namespace LibOpenCraft
     public class ClientManager
     {
         public PlayerClass _player = new PlayerClass();
+        public Stopwatch ms_latency = new Stopwatch();
         #region Misc Variables
         public Dictionary<string, object> customAttributes = new Dictionary<string, object>();
         public int id = -1;
@@ -188,6 +190,9 @@ namespace LibOpenCraft
                                 LibOpenCraft.ServerPackets.KeepAlivePacket p = new LibOpenCraft.ServerPackets.KeepAlivePacket(PacketType.KeepAlive);
                                 p.ID = (int)GridServer.player_list[_id].customAttributes["PayLoad"];
                                 p.BuildPacket();
+                                #region ProcessLatency
+                                ms_latency.Start();
+                                #endregion ProcessLatency
                                 SendPacket(p, _id, ref GridServer.player_list[_id], false, false);
                             }
                         }
