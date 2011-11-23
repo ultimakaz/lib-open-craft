@@ -10,13 +10,14 @@ using System.Data;
 
 namespace LibOpenCraft.Biomes
 {
-   public class Desert : Biome
+    public class Desert : Biome
     {
         public override void CreateChunk()
         {
             int helper = 0;
             FastRandom rnd = new FastRandom(100);
             //Random rnd = new Random(100);
+
             for (int block_y = 0; block_y < 128; block_y++)
             {
                 for (int block_x = 0; block_x < 16; block_x++)
@@ -24,14 +25,14 @@ namespace LibOpenCraft.Biomes
                     for (int block_z = 0; block_z < 16; block_z++)
                     {
                         //Fill complete Area with Sand and SandStone
-
                         if (Blocks[GetIndex(block_x, block_y, block_z)] == 0)
                         {
-                            if (block_y > 13 & block_y <= DefaultHeigth)
+                            //            13
+                            if (block_y > 35 & block_y <= DefaultHeigth)
                             {
-                                helper = rnd.Next(100);             
-                  
-                                if (helper == 24 & block_y <=126)
+                                helper = rnd.Next(100);
+
+                                if (helper == 24 & block_y <= 126)
                                 {
                                     for (int _x = -1; _x <= 1; _x++)
                                     {
@@ -44,21 +45,41 @@ namespace LibOpenCraft.Biomes
                                         }
                                     }
                                 }
-                                else if (helper <= 11)
+                                else if (helper <= 15 & helper >= 3)
                                 {
-                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
+                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.SandStone);
                                 }
-                                else
+                                else if (helper <= 2)
                                 {
                                     SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
                                 }
+                                else
+                                {
+                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
+                                }
+                            }
+                            if (block_y > 13 & block_y <= 35)
+                            {
+                                helper = rnd.Next(10);
+                                if (helper <= 6)
+                                {
+                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
+                                }
+                                if (helper <= 8 & helper >= 7)
+                                {
+                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
+                                }
+                                else
+                                {
+                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
+                                }
                             }
                         }
-                       
+
                     }
                 }
             }
-            
+
             base.CreateChunk();
         }
 
@@ -66,6 +87,8 @@ namespace LibOpenCraft.Biomes
             : base(x, z)
         {
             CreateChunk();
+            base.CreateChunk();
+            base.CreateOres();
         }
 
         public Desert()
