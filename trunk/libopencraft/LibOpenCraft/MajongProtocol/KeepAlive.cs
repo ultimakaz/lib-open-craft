@@ -6,7 +6,7 @@ using System.Reflection;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
-
+using System.Diagnostics;
 using LibOpenCraft.ServerPackets;
 
 namespace LibOpenCraft.MajongProtocol
@@ -16,6 +16,7 @@ namespace LibOpenCraft.MajongProtocol
     public class KeepAlive : CoreEventModule
     {
         string name = "";
+        
         public KeepAlive()
             : base(PacketType.KeepAlive)
         {
@@ -31,6 +32,19 @@ namespace LibOpenCraft.MajongProtocol
 
         public void OnKeepAlive(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
+            if (!_client.customAttributes.ContainsKey("MSLatencyLatency"))
+            {
+                _client.customAttributes.Add("MSLatency", _client.ms_latency.ElapsedMilliseconds);
+                _client.ms_latency.Stop();
+                _client.ms_latency.Reset();
+            }
+            else
+            {
+                _client.customAttributes["MSLatency"] = _client.ms_latency.ElapsedMilliseconds;
+                _client.ms_latency.Stop();
+                _client.ms_latency.Reset();
+            }
+            
             if (_client._client == null || _client._client.Connected == false)
             {
                 if (GridServer.player_list[_client.id] != null)
@@ -45,7 +59,8 @@ namespace LibOpenCraft.MajongProtocol
             if (_client.customAttributes.ContainsKey("PayLoad"))
             {
                 if (_client.customAttributes["PayLoad"] == null)
-                    _pReader.ReadInt();
+                    _client.customAttributes["PayLoad"] = _pReader.ReadInt();
+
                 else if (_pReader.ReadInt() != (int)_client.customAttributes["PayLoad"])
                 {
 
@@ -60,7 +75,6 @@ namespace LibOpenCraft.MajongProtocol
                 _client.customAttributes.Add("PayLoad", (object)_pReader.ReadInt());
 
             }
-            
         }
 
         public override void Stop()
