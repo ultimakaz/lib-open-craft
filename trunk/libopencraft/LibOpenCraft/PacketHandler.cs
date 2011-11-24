@@ -256,11 +256,11 @@ namespace LibOpenCraft
         public slot ReadSlot()
         {
             short temp_b = ReadShort();
-            if (!slot.IsGziped(temp_b))
+            if (temp_b <= -1)
             {
                 return new slot(temp_b);
             }
-            else
+            else if(slot.IsGziped(temp_b))
             {
                 byte[] buffer = ReadBytes(temp_b);
                 slot temp_slot = new slot(temp_b);
@@ -268,6 +268,7 @@ namespace LibOpenCraft
                 temp_slot.GZipData = decompress.ReadBytes(buffer.Length);
                 return temp_slot;
             }
+            return new slot(temp_b);
         }
         public short ReadShort()
         {
