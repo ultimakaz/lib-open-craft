@@ -36,9 +36,12 @@ namespace LibOpenCraft.MojangProtocol
             p.Y = _pReader.ReadByte();
             p.Z = _pReader.ReadInt();
             p.Face = _pReader.ReadByte();
-            p.BlockID = _pReader.ReadShort();
-            p.Amount = _pReader.ReadByte();
-            p.Damage = _pReader.ReadShort();
+            p.BlockID = _pReader.ReadSlot();
+            if (p.BlockID.s_short >= 0)
+            {
+                p.Amount = _pReader.ReadByte();
+                p.Damage = _pReader.ReadShort();
+            }
             GridServer.player_list[_client.id].WaitToRead = false;
             p.BuildPacket();
 

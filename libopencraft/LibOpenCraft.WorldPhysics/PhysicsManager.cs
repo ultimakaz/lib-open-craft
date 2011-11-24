@@ -72,7 +72,7 @@ namespace LibOpenCraft.WorldPhysics
             _client = cm;
             id = cm.id;
             block = new BlockChangePacket(PacketType.BlockChange);
-            block.BlockType = (byte)((PlayerBlockPlacementPacket)_p).BlockID;
+            block.BlockType = (byte)((PlayerBlockPlacementPacket)_p).BlockID.s_short;
             block.Metadata = 0x00;
             block.X = ((PlayerBlockPlacementPacket)_p).X;
             block.Y = ((PlayerBlockPlacementPacket)_p).Y;

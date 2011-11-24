@@ -36,7 +36,7 @@ namespace LibOpenCraft.MojangProtocol
         {
             PlayerBlockPlacementPacket _p = (PlayerBlockPlacementPacket)packet;
             BlockChangePacket block_change = new BlockChangePacket(PacketType.BlockChange);
-            block_change.Metadata = Utils.GetMetadata(_p.BlockID, _p.Face, _client.id);
+            block_change.Metadata = Utils.GetMetadata(_p.BlockID.s_short, _p.Face, _client.id);
             //block_change.Metadata = 0x00;
             int X = _p.X;
             byte Y = _p.Y;
@@ -48,11 +48,11 @@ namespace LibOpenCraft.MojangProtocol
                 (_p.Face == 3 ? Z++ :
                 (_p.Face == 4 ? X-- : X++)))));
 
-            if (_p.BlockID > 255)
+            if (_p.BlockID.s_short > 255)
             {
                 //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick); //kick variable
                 //block replacement and bans
-                switch (_p.BlockID)
+                switch (_p.BlockID.s_short)
                 {
                     /*
                 case 43: //double stone slabs
@@ -221,7 +221,7 @@ namespace LibOpenCraft.MojangProtocol
             block_change.X = X;
             block_change.Y = Y;
             block_change.Z = Z;
-            block_change.BlockType = (byte)_p.BlockID;
+            block_change.BlockType = (byte)_p.BlockID.s_short;
             //block_change.Metadata = 0x00;
             block_change.BuildPacket();
             #region Send Block Changes
