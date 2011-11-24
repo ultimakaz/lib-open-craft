@@ -134,23 +134,24 @@ namespace LibOpenCraft
         EndPortalFrame = 120,
         EndStone = 121,
         DragonEgg = 122,
-        //to be continued
     }
 
     public class World
     {
-                [System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Biome)),
+                [System.Xml.Serialization.XmlElement(Type = typeof(Chunk)), 
+        System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Biome)),
         System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Desert))]
         public static Biomes.Biome[] chunks;// Chunk[] chunks;
 
-                [System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Biome)),
+                [System.Xml.Serialization.XmlElement(Type = typeof(Chunk)),
+        System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Biome)),
         System.Xml.Serialization.XmlElement(Type = typeof(Biomes.Desert))]
         public static List<Biomes.Biome> chunk_b = new List<Biomes.Biome>(); // List<Chunk> chunk_b = new List<Chunk>();
         
         private static Thread HandleWorld;
         private static ThreadStart HandleWorld_start;
         public static System.Timers.Timer SaveWorldTimer;
-        static int count = 10;
+        static int count = 20;
         public static int Seed = 0;
         public static FastRandom rnd = new FastRandom();
         public static void LoadWorld()
@@ -265,9 +266,7 @@ namespace LibOpenCraft
                 for (int block_x = 0; block_x < 16; block_x++)
                 {
                     for (int block_z = 0; block_z < 16; block_z++)
-                    {
-
-                        //Create Bedrocks
+                    {//Create Bedrocks
                         if (block_y>0 & block_y <= 13)
                         {
                             if (rnd.Next(2) == 0)
@@ -282,8 +281,7 @@ namespace LibOpenCraft
                         else if (block_y == 0)
                         {
                             SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Bedrock);
-                        }
-                                         
+                        }          
                         //else if (block_y < 64)//Create Dirt
                         //    SetBlocktype(i, 0x04);
                         //else if (block_y == 64)//Create Grass
@@ -312,8 +310,7 @@ namespace LibOpenCraft
         }
 
         public void WriteBlockLight()
-        {
-        // Write BlockLight
+        {// Write BlockLight
             for (int block_x = 0; block_x < 16; block_x++)
             {
                 for (int block_z = 0; block_z < 16; block_z++)
@@ -322,15 +319,13 @@ namespace LibOpenCraft
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetBlockLight(i, 0x0F);
-                        //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
         }
 
         public void WriteMetaData()
-        {
-            // Write MetaData
+        {// Write MetaData
             for (int block_x = 0; block_x < 16; block_x++)
             {
                 for (int block_z = 0; block_z < 16; block_z++)
@@ -339,15 +334,13 @@ namespace LibOpenCraft
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetData(i, 0x00);
-                        //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
         }
 
         public void WriteSkyLight()
-        {
-            // Write SkyLight
+        {// Write SkyLight
             for (int block_x = 0; block_x < 16; block_x++)
             {
                 for (int block_z = 0; block_z < 16; block_z++)
@@ -356,7 +349,6 @@ namespace LibOpenCraft
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetSkyLight(i, 0x00F);
-                        //System.Threading.Thread.Sleep(0001);
                     }
                 }
             }
