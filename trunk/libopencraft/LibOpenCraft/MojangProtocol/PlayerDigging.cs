@@ -8,7 +8,7 @@ using System.ComponentModel.Composition.Primitives;
 
 using LibOpenCraft.ServerPackets;
 
-namespace LibOpenCraft.MajongProtocol
+namespace LibOpenCraft.MojangProtocol
 {
     [Export(typeof(CoreEventModule))]
     [ExportMetadata("Name", "PlayerDigging ")]

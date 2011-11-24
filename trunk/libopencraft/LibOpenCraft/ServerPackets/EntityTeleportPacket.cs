@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LibOpenCraft.MajongProtocol
+namespace LibOpenCraft.MojangProtocol
 {
     class EntityTeleportPacket : PacketHandler
     {

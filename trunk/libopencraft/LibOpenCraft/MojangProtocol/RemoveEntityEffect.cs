@@ -2,42 +2,42 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Reflection;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 
 using LibOpenCraft.ServerPackets;
 
-namespace LibOpenCraft.MajongProtocol
+namespace LibOpenCraft.MojangProtocol
 {
     [Export(typeof(CoreEventModule))]
-    [ExportMetadata("Name", "HoldingChanged")]
-    public class HoldingChanged : CoreEventModule
+    [ExportMetadata("Name", "RemoveEntityEffect")]
+    class RemoveEntityEffect : CoreEventModule
     {
         string name = "";
-        public HoldingChanged()
-            : base(PacketType.HoldingChange)
+        public RemoveEntityEffect()
+            : base(PacketType.RemoveEntityEffect)
         {
-           
+
         }
 
         public override void Start()
         {
             base.Start();
-            ModuleHandler.AddEventModule(PacketType.HoldingChange, new ModuleCallback(OnHoldingChanged));
+            ModuleHandler.AddEventModule(PacketType.Animation, new ModuleCallback(OnRemoveEntityEffect));
             base.RunModuleCache();
         }
 
-        public void OnHoldingChanged(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
+        public void OnRemoveEntityEffect(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
-            _client._player.Current_Slot = _pReader.ReadShort();
+            _pReader.ReadInt();//entity id
+            _pReader.ReadByte();//effect id
         }
 
         public override void Stop()
         {
             base.Stop();
-            ModuleHandler.RemoveEventModule(PacketType.HoldingChange);
+            ModuleHandler.RemoveEventModule(PacketType.RemoveEntityEffect);
         }
     }
 }
