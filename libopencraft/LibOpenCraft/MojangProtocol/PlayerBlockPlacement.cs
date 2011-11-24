@@ -35,9 +35,9 @@ namespace LibOpenCraft.MojangProtocol
             p.X = _pReader.ReadInt();
             p.Y = _pReader.ReadByte();
             p.Z = _pReader.ReadInt();
-            p.Face = _pReader.ReadByte();
+            p.Direction = _pReader.ReadByte();
             p.BlockID = _pReader.ReadSlot();
-            if (p.BlockID.s_short >= 0)
+            if (p.BlockID.s_short == -1)
             {
                 p.Amount = _pReader.ReadByte();
                 p.Damage = _pReader.ReadShort();
