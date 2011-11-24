@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 
 namespace LibOpenCraft
 {
@@ -264,47 +265,50 @@ namespace LibOpenCraft
         }
     }
     #endregion
+    
     public class PacketReader
     {
 
-        public BinaryReader reader;
+        public Stream reader;
         #region Packet_Reader
-        public PacketReader(BinaryReader _reader)
+        public PacketReader(Stream _reader)
         {
             reader = _reader;
         }
 
         public byte ReadByte()
         {
-            return reader.ReadByte();
+            return (byte)reader.ReadByte();
         }
 
         public byte[] ReadBytes(int length)
         {
-            return reader.ReadBytes(length);
+            byte[] buffer = new byte[length];
+            reader.Read(buffer, 0, length);
+            return buffer;
         }
 
         public short ReadShort()
         {
-            return Endianness.FlipIfLittleEndian((short)reader.ReadInt16());
+            return Endianness.FlipIfLittleEndian((short)BitConverter.ToInt16(ReadBytes(2), 0));
         }
         public int ReadInt16()
         {
-            return reader.ReadInt16();
+            return BitConverter.ToInt16(ReadBytes(1), 0);
         }
         public int ReadInt()
         {
-            return Endianness.FlipIfLittleEndian((int)reader.ReadInt32());
+            return Endianness.FlipIfLittleEndian(BitConverter.ToInt32(ReadBytes(4), 0));
         }
 
         public long ReadLong()
         {
-            return Endianness.FlipIfLittleEndian((long)reader.ReadDouble());
+            return Endianness.FlipIfLittleEndian((long)BitConverter.ToDouble(ReadBytes(8), 0));
         }
 
         public double ReadDouble()
         {
-            return Endianness.FlipIfLittleEndian((double)reader.ReadDouble());
+            return Endianness.FlipIfLittleEndian(BitConverter.ToDouble(ReadBytes(8), 0));
         }
 
         public float ReadFloat()
@@ -312,7 +316,7 @@ namespace LibOpenCraft
             byte[] floatBytes = new byte[4];
             try
             {
-                floatBytes = reader.ReadBytes(4);
+                floatBytes = ReadBytes(4);
                 Array.Reverse(floatBytes);
             }
             catch (IOException)
@@ -331,23 +335,19 @@ namespace LibOpenCraft
         {
             //reader.ReadByte();
             int i = 0;
-            List<byte> bytes = new List<byte>();
+            byte[] bytes = new byte[len * 2];
             int test = 0;
-            while(i < len)
+            while(i < len * 2)
             {
                 
-                byte t = reader.ReadByte();
-                if (t != 0x00)
-                {
-                    //bytes.Add(t);
-                    i++;
-                }
-                bytes.Add(t);
+                bytes[i] = ReadByte();
+                i++;
 
             }
-            //Encoding enc = new UnicodeEncoding(true, true, false);
+            //Encoding usc2 = System.Text.Encoding.GetEncoding("usc-2");
+            Encoding enc = new UnicodeEncoding(true, true, true);
             //string str = enc.GetString(bytes.ToArray());
-            string str = UTF8Encoding.UTF8.GetString(bytes.ToArray());
+            string str = UTF8Encoding.UTF8.GetString(bytes.ToArray()).Replace("\0", "");
             return str;
         }
         #endregion

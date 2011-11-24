@@ -153,7 +153,7 @@ namespace LibOpenCraft
             System.GC.KeepAlive(GridServer.player_list[_id]);
             _stream = new NetworkStream(_client.Client);
             NetworkStream stream = new NetworkStream(_client.Client);
-            PacketReader p_reader = new PacketReader(new System.IO.BinaryReader(stream));
+            PacketReader p_reader = new PacketReader(stream);
             //bool connected = true;
             while (true)
             {
