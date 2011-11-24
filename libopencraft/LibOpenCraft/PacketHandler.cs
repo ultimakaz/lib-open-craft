@@ -105,90 +105,160 @@ namespace LibOpenCraft
     {
         public static Int16 FlipIfLittleEndian(Int16 data)
         {
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                return IPAddress.HostToNetworkOrder((short)data);
+                if (BitConverter.IsLittleEndian)
+                {
+                    return IPAddress.HostToNetworkOrder((short)data);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Int32 FlipIfLittleEndian(Int32 data)
         {
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                return IPAddress.HostToNetworkOrder(data);
+                if (BitConverter.IsLittleEndian)
+                {
+                    return IPAddress.HostToNetworkOrder(data);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Int64 FlipIfLittleEndian(Int64 data)
         {
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                return IPAddress.HostToNetworkOrder(data);
+                if (BitConverter.IsLittleEndian)
+                {
+                    return IPAddress.HostToNetworkOrder(data);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Single FlipIfLittleEndian(Single data)
         {
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
+                if (BitConverter.IsLittleEndian)
+                {
+                    return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Double FlipIfLittleEndian(Double data)
         {
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
+                if (BitConverter.IsLittleEndian)
+                {
+                    return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Int16 FlipIfBigEndian(Int16 data)
         {
-            if (!BitConverter.IsLittleEndian)
+            try
             {
-                return IPAddress.HostToNetworkOrder(data);
+                if (!BitConverter.IsLittleEndian)
+                {
+                    return IPAddress.HostToNetworkOrder(data);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Int32 FlipIfBigEndian(Int32 data)
         {
-            if (!BitConverter.IsLittleEndian)
+            try
             {
-                return IPAddress.HostToNetworkOrder(data);
+                if (!BitConverter.IsLittleEndian)
+                {
+                    return IPAddress.HostToNetworkOrder(data);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Int64 FlipIfBigEndian(Int64 data)
         {
-            if (!BitConverter.IsLittleEndian)
+            try
             {
-                return IPAddress.HostToNetworkOrder(data);
+                if (!BitConverter.IsLittleEndian)
+                {
+                    return IPAddress.HostToNetworkOrder(data);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Single FlipIfBigEndian(Single data)
         {
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
+                if (BitConverter.IsLittleEndian)
+                {
+                    return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
 
         public static Double FlipIfBigEndian(Double data)
         {
-            if (BitConverter.IsLittleEndian)
+            try
             {
-                return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
+                if (BitConverter.IsLittleEndian)
+                {
+                    return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
+                }
+            }
+            catch
+            {
+                return data;
             }
             return data;
         }
@@ -275,9 +345,9 @@ namespace LibOpenCraft
                 bytes.Add(t);
 
             }
-            Encoding enc = new UnicodeEncoding(true, true, true);
-            string str = enc.GetString(bytes.ToArray());
-            //string str = UTF8Encoding.UTF8.GetString(bytes.ToArray()).Replace(" ", "");
+            //Encoding enc = new UnicodeEncoding(true, true, false);
+            //string str = enc.GetString(bytes.ToArray());
+            string str = UTF8Encoding.UTF8.GetString(bytes.ToArray());
             return str;
         }
         #endregion

@@ -125,7 +125,7 @@ namespace LibOpenCraft
                     {
                         Stop(true);
                     }
-                    Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nInnerException:" + e.InnerException);
+                    Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nStack trace:" + e.StackTrace);
                 }
                 else
                 {
@@ -204,7 +204,7 @@ namespace LibOpenCraft
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nInnerException:" + e.InnerException);
+                                Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nStackTrace:" + e.StackTrace);
                             }
                         }
                         else
@@ -241,7 +241,7 @@ namespace LibOpenCraft
 
                 catch (Exception e)
                 {
-                    Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nInnerException:" + e.InnerException);
+                    Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nStackTrace:" + e.StackTrace);
                     if (GridServer.player_list[_id] != null)
                     {
                         
