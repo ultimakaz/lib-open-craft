@@ -78,9 +78,10 @@
     <Compile Include="MojangProtocol\ListPlayer.cs" />
     <Compile Include="MojangProtocol\UseEntity.cs" />
     <Compile Include="MojangProtocol\HoldingChanged.cs" />
-    <Compile Include="MojangProtocol\CreativeInventoryAction.cs" />
+    <Compile Include="MojangProtocol\CreativeInventory.cs" />
     <Compile Include="MojangProtocol\EntityAction.cs" />
     <Compile Include="ServerPackets\AddObjectVehiclePacket.cs" />
+    <Compile Include="ServerPackets\CreateInventoryPacket.cs" />
     <Compile Include="ServerPackets\EntityTeleportPacket.cs" />
     <Compile Include="MojangProtocol\PlayerBlockPlacement.cs" />
     <Compile Include="MojangProtocol\PlayerDigging.cs" />

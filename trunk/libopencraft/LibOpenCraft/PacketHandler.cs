@@ -68,7 +68,6 @@ namespace LibOpenCraft
             {
                 ZOutputStream Compress = new ZOutputStream(stream);
                 Compress.Write(cv_slot.GZipData, 0, cv_slot.GZipData.Length);
-                Compress.Close();
             }
         }
         public void AddFloat(float value)
@@ -128,160 +127,91 @@ namespace LibOpenCraft
     {
         public static Int16 FlipIfLittleEndian(Int16 data)
         {
-            try
+            if (BitConverter.IsLittleEndian)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    return IPAddress.HostToNetworkOrder((short)data);
-                }
+                return IPAddress.HostToNetworkOrder((short)data);
             }
-            catch
-            {
-                return data;
-            }
+
             return data;
         }
 
         public static Int32 FlipIfLittleEndian(Int32 data)
         {
-            try
+            if (BitConverter.IsLittleEndian)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    return IPAddress.HostToNetworkOrder(data);
-                }
-            }
-            catch
-            {
-                return data;
+                return IPAddress.HostToNetworkOrder(data);
             }
             return data;
         }
 
         public static Int64 FlipIfLittleEndian(Int64 data)
         {
-            try
+            if (BitConverter.IsLittleEndian)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    return IPAddress.HostToNetworkOrder(data);
-                }
-            }
-            catch
-            {
-                return data;
+                return IPAddress.HostToNetworkOrder(data);
             }
             return data;
         }
 
         public static Single FlipIfLittleEndian(Single data)
         {
-            try
+            if (BitConverter.IsLittleEndian)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
-                }
-            }
-            catch
-            {
-                return data;
+                return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
             }
             return data;
         }
 
         public static Double FlipIfLittleEndian(Double data)
         {
-            try
+            if (BitConverter.IsLittleEndian)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
-                }
-            }
-            catch
-            {
-                return data;
+                return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
             }
             return data;
         }
 
         public static Int16 FlipIfBigEndian(Int16 data)
         {
-            try
+            if (!BitConverter.IsLittleEndian)
             {
-                if (!BitConverter.IsLittleEndian)
-                {
-                    return IPAddress.HostToNetworkOrder(data);
-                }
-            }
-            catch
-            {
-                return data;
+                return IPAddress.HostToNetworkOrder(data);
             }
             return data;
         }
 
         public static Int32 FlipIfBigEndian(Int32 data)
         {
-            try
+            if (!BitConverter.IsLittleEndian)
             {
-                if (!BitConverter.IsLittleEndian)
-                {
-                    return IPAddress.HostToNetworkOrder(data);
-                }
-            }
-            catch
-            {
-                return data;
+                return IPAddress.HostToNetworkOrder(data);
             }
             return data;
         }
 
         public static Int64 FlipIfBigEndian(Int64 data)
         {
-            try
+            if (!BitConverter.IsLittleEndian)
             {
-                if (!BitConverter.IsLittleEndian)
-                {
-                    return IPAddress.HostToNetworkOrder(data);
-                }
-            }
-            catch
-            {
-                return data;
+                return IPAddress.HostToNetworkOrder(data);
             }
             return data;
         }
 
         public static Single FlipIfBigEndian(Single data)
         {
-            try
+            if (BitConverter.IsLittleEndian)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
-                }
-            }
-            catch
-            {
-                return data;
+                return BitConverter.ToSingle(BitConverter.GetBytes(IPAddress.HostToNetworkOrder(BitConverter.ToInt32(BitConverter.GetBytes(data), 0))), 0);
             }
             return data;
         }
 
         public static Double FlipIfBigEndian(Double data)
         {
-            try
+            if (BitConverter.IsLittleEndian)
             {
-                if (BitConverter.IsLittleEndian)
-                {
-                    return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
-                }
-            }
-            catch
-            {
-                return data;
+                return BitConverter.Int64BitsToDouble(IPAddress.HostToNetworkOrder(BitConverter.DoubleToInt64Bits(data)));
             }
             return data;
         }
@@ -323,7 +253,6 @@ namespace LibOpenCraft
                 slot temp_slot = new slot(temp_b);
                 ZInputStream decompress = new ZInputStream(reader);
                 temp_slot.GZipData = decompress.ReadBytes(temp_b);
-                decompress.Close();
                 return temp_slot;
             }
         }
@@ -353,41 +282,24 @@ namespace LibOpenCraft
         public float ReadFloat()
         {
             byte[] floatBytes = new byte[4];
-            try
-            {
-                floatBytes = ReadBytes(4);
-                Array.Reverse(floatBytes);
-            }
-            catch (IOException)
-            {
-
-            }
+            floatBytes = ReadBytes(4);
+            Array.Reverse(floatBytes);
             return BitConverter.ToSingle(floatBytes, 0);
         }
 
         public string ReadString()
         {
             int len = ReadShort();
-            return GetString(len);
-        }
-        public string GetString(int len)
-        {
-            //reader.ReadByte();
             int i = 0;
             byte[] bytes = new byte[len * 2];
-            int test = 0;
-            while(i < len * 2)
+            while (i < len * 2)
             {
-                
+
                 bytes[i] = ReadByte();
                 i++;
 
             }
-            //Encoding usc2 = System.Text.Encoding.GetEncoding("usc-2");
-            Encoding enc = new UnicodeEncoding(true, true, true);
-            //string str = enc.GetString(bytes.ToArray());
-            string str = UTF8Encoding.UTF8.GetString(bytes.ToArray()).Replace("\0", "");
-            return str;
+            return (UTF8Encoding.UTF8.GetString(bytes).Replace("\0", ""));
         }
         #endregion
     }
