@@ -40,11 +40,11 @@ namespace LibOpenCraft.ServerPackets
             set;
         }
         /// <summary>
-        /// The face can be one of six values, representing the face being hit:
+        /// The Direction can be one of six values, representing the face being hit:
         /// Value	 0	 1	 2	 3	 4	 5
         /// Offset	 -Y	 +Y	 -Z	 +Z	 -X	 +X
         /// </summary>
-        public byte Face
+        public byte Direction
         {
             get;
             set;

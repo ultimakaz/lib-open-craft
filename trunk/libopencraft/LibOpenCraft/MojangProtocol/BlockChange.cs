@@ -36,17 +36,17 @@ namespace LibOpenCraft.MojangProtocol
         {
             PlayerBlockPlacementPacket _p = (PlayerBlockPlacementPacket)packet;
             BlockChangePacket block_change = new BlockChangePacket(PacketType.BlockChange);
-            block_change.Metadata = Utils.GetMetadata(_p.BlockID.s_short, _p.Face, _client.id);
+            block_change.Metadata = Utils.GetMetadata(_p.BlockID.s_short, _p.Direction, _client.id);
             //block_change.Metadata = 0x00;
             int X = _p.X;
             byte Y = _p.Y;
             int Z = _p.Z;
             int index = 0;
-            int temp = (_p.Face == 0 ? Y-- :
-                (_p.Face == 1 ? Y++ :
-                (_p.Face == 2 ? Z-- :
-                (_p.Face == 3 ? Z++ :
-                (_p.Face == 4 ? X-- : X++)))));
+            int temp = (_p.Direction == 0 ? Y-- :
+                (_p.Direction == 1 ? Y++ :
+                (_p.Direction == 2 ? Z-- :
+                (_p.Direction == 3 ? Z++ :
+                (_p.Direction == 4 ? X-- : X++)))));
 
             if (_p.BlockID.s_short > 255)
             {
@@ -203,11 +203,11 @@ namespace LibOpenCraft.MojangProtocol
             int index = 0;
             if (calculate_xyz == true)
             {
-                int temp = (_p.Face == 0 ? Y-- :
-                    (_p.Face == 1 ? Y++ :
-                    (_p.Face == 2 ? Z-- :
-                    (_p.Face == 3 ? Z++ :
-                    (_p.Face == 4 ? X-- : X++)))));
+                int temp = (_p.Direction == 0 ? Y-- :
+                    (_p.Direction == 1 ? Y++ :
+                    (_p.Direction == 2 ? Z-- :
+                    (_p.Direction == 3 ? Z++ :
+                    (_p.Direction == 4 ? X-- : X++)))));
             }
             try
             {

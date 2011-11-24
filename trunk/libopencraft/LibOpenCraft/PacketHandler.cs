@@ -19,7 +19,20 @@ namespace LibOpenCraft
             GZipData = new byte[0];
             s_short = val;
         }
-        
+        public static bool IsGziped(short value)
+        {
+            return (value == (0x15A | 0x167 |
+                0x10C | 0x10D | 0x10E | 0x10F | 0x122 |
+                0x110 | 0x111 | 0x112 | 0x113 | 0x123 |
+                0x10B | 0x100 | 0x101 | 0x102 | 0x124 |
+                0x114 | 0x115 | 0x116 | 0x117 | 0x125 |
+                0x11B | 0x11C | 0x11D | 0x11E | 0x126 |
+                0x12A | 0x12B | 0x12C | 0x12D |
+                0x12E | 0x12F | 0x130 | 0x131 |
+                0x132 | 0x133 | 0x134 | 0x135 |
+                0x136 | 0x137 | 0x138 | 0x139 |
+                0x13A | 0x13B | 0x13C | 0x14D) ? true : false);
+        }
     }
     public class PacketHandler
     {
@@ -64,7 +77,7 @@ namespace LibOpenCraft
         public void AddSlot(slot cv_slot)
         {
             AddShort(cv_slot.s_short);
-            if(cv_slot.GZipData.Length > 0)
+            if(slot.IsGziped(cv_slot.s_short))
             {
                 ZOutputStream Compress = new ZOutputStream(stream);
                 Compress.Write(cv_slot.GZipData, 0, cv_slot.GZipData.Length);
@@ -243,16 +256,16 @@ namespace LibOpenCraft
         public slot ReadSlot()
         {
             short temp_b = ReadShort();
-            if (temp_b == -1)
+            if (!slot.IsGziped(temp_b))
             {
                 return new slot(temp_b);
             }
             else
             {
-                
+                byte[] buffer = ReadBytes(temp_b);
                 slot temp_slot = new slot(temp_b);
-                ZInputStream decompress = new ZInputStream(reader);
-                temp_slot.GZipData = decompress.ReadBytes(temp_b);
+                ZInputStream decompress = new ZInputStream(new MemoryStream(buffer));
+                temp_slot.GZipData = decompress.ReadBytes(buffer.Length);
                 return temp_slot;
             }
         }
