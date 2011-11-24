@@ -58,7 +58,7 @@ namespace LibOpenCraft.ChunkHandler
                 EntitySpawn.Z = (int)_client._player.position.Z * 32;
                 EntitySpawn.EntityID = _client.id;
                 EntitySpawn.PlayerName = _client._player.name;
-                EntitySpawn.CurrentItem = _client._player.Current_Item;
+                EntitySpawn.CurrentItem = 0;
                 EntitySpawn.Pitch = (byte)_client._player.Pitch;
                 EntitySpawn.Rotation = (byte)_client._player.stance;
                 EntitySpawn.BuildPacket();
@@ -99,7 +99,7 @@ namespace LibOpenCraft.ChunkHandler
                             t_EntitySpawn.Z = (int)player[i]._player.position.Z * 32;
                             t_EntitySpawn.EntityID = player[i].id;
                             t_EntitySpawn.PlayerName = player[i]._player.name;
-                            t_EntitySpawn.CurrentItem = player[i]._player.Current_Item;
+                            t_EntitySpawn.CurrentItem = 0;
                             t_EntitySpawn.Pitch = (byte)(int)player[i]._player.Pitch;
                             t_EntitySpawn.Rotation = (byte)(int)player[i]._player.stance;
                             t_EntitySpawn.BuildPacket();
