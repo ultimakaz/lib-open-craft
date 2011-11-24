@@ -9,7 +9,7 @@ using System.ComponentModel.Composition.Primitives;
 using System.Diagnostics;
 using LibOpenCraft.ServerPackets;
 
-namespace LibOpenCraft.MajongProtocol
+namespace LibOpenCraft.MojangProtocol
 {
     [Export(typeof(CoreEventModule))]
     [ExportMetadata("Name", "Keep Alive")]

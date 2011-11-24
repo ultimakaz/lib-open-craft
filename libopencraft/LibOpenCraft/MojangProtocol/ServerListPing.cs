@@ -7,7 +7,7 @@ using System.ComponentModel.Composition.Primitives;
 using LibOpenCraft;
 using LibOpenCraft.ServerPackets;
 
-namespace LibOpenCraft.MajongProtocol
+namespace LibOpenCraft.MojangProtocol
 {
     [Export(typeof(CoreEventModule))]
     [ExportMetadata("Name", "Server List Ping")]
