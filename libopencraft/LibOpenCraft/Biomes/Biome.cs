@@ -103,7 +103,7 @@ namespace LibOpenCraft.Biomes
 
         public void CreateOres()
         {
-            for (int block_y = 0; block_y < DefaultHeigth - 4; block_y++)
+            for (int block_y = 1; block_y < DefaultHeigth - 4; block_y++)
             {
                 for (int block_x = 0; block_x < 16; block_x++)
                 {
@@ -167,12 +167,12 @@ namespace LibOpenCraft.Biomes
             }
         }
 
-        public void CreateLakes(int start_heigth)
+        public void CreateLakes(int start_heigth, int frequency = 6,int min_size = 6, int max_size = 11)
         {
-            if (RandomGenerator.Next(4) == 1)
+            if (RandomGenerator.Next(frequency) == 1)
             {
-                int x_start = RandomGenerator.Next(8);
-                int z_start = RandomGenerator.Next(8);
+                int x_start = RandomGenerator.Next(min_size, max_size);
+                int z_start = RandomGenerator.Next(min_size, max_size);
 
                 if (x_start < z_start)
                 {

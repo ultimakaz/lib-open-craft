@@ -15,9 +15,9 @@ namespace LibOpenCraft.Biomes
         public override void CreateChunk()
         {
             int helper = 0;
-        //    FastRandom rnd = new FastRandom(100);
+            //    FastRandom rnd = new FastRandom(100);
             //Random rnd = new Random(100);
-                        
+
             for (int block_y = 0; block_y < 128; block_y++)
             {
                 for (int block_x = 0; block_x < 16; block_x++)
@@ -28,57 +28,75 @@ namespace LibOpenCraft.Biomes
                         if (Blocks[GetIndex(block_x, block_y, block_z)] == 0)
                         {
                             //            13
-                            if (block_y > 35 & block_y <= DefaultHeigth)
-                            {
-                                helper = RandomGenerator.Next(100);
+                            //if (block_y > 35 & block_y <= DefaultHeigth)
+                            //{
+                            helper = RandomGenerator.Next(200);
 
-                                if (helper == 24 & block_y <= 126)
-                                {
-                                    for (int _x = -1; _x <= 1; _x++)
-                                    {
-                                        for (int _y = -1; _y <= 1; _y++)
-                                        {
-                                            for (int _z = -1; _z <= 1; _z++)
-                                            {
-                                                SetBlocktype(block_x + _x, block_y + _y, block_z + _z, (byte)BlockTypes.SandStone);
-                                            }
-                                        }
-                                    }
-                                }
-                                else if (helper <= 15 & helper >= 3)
-                                {
-                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.SandStone);
-                                }
-                                else if (helper <= 2)
-                                {
-                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
-                                }
-                                else
-                                {
-                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
-                                }
+                            //if (helper == 24 & block_y <= 126)
+                            //{
+                            //    for (int _x = -1; _x <= 1; _x++)
+                            //    {
+                            //        for (int _y = -1; _y <= 1; _y++)
+                            //        {
+                            //            for (int _z = -1; _z <= 1; _z++)
+                            //            {
+                            //                SetBlocktype(block_x + _x, block_y + _y, block_z + _z, (byte)BlockTypes.SandStone);
+                            //            }
+                            //        }
+                            //    }
+                            //}
+
+
+                            int mathematical_frequency = (int)(100 + ((double)block_y * (-1.818181818181818181)));
+
+                            if (helper <= mathematical_frequency)
+                            {
+                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
                             }
-                            if (block_y == DefaultHeigth+1)
+                            else if (helper - mathematical_frequency <= 5)
+                            {
+                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.SandStone);
+                            }
+                            else
+                            {
+                                //  SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
+                            }
+                            /*
+                            else if (helper <= 15 & helper >= 3)
+                            {
+                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.SandStone);
+                            }
+                            else if (helper <= 2)
+                            {
+                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
+                            }
+                            else
                             {
                                 SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
                             }
-                            if (block_y > 13 & block_y <= 35)
-                            {
-                                helper = RandomGenerator.Next(10);
-                                if (helper <= 6)
-                                {
-                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
-                                }
-                                if (helper <= 8 & helper >= 7)
-                                {
-                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
-                                }
-                                else
-                                {
-                                    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
-                                }
-                            }
+                              */
                         }
+                        //if (block_y == DefaultHeigth + 1)
+                        //{
+                        //    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
+                        //}
+                        //if (block_y > 6 & block_y <= 35)
+                        //{
+                        //    helper = RandomGenerator.Next(10);
+                        //    if (helper <= 6)
+                        //    {
+                        //        SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
+                        //    }
+                        //    if (helper <= 8 & helper >= 7)
+                        //    {
+                        //        SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
+                        //    }
+                        //    else
+                        //    {
+                        //        SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
+                        //    }
+                        //}
+                        //}
 
                     }
                 }
@@ -92,11 +110,9 @@ namespace LibOpenCraft.Biomes
             {
                 for (int z = 0; z < 16; z++)
                 {
-                    if (RandomGenerator.Next(500) == 5)
+                    if (RandomGenerator.Next(800) == 5)
                     {
-                        
-
-                        int start_heigth = DefaultHeigth-5;
+                        int start_heigth = DefaultHeigth - 5;
 
                         while (Blocks[GetIndex(x, start_heigth, z)] != 0)
                         {
@@ -104,8 +120,8 @@ namespace LibOpenCraft.Biomes
                         }
 
                         SetBlocktype(x, start_heigth, z, (byte)BlockTypes.Cactus);
-                        SetBlocktype(x, start_heigth+1, z, (byte)BlockTypes.Cactus);
-                        
+                        SetBlocktype(x, start_heigth + 1, z, (byte)BlockTypes.Cactus);
+
                         if (RandomGenerator.Next(2) == 1)
                         {
                             SetBlocktype(x, start_heigth + 2, z, (byte)BlockTypes.Cactus);
@@ -118,10 +134,10 @@ namespace LibOpenCraft.Biomes
 
         public void CreateHills()
         {
-            if (RandomGenerator.Next(4) == 1)
+            if (RandomGenerator.Next(10) == 1)
             {
-                int x_start = RandomGenerator.Next(4,10);
-                int z_start = RandomGenerator.Next(4,10);
+                int x_start = RandomGenerator.Next(8, 12);
+                int z_start = RandomGenerator.Next(8, 12);
 
                 if (x_start < z_start)
                 {
@@ -141,10 +157,12 @@ namespace LibOpenCraft.Biomes
                     current_heigth++;
                 }
 
-                for (int z = 0; z < z_start; z++)
+                //           0
+                for (int z = (16 - z_start) / 2; z < z_start; z++)
                 {
-                    for (int x = 0; x < x_start; x++)
-                    {                    
+                    //           0
+                    for (int x = (16 - x_start) / 2; x < x_start; x++)
+                    {
                         SetBlocktype(x, current_heigth, z, (byte)BlockTypes.Sand);
                     }
                 }
@@ -155,14 +173,14 @@ namespace LibOpenCraft.Biomes
                 }
                 SetBlocktype(x_start - 1, current_heigth, z_start, (byte)BlockTypes.Air);
                 SetBlocktype(-1, current_heigth, z_start - 1, (byte)BlockTypes.Air);
-            }      
+            }
         }
 
         public Desert(short x, short z, FastRandom rnd)
             : base(x, z, rnd)
         {
             CreateChunk();
-           base.CreateChunk();
+            base.CreateChunk();
             base.CreateOres();
             base.CreateLakes(DefaultHeigth + 1);
             CreateHills();
