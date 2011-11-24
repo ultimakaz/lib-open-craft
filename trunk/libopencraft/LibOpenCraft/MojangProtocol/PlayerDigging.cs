@@ -35,7 +35,7 @@ namespace LibOpenCraft.MojangProtocol
             p.Y = _pReader.ReadByte();
             p.Z = _pReader.ReadInt();
             p.Face = _pReader.ReadByte();
-            PacketReader pr = new PacketReader(new System.IO.BinaryReader(new System.IO.MemoryStream(p.GetBytes())));
+            PacketReader pr = new PacketReader(new System.IO.MemoryStream(p.GetBytes()));
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {

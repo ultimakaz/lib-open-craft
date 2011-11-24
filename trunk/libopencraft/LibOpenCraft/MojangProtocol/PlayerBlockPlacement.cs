@@ -42,7 +42,7 @@ namespace LibOpenCraft.MojangProtocol
             GridServer.player_list[_client.id].WaitToRead = false;
             p.BuildPacket();
 
-            PacketReader pr = new PacketReader(new System.IO.BinaryReader(new System.IO.MemoryStream(p.GetBytes())));
+            PacketReader pr = new PacketReader(new System.IO.MemoryStream(p.GetBytes()));
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
             {
