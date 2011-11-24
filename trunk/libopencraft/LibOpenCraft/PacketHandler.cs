@@ -5,9 +5,22 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using ComponentAce.Compression.Libs.zlib;
 
 namespace LibOpenCraft
 {
+    public struct slot
+    {
+        public short s_short;
+        public byte[] GZipData;
+
+        public slot(short val)
+        {
+            GZipData = new byte[0];
+            s_short = val;
+        }
+        
+    }
     public class PacketHandler
     {
         private MemoryStream stream;
@@ -287,7 +300,27 @@ namespace LibOpenCraft
             reader.Read(buffer, 0, length);
             return buffer;
         }
-
+        /// <summary>
+        /// This is a temp fix nOT FULLY FUnctional.
+        /// </summary>
+        /// <returns></returns>
+        public slot ReadSlot()//This is a temp fix nOT FULLY FUnctional.
+        {
+            short temp_b = ReadShort();
+            if (temp_b == -1)
+            {
+                return new slot(temp_b);
+            }
+            else
+            {
+                
+                slot temp_slot = new slot(temp_b);
+                ZInputStream decompress = new ZInputStream(reader);
+                temp_slot.GZipData = decompress.ReadBytes(temp_b);
+                decompress.Close();
+                return temp_slot;
+            }
+        }
         public short ReadShort()
         {
             return Endianness.FlipIfLittleEndian((short)BitConverter.ToInt16(ReadBytes(2), 0));

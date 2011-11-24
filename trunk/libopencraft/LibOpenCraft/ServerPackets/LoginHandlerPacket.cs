@@ -81,6 +81,11 @@ namespace LibOpenCraft.ServerPackets
             this.AddInt(ServerMode);
             this.AddByte(Dimension);
             this.AddByte(Unknown);
+
+
+            //byte world_max = 0x00;//(byte)((WorldHeight << 4) & (MaxPlayers >> 4));
+            //world_max = 
+
             this.AddByte(WorldHeight);
             this.AddByte(MaxPlayers);
             return true;

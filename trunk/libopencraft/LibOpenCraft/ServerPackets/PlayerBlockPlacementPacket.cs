@@ -7,7 +7,7 @@ namespace LibOpenCraft.ServerPackets
 {
     public class PlayerBlockPlacementPacket : PacketHandler
     {
-        public short BlockID
+        public slot BlockID
         {
             get;
             set;
