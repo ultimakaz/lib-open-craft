@@ -61,7 +61,16 @@ namespace LibOpenCraft
                 stream.WriteByte(value[i]);
             }
         }
-
+        public void AddSlot(slot cv_slot)
+        {
+            AddShort(cv_slot.s_short);
+            if(cv_slot.GZipData.Length > 0)
+            {
+                ZOutputStream Compress = new ZOutputStream(stream);
+                Compress.Write(cv_slot.GZipData, 0, cv_slot.GZipData.Length);
+                Compress.Close();
+            }
+        }
         public void AddFloat(float value)
         {
             byte[] buffer = BitConverter.GetBytes(Endianness.FlipIfLittleEndian(value));
@@ -300,11 +309,8 @@ namespace LibOpenCraft
             reader.Read(buffer, 0, length);
             return buffer;
         }
-        /// <summary>
-        /// This is a temp fix nOT FULLY FUnctional.
-        /// </summary>
-        /// <returns></returns>
-        public slot ReadSlot()//This is a temp fix nOT FULLY FUnctional.
+
+        public slot ReadSlot()
         {
             short temp_b = ReadShort();
             if (temp_b == -1)

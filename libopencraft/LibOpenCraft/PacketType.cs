@@ -64,7 +64,7 @@ namespace LibOpenCraft
         WindowItems = 0x68,
         UpdateProgressBar = 0x69,
         Transaction = 0x6A,
-        CreativeInventoryAction = 0x6B,
+        CreativeInventory = 0x6B,
         UpdateSign = 0x82,
         ItemData = 0x83,
         IncrementStatistic = 0xC8,
