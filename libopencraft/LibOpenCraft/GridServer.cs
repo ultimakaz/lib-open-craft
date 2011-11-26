@@ -42,8 +42,19 @@ namespace LibOpenCraft
                 }
             }
         }
-
-        public void SendToAll(PacketHandler p, int id)
+        public static void SendToPlayer(PacketHandler p, int id)
+        {
+            int i = 0;
+            while (i < player_list.Length)
+            {
+                if (player_list[i] != null && player_list[i].id == id)
+                {
+                    player_list[i].SendPacket(p, id, ref player_list[i], false, false);
+                }
+                i++;
+            }
+        }
+        public static void SendToAll(PacketHandler p, int id)
         {
 
         }
