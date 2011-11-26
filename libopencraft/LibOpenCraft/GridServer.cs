@@ -54,10 +54,6 @@ namespace LibOpenCraft
                 i++;
             }
         }
-        public static void SendToAll(PacketHandler p, int id)
-        {
-
-        }
         public static int PlayerCount()
         {
             int i = 0;
