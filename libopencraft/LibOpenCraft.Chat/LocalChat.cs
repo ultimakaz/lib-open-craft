@@ -39,8 +39,9 @@ namespace LibOpenCraft.Chat
                 switch (command)
                 {
                     case "save":
-                        ChatMessage.MessageSent = _client._player.name + ": " + "World Saved....";
+                        ChatMessage.MessageSent = _client._player.name + ": " + "Saving World....";
                         World.SaveWorld();
+                        ChatMessage.MessageSent = _client._player.name + ": " + "World Saved!";
                         break;
                     case "set -b 1":
                         break;
@@ -51,6 +52,87 @@ namespace LibOpenCraft.Chat
                     case "set -b 4":
                         break;
                 }
+
+                string[] data = command.ToLower().Split((" ").ToCharArray());
+                // command.Split((" ").ToCharArray());
+                switch (data[0])
+                {
+                    case "tp":
+                        bool UniqueUserNames = true;
+
+                        PlayerClass player1 = null, player2 = null;
+
+                        foreach (ClientManager _user1 in GridServer.player_list)
+                        {
+                            if ((_user1 != null) && (_user1._player.name.ToLower().StartsWith(data[1])))
+                            {
+                                if (player1 == null)
+                                {
+                                    player1 = _user1._player;
+                                }
+                                else
+                                {
+                                    UniqueUserNames = false;
+                                    break;
+                                }
+                            }
+                            if ((_user1 != null) && (_user1._player.name.ToLower().StartsWith(data[2])))
+                            {
+                                if (player2 == null)
+                                {
+                                    player2 = _user1._player;
+                                }
+                                else
+                                {
+                                    UniqueUserNames = false;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (player1 != null & player2 != null & UniqueUserNames == true)
+                        {
+                            player2.position = player1.position;
+
+                            PlayerPositionAndLookPacket tp_packet = new PlayerPositionAndLookPacket(PacketType.PlayerPositionLook);
+
+                            tp_packet.OnGround = player2.onGround;
+                            tp_packet.Pitch = player2.Pitch;
+                            tp_packet.Stance = player2.stance;
+                            tp_packet.X = player2.position.X;
+                            tp_packet.Y = player2.position.Y;
+                            tp_packet.Z = player2.position.Z;
+                            tp_packet.Yaw = player2.Yaw;
+
+                            tp_packet.BuildPacket();
+
+                            _client.SendPacket((PacketHandler)tp_packet, _client.id, ref _client, false, false);
+                            ChatMessage.MessageSent = player1.name + " teleported to " + player2.name;
+
+                        }
+                        else
+                        {
+                            ChatMessage.MessageSent = _client._player.name + ": " + "Cannot find user/wrong syntax";
+                            GridServer.SendToPlayer((PacketHandler)ChatMessage, _client.id);                
+                        }
+                        break;
+
+                    case "kick":
+                        foreach (ClientManager _user1 in GridServer.player_list)
+                        {
+                            if ((_user1 != null) && (_user1._player.name.ToLower().StartsWith(data[1])))
+                            {
+                                DisconnectKick dk_packet = new DisconnectKick(PacketType.Disconnect_Kick);
+                                dk_packet.Reason = "You have been kicked by " + _client._player.name + ", bitch!";
+                                dk_packet.BuildPacket();
+                                ClientManager test = _user1;
+                                _client.SendPacket((PacketHandler)dk_packet, _user1.id, ref test, false, false);
+                            }
+                        }
+                       break;
+
+                }
+
                 try
                 {
                     int i = 0;

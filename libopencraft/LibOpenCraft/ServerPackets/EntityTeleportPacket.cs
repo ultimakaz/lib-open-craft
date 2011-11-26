@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LibOpenCraft.MojangProtocol
 {
-    class EntityTeleportPacket : PacketHandler
+   public class EntityTeleportPacket : PacketHandler
     {
         public int EntityID
         {

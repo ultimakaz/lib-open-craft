@@ -82,6 +82,7 @@
     <Compile Include="MojangProtocol\EntityAction.cs" />
     <Compile Include="ServerPackets\AddObjectVehiclePacket.cs" />
     <Compile Include="ServerPackets\CreateInventoryPacket.cs" />
+    <Compile Include="ServerPackets\DisconnectKick.cs" />
     <Compile Include="ServerPackets\EntityTeleportPacket.cs" />
     <Compile Include="MojangProtocol\PlayerBlockPlacement.cs" />
     <Compile Include="MojangProtocol\PlayerDigging.cs" />
