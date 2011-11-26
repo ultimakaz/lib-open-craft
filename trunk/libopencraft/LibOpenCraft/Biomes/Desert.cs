@@ -18,8 +18,11 @@ namespace LibOpenCraft.Biomes
             //    FastRandom rnd = new FastRandom(100);
             //Random rnd = new Random(100);
 
-            for (int block_y = 0; block_y < 128; block_y++)
+            //                              128
+            for (int block_y = 0; block_y < DefaultHeigth; block_y++)
             {
+                int mathematical_frequency = (int)(100 + ((double)(block_y - 7) * (-1.818181818181818181)));
+
                 for (int block_x = 0; block_x < 16; block_x++)
                 {
                     for (int block_z = 0; block_z < 16; block_z++)
@@ -27,28 +30,24 @@ namespace LibOpenCraft.Biomes
                         //Fill complete Area with Sand and SandStone
                         if (Blocks[GetIndex(block_x, block_y, block_z)] == 0)
                         {
-                            //            13
-                            //if (block_y > 35 & block_y <= DefaultHeigth)
-                            //{
-                            helper = RandomGenerator.Next(200);
-
-                            //if (helper == 24 & block_y <= 126)
-                            //{
-                            //    for (int _x = -1; _x <= 1; _x++)
-                            //    {
-                            //        for (int _y = -1; _y <= 1; _y++)
-                            //        {
-                            //            for (int _z = -1; _z <= 1; _z++)
-                            //            {
-                            //                SetBlocktype(block_x + _x, block_y + _y, block_z + _z, (byte)BlockTypes.SandStone);
-                            //            }
-                            //        }
-                            //    }
-                            //}
-
-
-                            int mathematical_frequency = (int)(100 + ((double)block_y * (-1.818181818181818181)));
-
+                            // 13
+                            helper = RandomGenerator.Next(99) + 1;
+                            if (block_y > 35 & block_y < DefaultHeigth)
+                            {
+                                if (helper == 24 & block_y <= 126)
+                                {
+                                    for (int _x = -1; _x <= 1; _x++)
+                                    {
+                                        for (int _y = -1; _y <= 1; _y++)
+                                        {
+                                            for (int _z = -1; _z <= 1; _z++)
+                                            {
+                                                SetBlocktype(block_x + _x, block_y + _y, block_z + _z, (byte)BlockTypes.SandStone);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             if (helper <= mathematical_frequency)
                             {
                                 SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
@@ -59,45 +58,9 @@ namespace LibOpenCraft.Biomes
                             }
                             else
                             {
-                                //  SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
-                            }
-                            /*
-                            else if (helper <= 15 & helper >= 3)
-                            {
-                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.SandStone);
-                            }
-                            else if (helper <= 2)
-                            {
-                                SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
-                            }
-                            else
-                            {
                                 SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
                             }
-                              */
                         }
-                        //if (block_y == DefaultHeigth + 1)
-                        //{
-                        //    SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
-                        //}
-                        //if (block_y > 6 & block_y <= 35)
-                        //{
-                        //    helper = RandomGenerator.Next(10);
-                        //    if (helper <= 6)
-                        //    {
-                        //        SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
-                        //    }
-                        //    if (helper <= 8 & helper >= 7)
-                        //    {
-                        //        SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Stone);
-                        //    }
-                        //    else
-                        //    {
-                        //        SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Sand);
-                        //    }
-                        //}
-                        //}
-
                     }
                 }
             }
@@ -176,13 +139,58 @@ namespace LibOpenCraft.Biomes
             }
         }
 
+        public void CreateHills2()
+        {
+            int _left = X - 1;
+            int _right = X + 1;
+            int _top = Z - 1;
+            int _down = Z + 1;
+
+            if (_left == -1) { _left = 0; }
+            if (_right == -1) { _right = 0; }
+            if (_top == -1) { _top = 0; }
+            if (_down == -1) { _down = 0; } 
+
+            Biome left, right, top, down;
+
+            for (int i = 0;i< World.chunk_b.Count;i++)
+            {
+                if (World.chunk_b[i].X == _left & World.chunk_b[i].Z == Z) { left = World.chunk_b[i]; }
+                if (World.chunk_b[i].X == _right & World.chunk_b[i].Z == Z) {right = World.chunk_b[i];}
+                if (World.chunk_b[i].X == X & World.chunk_b[i].Z == _top) { top = World.chunk_b[i]; }
+                if (World.chunk_b[i].X == X & World.chunk_b[i].Z == _down) {down = World.chunk_b[i];}
+            }
+
+            //left chunk
+            for (int block_z = 0; block_z < 16; block_z++)
+            {
+                int _x = X;
+                //while (left.Blocks[left.get])           
+            }
+
+            //rigth chunk
+            for (int block_z = 0; block_z < 16; block_z++)
+            {
+            }
+
+            //top chunk
+            for (int block_x = 0; block_x < 16; block_x++)
+            {
+            }
+
+            //down chunk
+            for (int block_x = 0; block_x < 16; block_x++)
+            {
+            }
+        }
+
         public Desert(short x, short z, FastRandom rnd)
             : base(x, z, rnd)
         {
             CreateChunk();
             base.CreateChunk();
             base.CreateOres();
-            base.CreateLakes(DefaultHeigth + 1);
+            base.CreateLakes(DefaultHeigth - 1);
             CreateHills();
             CreateCacti();
         }
