@@ -23,9 +23,9 @@ namespace LibOpenCraft.MojangProtocol
 
         public override void Start()
         {
-            //UpdatePlayerLists_Timer = new System.Timers.Timer(10000);
-            //UpdatePlayerLists_Timer.Elapsed += new System.Timers.ElapsedEventHandler(UpdatePlayerLists_Timer_Elapsed);
-            //UpdatePlayerLists_Timer.Start();
+            UpdatePlayerLists_Timer = new System.Timers.Timer(10000);
+            UpdatePlayerLists_Timer.Elapsed += new System.Timers.ElapsedEventHandler(UpdatePlayerLists_Timer_Elapsed);
+            UpdatePlayerLists_Timer.Start();
             base.Start();
             
             //  base.RunModuleCache();
