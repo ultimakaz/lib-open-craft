@@ -17,8 +17,35 @@ namespace LibOpenCraft.WorldPhysics
 {
     public struct PhysicalObject
     {
-        public Vector3D pos;
-        public byte face;
-        public int position;
+        /// <summary>
+        /// this is the format of our XYZ for physics
+        /// X, Y, Z = meter.cm.mm
+        /// </summary>
+        public Vector3D v_pos;
+
+        public byte b_face;
+
+        public int i_position;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public double d_G_Force;
+
+        /// <summary>
+        /// This is the objects mass,
+        /// it will weigh in kilograms
+        /// </summary>
+        public const double d_mass = 1.0;
+
+        /// <summary>
+        /// This is how much it get's deducted persecond.
+        /// </summary>
+        public const double resistance = 0.1;
+
+        /// <summary>
+        /// This is how many cm persecond the object moves
+        /// </summary>
+        public double d_speed;
     }
 }

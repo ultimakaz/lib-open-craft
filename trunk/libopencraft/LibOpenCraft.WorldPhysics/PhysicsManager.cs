@@ -39,12 +39,17 @@ namespace LibOpenCraft.WorldPhysics
             base.RunModuleCache();
             while (true)
             {
+                Nanosecond ns = new Nanosecond();
                 PhysicalObject[] objs = PhysicsStorage.objects.ToArray();
                 int i = 0;
                 for (i = 0; i < objs.Length; i++)
                 {
-                    
+
+                    #region nanosleep HACK
+                    if (ns.RunMiliSecond() == true) Thread.Sleep(1);
+                    #endregion nanosleep HACK
                 }
+                #region IGNORE SHIT
                 /* IGNORE THIS SHIT
                  * this is were you do the water physics when you are done make sure to do  HandlePhysics.Abort(); so the thread doesn't stay running.
                  * block.BlockType
@@ -55,9 +60,8 @@ namespace LibOpenCraft.WorldPhysics
                  * digging packet here send it then the player block change and put it here both need to run to update blocks.
                  * ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerDigging, OnBlockDelete);
                  * ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnBlockChange);
-                 * 
-                 * 
                 */
+                #endregion IGNORE SHIT
             }
         }
         //public static DidColision
