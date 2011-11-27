@@ -94,6 +94,7 @@ namespace LibOpenCraft
         public void SetupModules()
         {
             #region Module Container Loading
+            //System.ComponentModel.Composition.Primitives.ComposablePartCatalog
             List<ComposablePartCatalog> compose = new List<ComposablePartCatalog>();
             Assembly assembly = Assembly.GetExecutingAssembly();
             AssemblyCatalog assemblyCatalog = new AssemblyCatalog(assembly);

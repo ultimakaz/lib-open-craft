@@ -5,40 +5,12 @@ using System.Text;
 
 namespace LibOpenCraft
 {
-    public class Nanosecond
-    {
-        private int microsecond;
-        private int m_count;
-        private DateTime time;
-        public Nanosecond()
-        {
-            microsecond = 0;
-            m_count = 0;
-            time = new DateTime();
-        }
-        public bool RunMiliSecond()
-        {
-            if (DateTime.Now.Millisecond > time.Millisecond || DateTime.Now.Millisecond < time.Millisecond)
-            {
-                time = DateTime.Now;
-                m_count++;
-            }
-
-            if (m_count == 1)
-            {
-                m_count = 0;
-                return true;
-            }
-            else
-                return false;
-        }
-    }
     class Utils
     {
         public static long Clamp(long value, int max)
         {
             long new_value = value;
-            while (new_value > max)
+            while (new_value >= max)
             {
                 new_value -= max;
             }
