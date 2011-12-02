@@ -49,6 +49,7 @@ namespace LibOpenCraft.WorldPhysics
                     if (ns.RunMiliSecond() == true) Thread.Sleep(1);
                     #endregion nanosleep HACK
                 }
+                if (ns.RunMiliSecond() == true) Thread.Sleep(1);
                 #region IGNORE SHIT
                 /* IGNORE THIS SHIT
                  * this is were you do the water physics when you are done make sure to do  HandlePhysics.Abort(); so the thread doesn't stay running.

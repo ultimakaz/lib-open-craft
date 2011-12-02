@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Nanosecond.cs" />
     <Compile Include="PhysicalObject.cs" />
     <Compile Include="PhysicsEngine.cs" />
     <Compile Include="PhysicsManager.cs" />
