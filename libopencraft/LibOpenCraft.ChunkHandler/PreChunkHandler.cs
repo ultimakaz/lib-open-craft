@@ -50,7 +50,7 @@ namespace LibOpenCraft.ChunkHandler
                 {
                     base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
                 }
-                //SendChunks(6, 15);
+                SendChunks(6, 15);
                 #region SendSpawn
                 NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
                 EntitySpawn.X = (int)_client._player.position.X * 32;

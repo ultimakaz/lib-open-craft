@@ -151,7 +151,7 @@ namespace LibOpenCraft
         private static Thread HandleWorld;
         private static ThreadStart HandleWorld_start;
         public static System.Timers.Timer SaveWorldTimer;
-        static int count = 10;
+        static int count = 20;
         public static int Seed = 0;
         public static FastRandom rnd = new FastRandom();
         public static void LoadWorld()

@@ -7,10 +7,11 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Diagnostics;
 
+
 namespace LibOpenCraft
 {
     public delegate void RecievedPackets(Dictionary<string, Variable> data, TcpClient client);
-    
+
     public class ClientManager
     {
         public PlayerClass _player = new PlayerClass();
@@ -81,14 +82,14 @@ namespace LibOpenCraft
                 byte[] t_byte = p.GetBytes();
                 if (PingType == false)
                 {
-                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
                 }
                 else if (PingType == true)
                 {
-                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     byte[] temp = new byte[256];
                     t_byte.CopyTo(temp, 0);
                     GridServer.player_list[cm.id]._client.Client.Send(temp);
@@ -99,7 +100,7 @@ namespace LibOpenCraft
                 }
                 else
                 {
-                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
@@ -160,7 +161,7 @@ namespace LibOpenCraft
                             GridServer.player_list[_id].WaitToRead = true;
                             byte read = p_reader.ReadByte();
                             PacketType p_type = (PacketType)read;
-                            Console.WriteLine("Packet Recieved: " + p_type.ToString() + " Packet Byte:" + (byte)p_type);
+                            //Console.WriteLine("Packet Recieved: " + p_type.ToString() + " Packet Byte:" + (byte)p_type);
                             if (ModuleHandler.Eventmodules.Keys.Contains(p_type))
                             {
                                 Thread.BeginCriticalRegion();
