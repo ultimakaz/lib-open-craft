@@ -23,14 +23,15 @@ namespace LibOpenCraft.WorldPhysics
         /// </summary>
         public Vector3D v_pos;
 
+        /// <summary>
+        /// this is the position to were the force is from and how much is less.
+        /// the values are 0.1 - 255.0 or else there not valid.
+        /// </summary>
+        public Vector3D v_force_pos;
+
         public byte b_face;
 
         public int i_position;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public double d_G_Force;
 
         /// <summary>
         /// This is the objects mass,

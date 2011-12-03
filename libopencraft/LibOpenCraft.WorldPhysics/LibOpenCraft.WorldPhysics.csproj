@@ -44,6 +44,7 @@
     <Compile Include="Nanosecond.cs" />
     <Compile Include="PhysicalObject.cs" />
     <Compile Include="PhysicsEngine.cs" />
+    <Compile Include="PhysicsFunctions.cs" />
     <Compile Include="PhysicsManager.cs" />
     <Compile Include="PhysicsStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

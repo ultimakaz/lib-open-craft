@@ -24,7 +24,7 @@ namespace LibOpenCraft.WorldPhysics
         int id;
         private ClientManager _client;
         private BlockChangePacket block;
-
+        private System.Timers.Timer physics_interval;
         public PhysicsManager()
             : base()
         {
@@ -37,21 +37,30 @@ namespace LibOpenCraft.WorldPhysics
         public void DoPhysics()
         {
             base.RunModuleCache();
-            while (true)
-            {
-                Nanosecond ns = new Nanosecond();
-                PhysicalObject[] objs = PhysicsStorage.objects.ToArray();
-                int i = 0;
-                for (i = 0; i < objs.Length; i++)
-                {
+            physics_interval = new System.Timers.Timer(10);
+            physics_interval.Elapsed += new System.Timers.ElapsedEventHandler(physics_interval_Elapsed);
+            physics_interval.Start();
+        }
 
-                    #region nanosleep HACK
-                    if (ns.RunMiliSecond() == true) Thread.Sleep(1);
-                    #endregion nanosleep HACK
-                }
+        void physics_interval_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            #region nanosleep and objs init
+            Nanosecond ns = new Nanosecond();
+            PhysicalObject[] objs = PhysicsStorage.objects.ToArray();
+            int i = 0;
+            #endregion
+            for (i = 0; i < objs.Length; i++)
+            {
+
+                #region nanosleep HACK
                 if (ns.RunMiliSecond() == true) Thread.Sleep(1);
-                #region IGNORE SHIT
-                /* IGNORE THIS SHIT
+                #endregion nanosleep HACK
+            }
+            #region nanosleep HACK 2
+            if (ns.RunMiliSecond() == true) Thread.Sleep(1);
+            #endregion nanosleep HACK 2
+            #region IGNORE SHIT
+            /* IGNORE THIS SHIT
                  * this is were you do the water physics when you are done make sure to do  HandlePhysics.Abort(); so the thread doesn't stay running.
                  * block.BlockType
                  * block.X
@@ -62,8 +71,8 @@ namespace LibOpenCraft.WorldPhysics
                  * ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerDigging, OnBlockDelete);
                  * ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnBlockChange);
                 */
-                #endregion IGNORE SHIT
-            }
+            #endregion IGNORE SHIT
+            throw new NotImplementedException();
         }
         //public static DidColision
         #endregion  Do Physics
