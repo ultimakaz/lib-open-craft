@@ -29,6 +29,11 @@ namespace LibOpenCraft.WorldPhysics
         /// </summary>
         public Vector3D v_force_pos;
 
+        /// <summary>
+        /// This is the amount of mass this object is being hit with.
+        /// </summary>
+        public double d_mass_op;
+
         public byte b_face;
 
         public int i_position;

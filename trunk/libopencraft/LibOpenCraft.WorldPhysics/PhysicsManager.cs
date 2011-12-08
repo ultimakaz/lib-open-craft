@@ -72,7 +72,7 @@ namespace LibOpenCraft.WorldPhysics
                  * ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnBlockChange);
                 */
             #endregion IGNORE SHIT
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         //public static DidColision
         #endregion  Do Physics
