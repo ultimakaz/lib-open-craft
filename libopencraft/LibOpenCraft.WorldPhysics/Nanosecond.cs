@@ -24,7 +24,7 @@ namespace LibOpenCraft.WorldPhysics
                 m_count++;
             }
 
-            if (m_count == 1)
+            if (m_count == 4)
             {
                 m_count = 0;
                 return true;
