@@ -5,14 +5,14 @@ using System.Text;
 using LibOpenCraft;
 using LibOpenCraft.ServerPackets;
 
-using System.IO.Compression;
 using System.IO;
 using System.Reflection;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
 using System.Threading;
-using ComponentAce.Compression.Libs.zlib;
+using Ionic.Zlib;
+//using ComponentAce.Compression.Libs.zlib;
 
 namespace LibOpenCraft.ChunkHandler
 {
@@ -20,7 +20,7 @@ namespace LibOpenCraft.ChunkHandler
     [ExportMetadata("Name", "Pre Chunk, Chunk Handler")]
     public class PreChunkHandler : CoreModule
     {
-        int compression = (int)Config.Configuration["Compression"];
+        static int compression = (int)Config.Configuration["Compression"];
         private Thread send;
         private ThreadStart send_start;
         int id;
@@ -29,6 +29,7 @@ namespace LibOpenCraft.ChunkHandler
         public PreChunkHandler()
             : base()
         {
+            
             ModuleHandler.InvokeAddModuleAddon(PacketType.LoginRequest, LoginPreChunkHandler);
             //ModuleHandler.AddEventModule(PacketType.PreChunk, OnPreChunkRequested);
             base._ptype = PacketType.PreMapChunkDone;
@@ -50,7 +51,6 @@ namespace LibOpenCraft.ChunkHandler
                 {
                     base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
                 }
-                SendChunks(6, 15);
                 #region SendSpawn
                 NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
                 EntitySpawn.X = (int)_client._player.position.X * 32;
@@ -110,7 +110,8 @@ namespace LibOpenCraft.ChunkHandler
                         }
                     }
                 }
-                SendChunks(6, 15);
+                // Sending the rest of the chunks
+                SendChunks(6, 20);
                 GC.Collect();
                 try
                 {
@@ -146,7 +147,6 @@ namespace LibOpenCraft.ChunkHandler
 
         public void RunPreChunkInitialization()
         {
-            _client.PreChunkRan = 1;
             int count = 5;
             int x = 0;
             int y = 0;
@@ -165,6 +165,7 @@ namespace LibOpenCraft.ChunkHandler
                     GC.Collect();
                 }
             }
+            _client.PreChunkRan = 1;
         }
         public void SendChunks(int start, int amount)
         {
@@ -199,30 +200,29 @@ namespace LibOpenCraft.ChunkHandler
             int index = Chunk.GetIndex(_x, _y);
             using (MemoryStream memStream = new MemoryStream())
             {
-                using (ZOutputStream compressor = new ZOutputStream(memStream, compression))
+                using (Ionic.Zlib.ZlibStream compressor = new Ionic.Zlib.ZlibStream(memStream, CompressionMode.Compress, (CompressionLevel)compression, false))
                 {
                     for (int i = 0; i < (16 * 16 * 128); i++)
                     {
-                        compressor.WriteByte((int)World.chunks[Chunk.GetIndex(_x, _y)].GetBlocktype(i));
+                        compressor.WriteByte((byte)World.chunks[Chunk.GetIndex(_x, _y)].GetBlocktype(i));
                     }
 
                     // Write MetaData
                     for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        //System.Threading.Thread.Sleep(1);
-                        compressor.WriteByte((int)(((World.chunks[index].GetData((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetData((i) + 0) & 0x0F)));
+                        compressor.WriteByte((byte)(((World.chunks[index].GetData((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetData((i) + 0) & 0x0F)));
                     }
 
                     // Write BlockLight
                     for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        compressor.WriteByte((int)(((World.chunks[index].GetBlockLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetBlockLight((i) + 0) & 0x0F)));
+                        compressor.WriteByte((byte)(((World.chunks[index].GetBlockLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetBlockLight((i) + 0) & 0x0F)));
                     }
 
                     // Write SkyLight
                     for (int i = 0; i < (16 * 16 * 128) / 2; i++)
                     {
-                        compressor.WriteByte((int)(((World.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
+                         compressor.WriteByte((byte)(((World.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
                     }
                     
                 }

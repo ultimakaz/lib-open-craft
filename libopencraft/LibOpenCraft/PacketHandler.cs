@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using ComponentAce.Compression.Libs.zlib;
+using Ionic.Zlib;
 
 namespace LibOpenCraft
 {
@@ -79,7 +79,7 @@ namespace LibOpenCraft
             AddShort(cv_slot.s_short);
             if(slot.IsGziped(cv_slot.s_short))
             {
-                ZOutputStream Compress = new ZOutputStream(stream);
+                ZlibStream Compress = new ZlibStream(stream, CompressionMode.Compress);
                 Compress.Write(cv_slot.GZipData, 0, cv_slot.GZipData.Length);
             }
         }
@@ -264,8 +264,8 @@ namespace LibOpenCraft
             {
                 byte[] buffer = ReadBytes(temp_b);
                 slot temp_slot = new slot(temp_b);
-                ZInputStream decompress = new ZInputStream(new MemoryStream(buffer));
-                temp_slot.GZipData = decompress.ReadBytes(buffer.Length);
+                ZlibStream decompress = new ZlibStream(reader, CompressionMode.Decompress);
+                decompress.Read(temp_slot.GZipData,0 ,buffer.Length);
                 return temp_slot;
             }
             return new slot(temp_b);
