@@ -27,6 +27,18 @@ namespace LibOpenCraft.ServerPackets
             get;
             set;
         }
+
+        /// <summary>
+        /// level-type in server.properties
+        /// 1.DEFAULT
+        /// 2.SUPERFLAT
+        /// </summary>
+        public string LevelType
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Currently there is only two Server Modes
         /// 0 for survival
@@ -78,6 +90,7 @@ namespace LibOpenCraft.ServerPackets
             this.AddString(NotUsed);
             if (MapSeed != -2)
                 this.AddLong(MapSeed);
+            this.AddString(LevelType);
             this.AddInt(ServerMode);
             this.AddByte(Dimension);
             this.AddByte(Unknown);

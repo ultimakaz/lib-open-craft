@@ -54,6 +54,7 @@ namespace LibOpenCraft.MojangProtocol
             p.EntityID = _client.id;
             p.NotUsed = "";
             p.MapSeed = 0;
+            p.LevelType = (string)Config.Configuration["LevelType"];
             p.ServerMode = (int)Config.Configuration["ServerMode"];
             p.Dimension = 0;
             p.Unknown = 1;
