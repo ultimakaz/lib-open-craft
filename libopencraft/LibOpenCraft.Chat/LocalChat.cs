@@ -52,6 +52,9 @@ namespace LibOpenCraft.Chat
                         break;
                     case "set -b 4":
                         break;
+                    default:
+                        ChatMessage.MessageSent = "There is no such command please try again!";
+                        break;
                 }
 
                 string[] data = command.ToLower().Split((" ").ToCharArray());
