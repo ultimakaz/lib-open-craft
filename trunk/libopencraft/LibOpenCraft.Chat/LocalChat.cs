@@ -33,6 +33,7 @@ namespace LibOpenCraft.Chat
             string message = _pReader.ReadString();
             ChatMessagePacket ChatMessage = new ChatMessagePacket(PacketType.ChatMessage);
             ChatMessage.MessageRecieved = message;
+            ChatMessage.MessageSent = "";
             if (message[0] == '/' && (bool)Config.Configuration["EnableEmbeddedChatCommands"])
             {
                 string command = message.Substring(1, message.Length - 1).ToLower();
@@ -120,7 +121,7 @@ namespace LibOpenCraft.Chat
                     case "kick":
                         foreach (ClientManager _user1 in GridServer.player_list)
                         {
-                            if ((_user1 != null) && (_user1._player.name.ToLower().StartsWith(data[1])))
+                            if ((_user1 != null) && (_user1._player.name.ToLower().StartsWith(data[1])) && _user1._player.Rank <= RankLevel.Moderator)
                             {
                                 DisconnectKick dk_packet = new DisconnectKick(PacketType.Disconnect_Kick);
                                 dk_packet.Reason = "You have been kicked by " + _client._player.name + ", bitch!";
@@ -129,6 +130,9 @@ namespace LibOpenCraft.Chat
                                 _client.SendPacket((PacketHandler)dk_packet, _user1.id, ref test, false, false);
                             }
                         }
+                       break;
+                    default:
+                       ChatMessage.MessageSent = "There is no such command please try again!";
                        break;
 
                 }
@@ -145,9 +149,10 @@ namespace LibOpenCraft.Chat
                 {
                     Console.WriteLine("ERROR: " + e.Message + " Source:" + e.Source + " Method:" + e.TargetSite + " Data:" + e.Data);
                 }
-                if (ChatMessage.MessageSent == "")
+                if (ChatMessage.MessageSent == null || ChatMessage.MessageSent == "")
                 {
-
+                    ChatMessage.BuildPacket();
+                    _client.SendPacket((PacketHandler)ChatMessage, _client.id, ref _client, false, false);
                 }
                 else
                 {

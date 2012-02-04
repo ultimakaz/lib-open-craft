@@ -5,8 +5,18 @@ using System.Text;
 
 namespace LibOpenCraft
 {
+    public enum RankLevel : byte
+    {
+        User = 0x00,
+        Builder = 0x01,
+        Friend = 0x02,
+        Moderator = 0x03,
+        God = 0x04,
+        Administrator = 0x04,
+    }
     public class PlayerClass
     {
+        public RankLevel Rank = RankLevel.User;
         public int[] inventory = new int[368];//contains amount left
         public short Current_Item = 0x00;
         public short Current_Slot = 9;
