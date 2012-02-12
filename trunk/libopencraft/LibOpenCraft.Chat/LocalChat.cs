@@ -57,7 +57,7 @@ namespace LibOpenCraft.Chat
                         break;
                 }
 
-                string[] data = command.ToLower().Split((" ").ToCharArray());
+                string[] data = command.Split((" ").ToCharArray());
                 // command.Split((" ").ToCharArray());
                 switch (data[0])
                 {

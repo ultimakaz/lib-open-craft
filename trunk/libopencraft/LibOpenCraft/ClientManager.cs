@@ -84,7 +84,13 @@ namespace LibOpenCraft
                 {
                     //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
-                    GridServer.player_list[cm.id].keep_alive = DateTime.Now;
+                    if (GridServer.player_list[cm.id].keep_alive != null) GridServer.player_list[cm.id].keep_alive = DateTime.Now;
+                    else
+                    {
+                        GridServer.player_list[cm.id].keep_alive = new DateTime();
+                        GridServer.player_list[cm.id].keep_alive = DateTime.Now;
+
+                    }
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
                 }
                 else if (PingType == true)
@@ -117,12 +123,12 @@ namespace LibOpenCraft
                     }
                     else
                     {
-                        Stop(true);
+                        this.Stop(true);
                     }
                 }
                 else
                 {
-                    Stop(true);
+                    this.Stop(true);
                 }
             }
         }
@@ -176,7 +182,9 @@ namespace LibOpenCraft
                                 //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
                                 //kick.AddString("Server has kicked you for illegal packet!!");
                                 //GridServer.player_list[_id].SendPacket(kick, _id, ref GridServer.player_list[_id]);
-
+                                byte[] unsupported_garbage = new byte[(int)p_reader.reader.Length];
+                                p_reader.reader.Read(unsupported_garbage, 0, (int)p_reader.reader.Length);
+                                //p_reader.reader.Flush();
                                 GridServer.player_list[_id].WaitToRead = false;
 
                             }
