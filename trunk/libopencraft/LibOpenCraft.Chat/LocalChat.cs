@@ -135,7 +135,7 @@ namespace LibOpenCraft.Chat
                         }
                        break;
                     default:
-                       ChatMessage.MessageSent = "There is no such command please try again!";
+                       //ChatMessage.MessageSent = "There is no such command please try again!";
                        break;
 
                 }
