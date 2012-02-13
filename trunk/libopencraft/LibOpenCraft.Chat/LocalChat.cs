@@ -37,20 +37,31 @@ namespace LibOpenCraft.Chat
             if (message[0] == '/' && (bool)Config.Configuration["EnableEmbeddedChatCommands"])
             {
                 string command = message.Substring(1, message.Length - 1).ToLower();
-                switch (command)
+                string[] commands = command.Split(' ');
+                switch (commands[0])
                 {
                     case "save":
                         ChatMessage.MessageSent = _client._player.name + ": " + "Saving World....";
                         World.SaveWorld();
                         ChatMessage.MessageSent = _client._player.name + ": " + "World Saved!";
                         break;
-                    case "set -b 1":
-                        break;
-                    case "set -b 2":
-                        break;
-                    case "set -b 3":
-                        break;
-                    case "set -b 4":
+                    case "set":
+                        switch (commands[1])
+                        {
+                            case "-b":
+                                switch (commands[2])
+                                {
+                                    case "1":
+                                        break;
+                                    case "2":
+                                        break;
+                                    case "3":
+                                        break;
+                                    case "4":
+                                        break;
+                                }
+                                break;
+                        }
                         break;
                     default:
                         ChatMessage.MessageSent = "There is no such command please try again!";
