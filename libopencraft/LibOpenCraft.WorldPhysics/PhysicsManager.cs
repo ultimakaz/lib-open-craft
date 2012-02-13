@@ -28,10 +28,26 @@ namespace LibOpenCraft.WorldPhysics
         public PhysicsManager()
             : base()
         {
-            //ModuleHandler.InvokeAddModuleAddon(PacketType.PlayerBlockPlacement, OnPhysicsHandler);
+            
+        }
+
+        public override void Start()
+        {
             HandlePhysics_start = new ThreadStart(DoPhysics);
             HandlePhysics = new Thread(HandlePhysics_start);
             HandlePhysics.Start();
+            base.Start();
+        }
+
+        public override void Stop()
+        {
+            try
+            {
+                HandlePhysics.Abort();
+                physics_interval.Stop();
+            }
+            catch (Exception) { }
+            base.Stop();
         }
         #region Do Physics
         public void DoPhysics()
