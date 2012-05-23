@@ -83,6 +83,8 @@ namespace LibOpenCraft
                 if (PingType == false)
                 {
                     //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    GridServer.player_list[cm.id]._client.Client.SendBufferSize = t_byte.Length;
+                    GridServer.player_list[cm.id]._client.Client.NoDelay = true;
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     if (GridServer.player_list[cm.id].keep_alive != null) GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     else
@@ -98,6 +100,8 @@ namespace LibOpenCraft
                     //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     byte[] temp = new byte[256];
                     t_byte.CopyTo(temp, 0);
+                    GridServer.player_list[cm.id]._client.Client.SendBufferSize = temp.Length;
+                    GridServer.player_list[cm.id]._client.Client.NoDelay = true;
                     GridServer.player_list[cm.id]._client.Client.Send(temp);
                     GridServer.player_list[cm.id]._client.Close();
                     //t_byte = null;
@@ -107,6 +111,8 @@ namespace LibOpenCraft
                 else
                 {
                     //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    GridServer.player_list[cm.id]._client.Client.SendBufferSize = t_byte.Length;
+                    GridServer.player_list[cm.id]._client.Client.NoDelay = true;
                     GridServer.player_list[cm.id]._client.Client.Send(t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
