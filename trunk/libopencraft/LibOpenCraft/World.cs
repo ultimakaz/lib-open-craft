@@ -169,17 +169,30 @@ namespace LibOpenCraft
             }
             else
             {
+                Console.WriteLine("Generating World...");
                 if (Seed == 0) { Seed = rnd.Next(); }
                 rnd = new FastRandom(Seed);
-
+                int total_count = 0;
+                for (int x = 0; x < count; x++)
+                {
+                    for (int z = 0; z < count; z++)
+                    {
+                        total_count++;
+                    }
+                }
+                //int percent_each = total_count / 100;
+                //int current_count = 0;
                 for (int x = 0; x < count; x++)
                 {
                     for (int z = 0; z < count; z++)
                     {
                         World.chunk_b.Add(new Biomes.Desert((short)x, (short)z, rnd));
                         GC.Collect();
+                        
+                        //current_count++;
                     }
                 }
+                Console.WriteLine("World Generated!");
                 World.chunks = new Biomes.Biome[World.chunk_b.Count];
                 World.chunks = World.chunk_b.ToArray();
                 World.chunk_b.Clear();
@@ -210,8 +223,16 @@ namespace LibOpenCraft
             System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(Biomes.Biome[]));//Chunk[]));
             System.IO.StreamWriter file =
                 new System.IO.StreamWriter(Chunk.GetPath(0, 0));
-            writer.Serialize(file, World.chunks);
-            file.Close();
+            Biomes.Biome[] chunks = new Biomes.Biome[World.chunks.Length];
+            lock (World.chunks)
+            {
+                World.chunks.CopyTo(chunks, 0);
+            }
+            lock (chunks)
+            {
+                writer.Serialize(file, chunks);
+                file.Close();
+            }
             //writer = null;
             //file = null;
         }
@@ -225,9 +246,9 @@ namespace LibOpenCraft
     [XmlInclude(typeof(Biomes.Desert))]
     public class Chunk
     {
-        public const int Width = 16;
-        public const int Depth = 128;
-        public const int Height = 16;
+        public static int Width = Config.GetSettingInt("Size_X");//int.Parse((string)Config.Configuration["Size_X"]);
+        public static int Depth = Config.GetSettingInt("Size_Y");//int.Parse((string)Config.Configuration["Size_Y"]);
+        public static int Height = Config.GetSettingInt("Size_Z");//int.Parse((string)Config.Configuration["Size_Z"]);
 
         bool _cached1, _cached2;
 
@@ -238,6 +259,7 @@ namespace LibOpenCraft
         public byte[] BlockLight;
         public byte[] SkyLight;
         public byte[] HeightMap;
+        public bool[] IsAir;
 
         public bool Cached
         {
@@ -254,10 +276,10 @@ namespace LibOpenCraft
         public Chunk(short x, short z)
         {
             X = x; Z = z;
-            Blocks = new byte[16 * 16 * 128];
-            Data = new byte[(16 * 16 * 128) / 2];
-            BlockLight = new byte[(16 * 16 * 128) / 2];
-            SkyLight = new byte[(16 * 16 * 128) / 2];
+            Blocks = new byte[Width * Height * Depth];
+            Data = new byte[(Width * Height * Depth) / 2];
+            BlockLight = new byte[(Width * Height * Depth) / 2];
+            SkyLight = new byte[(Width * Height * Depth) / 2];
             HeightMap = new byte[256];
             FastRandom rnd = new FastRandom();
 
@@ -281,26 +303,7 @@ namespace LibOpenCraft
                         else if (block_y == 0)
                         {
                             SetBlocktype(block_x, block_y, block_z, (byte)BlockTypes.Bedrock);
-                        }          
-                        //else if (block_y < 64)//Create Dirt
-                        //    SetBlocktype(i, 0x04);
-                        //else if (block_y == 64)//Create Grass
-                        //    SetBlocktype(i, 0x02);
-                        //else if (block_y >= 65)//Create Air
-                        //    SetBlocktype(i, 0x00);
-
-                        //int i = GetIndex(block_x, block_y, block_z);
-                        //if (block_y == 1)//Create Bedrock
-                        //    SetBlocktype(i, 0x07);
-                        //else if (block_y < 49)//Create Stone
-                        //    SetBlocktype(i, 0x01);
-                        //else if (block_y < 64)//Create Dirt
-                        //    SetBlocktype(i, 0x04);
-                        //else if (block_y == 64)//Create Grass
-                        //    SetBlocktype(i, 0x02);
-                        //else if (block_y >= 65)//Create Air
-                        //    SetBlocktype(i, 0x00);
-                        ////System.Threading.Thread.Sleep(0001);
+                        }
                     }
                 }
             }
@@ -311,11 +314,11 @@ namespace LibOpenCraft
 
         public void WriteBlockLight()
         {// Write BlockLight
-            for (int block_x = 0; block_x < 16; block_x++)
+            for (int block_x = 0; block_x < Width; block_x++)
             {
-                for (int block_z = 0; block_z < 16; block_z++)
+                for (int block_z = 0; block_z < Height; block_z++)
                 {
-                    for (int block_y = 0; block_y < 128; block_y++)
+                    for (int block_y = 0; block_y < Depth; block_y++)
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetBlockLight(i, 0x0F);
@@ -326,11 +329,11 @@ namespace LibOpenCraft
 
         public void WriteMetaData()
         {// Write MetaData
-            for (int block_x = 0; block_x < 16; block_x++)
+            for (int block_x = 0; block_x < Width; block_x++)
             {
-                for (int block_z = 0; block_z < 16; block_z++)
+                for (int block_z = 0; block_z < Height; block_z++)
                 {
-                    for (int block_y = 0; block_y < 128; block_y++)
+                    for (int block_y = 0; block_y < Depth; block_y++)
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetData(i, 0x00);
@@ -341,11 +344,11 @@ namespace LibOpenCraft
 
         public void WriteSkyLight()
         {// Write SkyLight
-            for (int block_x = 0; block_x < 16; block_x++)
+            for (int block_x = 0; block_x < Width; block_x++)
             {
-                for (int block_z = 0; block_z < 16; block_z++)
+                for (int block_z = 0; block_z < Height; block_z++)
                 {
-                    for (int block_y = 0; block_y < 128; block_y++)
+                    for (int block_y = 0; block_y < Depth; block_y++)
                     {
                         int i = GetIndex(block_x, block_y, block_z);
                         SetSkyLight(i, 0x00F);
@@ -356,16 +359,16 @@ namespace LibOpenCraft
 
         public Chunk()
         {
-            Blocks = new byte[32768];
-            Data = new byte[16384];
-            BlockLight = new byte[16384];
-            SkyLight = new byte[16384];
+            Blocks = new byte[Width * Height * Depth];
+            Data = new byte[(Width * Height * Depth) / 2];
+            BlockLight = new byte[(Width * Height * Depth) / 2];
+            SkyLight = new byte[(Width * Height * Depth) / 2];
             HeightMap = new byte[256];
             //32768
             //16384
         }
         #region LoadChunk
-        public static int c_size = 128;
+        public static int c_size = Depth;
         public static string GetPath(int x, int z)
         {
             return AppDomain.CurrentDomain.BaseDirectory + "World\\" +
@@ -387,14 +390,14 @@ namespace LibOpenCraft
                 //chunk.Unlock(82176 * GetIndex(x, z) * 2, chunk.Length);
                 Chunk t_chunk = new Chunk();
                 chunk.Position = 82176 * GetIndex(x, z);
-                chunk.Read(t_chunk.Blocks, 0, 32768);
-                chunk.Position = (82176 * GetIndex(x, z)) + 16384;
-                chunk.Read(t_chunk.Data, 0, 16384);
+                chunk.Read(t_chunk.Blocks, 0, (Width * Height * Depth));
+                chunk.Position = (82176 * GetIndex(x, z)) + (Width * Height * Depth) / 2;
+                chunk.Read(t_chunk.Data, 0, (Width * Height * Depth) / 2);
                 chunk.Position = (82176 * GetIndex(x, z)) + (16384 * 2);
-                chunk.Read(t_chunk.BlockLight, 0, 16384);
-                chunk.Position = (82176 * GetIndex(x, z)) + (16384 * 3);
-                chunk.Read(t_chunk.SkyLight, 0, 16384);
-                chunk.Position = (82176 * GetIndex(x, z)) + (16384 * 3) + 256;
+                chunk.Read(t_chunk.BlockLight, 0, (Width * Height * Depth) / 2);
+                chunk.Position = (82176 * GetIndex(x, z)) + (((Width * Height * Depth) / 2) * 3);
+                chunk.Read(t_chunk.SkyLight, 0, (Width * Height * Depth) / 2);
+                chunk.Position = (82176 * GetIndex(x, z)) + (((Width * Height * Depth) / 2) * 3) + 256;
                 chunk.Read(t_chunk.HeightMap, 0, 256);
                 chunk.Close();
                 GC.Collect();
@@ -410,14 +413,14 @@ namespace LibOpenCraft
             //System.Security.Permissions.FileIOPermission fp = new System.Security.Permissions.FileIOPermission(System.Security.Permissions.FileIOPermissionAccess.AllAccess, GetPath(0, 0));
             FileStream chunk = new FileStream(GetPath(0, 0), FileMode.Open);
             chunk.Position = 82176 * GetIndex(X, Z);
-            chunk.Write(Blocks, 0, 32768);
-            chunk.Position = (82176 * GetIndex(X, Z)) + 16384;
-            chunk.Write(Data, 0, 16384);
-            chunk.Position = (82176 * GetIndex(X, Z)) + (16384 * 2);
-            chunk.Write(BlockLight, 0, 16384);
-            chunk.Position = (82176 * GetIndex(X, Z)) + (16384 * 3);
-            chunk.Write(SkyLight, 0, 16384);
-            chunk.Position = (82176 * GetIndex(X, Z)) + (16384 * 3) + 256;
+            chunk.Write(Blocks, 0, (Width * Height * Depth));
+            chunk.Position = (82176 * GetIndex(X, Z)) + (Width * Height * Depth) / 2;
+            chunk.Write(Data, 0, ((Width * Height * Depth) / 2));
+            chunk.Position = (82176 * GetIndex(X, Z)) + (((Width * Height * Depth) / 2) * 2);
+            chunk.Write(BlockLight, 0, ((Width * Height * Depth) / 2));
+            chunk.Position = (82176 * GetIndex(X, Z)) + (((Width * Height * Depth) / 2) * 3);
+            chunk.Write(SkyLight, 0, ((Width * Height * Depth) / 2));
+            chunk.Position = (82176 * GetIndex(X, Z)) + (((Width * Height * Depth) / 2) * 3) + 256;
             chunk.Write(HeightMap, 0, 256);
             chunk.Close();
             GC.Collect();

@@ -23,9 +23,9 @@ namespace LibOpenCraft.Biomes
             {
                 int mathematical_frequency = (int)(100 + ((double)(block_y - 7) * (-1.818181818181818181)));
 
-                for (int block_x = 0; block_x < 16; block_x++)
+                for (int block_x = 0; block_x < Width; block_x++)
                 {
-                    for (int block_z = 0; block_z < 16; block_z++)
+                    for (int block_z = 0; block_z < Height; block_z++)
                     {
                         //Fill complete Area with Sand and SandStone
                         if (Blocks[GetIndex(block_x, block_y, block_z)] == 0)
@@ -69,9 +69,9 @@ namespace LibOpenCraft.Biomes
 
         public void CreateCacti()
         {
-            for (int x = 0; x < 16; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int z = 0; z < 16; z++)
+                for (int z = 0; z < Height; z++)
                 {
                     if (RandomGenerator.Next(800) == 5)
                     {

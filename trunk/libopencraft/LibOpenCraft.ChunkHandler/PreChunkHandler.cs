@@ -29,10 +29,10 @@ namespace LibOpenCraft.ChunkHandler
         public PreChunkHandler()
             : base()
         {
-            
+
             ModuleHandler.InvokeAddModuleAddon(PacketType.LoginRequest, LoginPreChunkHandler);
             //ModuleHandler.AddEventModule(PacketType.PreChunk, OnPreChunkRequested);
-            base._ptype = PacketType.PreMapChunkDone;
+            //base._ptype = PacketType.PreMapChunkDone;
         }
 
         public void OnPreChunkRequested(ref PacketReader packet_reader, PacketType p_type, ref ClientManager cm)
@@ -49,7 +49,7 @@ namespace LibOpenCraft.ChunkHandler
                 GridServer.player_list[id].Resume();
                 for (int i = 0; i < base.ModuleAddons.Count; i++)
                 {
-                    base.ModuleAddons.ElementAt(i).Value(PacketType.PreMapChunkDone, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
+                    base.ModuleAddons.ElementAt(i).Value(PacketType.PreChunk, ModuleAddons.ElementAt(i).Key, ref pr, null, ref _client);
                 }
                 #region SendSpawn
                 NamedEntitySpawnPacket EntitySpawn = new NamedEntitySpawnPacket(PacketType.NamedEntitySpawn);
@@ -62,8 +62,8 @@ namespace LibOpenCraft.ChunkHandler
                 EntitySpawn.Pitch = (byte)_client._player.Pitch;
                 EntitySpawn.Rotation = (byte)_client._player.stance;
                 EntitySpawn.BuildPacket();
-                
-                foreach(string key in Config.Configuration.Keys)
+
+                foreach (string key in Config.Configuration.Keys)
                 {
                     if (key.Contains("WelcomeMessage"))
                     {
@@ -110,8 +110,6 @@ namespace LibOpenCraft.ChunkHandler
                         }
                     }
                 }
-                // Sending the rest of the chunks
-                SendChunks(6, 20);
                 GC.Collect();
                 try
                 {
@@ -126,12 +124,12 @@ namespace LibOpenCraft.ChunkHandler
             {
                 send.Abort();
             }
-            #endregion SendSpawn
+                #endregion SendSpawn
         }
         public PacketHandler LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
         {
             base.RunModuleCache();
-            
+
             GridServer.player_list[cm.id].WaitToRead = false;
             send_start = new ThreadStart(DoChunks);
             send = new Thread(send_start);
@@ -141,7 +139,7 @@ namespace LibOpenCraft.ChunkHandler
             id = cm.id;
 
             send.Start();
-            
+
             return _p;
         }
 
@@ -154,14 +152,7 @@ namespace LibOpenCraft.ChunkHandler
             {
                 for (y = 0; y < count; y++)
                 {
-                    PreChunkPacket p = new PreChunkPacket(PacketType.PreChunk);
-                    p.x = x;
-                    p.y = y;
-                    p.load = 1;
-                    p.BuildPacket();
-                    _client._client.Client.Send(p.GetBytes());
-                    GC.Collect();
-                    _client._client.Client.Send(MakeChunkArray(x, y).GetBytes());
+                    _client._client.Client.Send(MakeChunkArray(x, y, true).GetBytes());
                     GC.Collect();
                 }
             }
@@ -176,62 +167,110 @@ namespace LibOpenCraft.ChunkHandler
             {
                 for (y = 0; y < count; y++)
                 {
-                    PreChunkPacket p = new PreChunkPacket(PacketType.PreChunk);
-                    p.x = x;
-                    p.y = y;
-                    p.load = 1;
-                    p.BuildPacket();
-                    _client._client.Client.Send(p.GetBytes());
-                    GC.Collect();
-                    _client._client.Client.Send(MakeChunkArray(x, y).GetBytes());
+                    _client._client.Client.Send(MakeChunkArray(x, y, true).GetBytes());
                     GC.Collect();
                 }
             }
         }
 
-        public ChunkPacket MakeChunkArray(int _x, int _y)
+        public ChunkPacket MakeChunkArray(int _x, int _y, bool Load)
         {
+            int Width = Config.GetSettingInt("Size_X");
+            int Height = Config.GetSettingInt("Size_Z");
+            int Depth = Config.GetSettingInt("Size_Y");
+            PreChunkPacket p = new PreChunkPacket();//PacketType.PreChunk);
+            p.x = _x;
+            p.y = _y;
+            p.load = (byte)(Load == true ? 0x01 : 0x00);
+            p.BuildPacket();
+
             ChunkPacket _cPacket = new ChunkPacket();
             _cPacket.X = _x * 16;
             _cPacket.Z = _y * 16;
-            _cPacket.SIZE_X = 15;
-            _cPacket.SIZE_Y = 127;
-            _cPacket.SIZE_Z = 15;
+            _cPacket.GroundUpC = true;
+            _cPacket.PrimaryBitMap = 0;
+            _cPacket.AddBitMap = 0;
+            _cPacket.ModAPI = 0;
             int index = Chunk.GetIndex(_x, _y);
-            using (MemoryStream memStream = new MemoryStream())
+            short mask = 1;
+            byte[] f_blockData = new byte[0];
+            byte[] f_metadata = new byte[0];
+            byte[] f_blockLight = new byte[0];
+            byte[] f_skyLight = new byte[0];
+            int pos = 0;
+            Chunk c = World.chunks.ElementAt(Chunk.GetIndex(_x, _y));
+            bool[] IsAir = c.IsAir;
+            for (int i = 0; i < Depth / 16; i++)
             {
-                using (Ionic.Zlib.ZlibStream compressor = new Ionic.Zlib.ZlibStream(memStream, CompressionMode.Compress, (CompressionLevel)compression, false))
+                if (!IsAir[i])
                 {
-                    for (int i = 0; i < (16 * 16 * 128); i++)
+                    try
                     {
-                        compressor.WriteByte((byte)World.chunks[Chunk.GetIndex(_x, _y)].GetBlocktype(i));
-                    }
+                        byte[] blockData = new byte[(Width * Height * (Depth / 16))];
+                        for (int ii = 0; ii < (Width * Height * (Depth / 16)); ii++)
+                        {
+                            blockData[ii] = (byte)c.GetBlocktype(ii * i);
+                        }
+                        f_blockData = f_blockData.Concat(blockData).ToArray();
 
-                    // Write MetaData
-                    for (int i = 0; i < (16 * 16 * 128) / 2; i++)
-                    {
-                        compressor.WriteByte((byte)(((World.chunks[index].GetData((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetData((i) + 0) & 0x0F)));
-                    }
+                        byte[] metadata = new byte[(Width * Height * (Depth / 16)) / 2];
+                        // Write MetaData
+                        for (int ii = 0; ii < (Width * Height * (Depth / 16)) / 2; ii++)
+                        {
+                            metadata[ii] = (byte)(((c.GetData((ii * i) + 1) & 0x0F) << 4) | (c.GetData((ii * i) + 0) & 0x0F));
+                        }
+                        f_metadata = f_metadata.Concat(metadata).ToArray();
 
-                    // Write BlockLight
-                    for (int i = 0; i < (16 * 16 * 128) / 2; i++)
-                    {
-                        compressor.WriteByte((byte)(((World.chunks[index].GetBlockLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetBlockLight((i) + 0) & 0x0F)));
-                    }
+                        byte[] blockLight = new byte[(Width * Height * (Depth / 16)) / 2];
+                        // Write BlockLight
+                        for (int ii = 0; ii < (Width * Height * (Depth / 16)) / 2; ii++)
+                        {
+                            blockLight[ii] = (byte)(((c.GetBlockLight((ii * i) + 1) & 0x0F) << 4) | (c.GetBlockLight((ii * i) + 0) & 0x0F));
+                        }
+                        f_blockLight = f_blockLight.Concat(blockLight).ToArray();
 
-                    // Write SkyLight
-                    for (int i = 0; i < (16 * 16 * 128) / 2; i++)
-                    {
-                         compressor.WriteByte((byte)(((World.chunks[index].GetSkyLight((i) + 1) & 0x0F) << 4) | (World.chunks[index].GetSkyLight((i) + 0) & 0x0F)));
+                        byte[] skyLight = new byte[(Width * Height * (Depth / 16)) / 2];
+                        // Write SkyLight
+                        for (int ii = 0; ii < (Width * Height * (Depth / 16)) / 2; ii++)
+                        {
+                            skyLight[ii] = (byte)(((c.GetSkyLight((ii * i) + 1) & 0x0F) << 4) | (c.GetSkyLight((ii * i) + 0) & 0x0F));
+                        }
+                        f_skyLight = f_skyLight.Concat(skyLight).ToArray();
+                        _cPacket.PrimaryBitMap |= mask;
                     }
-                    
+                    catch (Exception e)
+                    {
+                        throw;
+                    }
                 }
-                _cPacket.ChunkData = memStream.ToArray();
+                mask <<= 1;
             }
+            
+
+            Ionic.Zlib.ZlibStream compressor = new Ionic.Zlib.ZlibStream(new MemoryStream(), CompressionMode.Compress, (CompressionLevel)compression, false);
+            byte[] data = new byte[0];
+            data = data.Concat(f_blockData).ToArray();
+            f_blockData = new byte[0];
+            data = data.Concat(f_metadata).ToArray();
+            f_metadata = new byte[0];
+            data = data.Concat(f_blockLight).ToArray();
+            f_blockLight = new byte[0];
+            data = data.Concat(f_skyLight).ToArray();
+            f_skyLight = new byte[0];
+
+            GC.Collect();
+            compressor.Write(data, 0, data.Length);
+
+            _cPacket.ChunkData = data;
             _cPacket.Compressed_Size = _cPacket.ChunkData.Count();
             _cPacket.BuildPacket();
+
+            data = new byte[0];
+            GC.Collect();
+
+            _client.SendPacket(p, _client.id, ref _client, false, true);
             return _cPacket;
         }
-        //
     }
+    //
 }

@@ -18,7 +18,7 @@ namespace LibOpenCraft.MojangProtocol
         public SpawnPlayer()
             : base(PacketType.SpwanPosition)
         {
-            ModuleHandler.InvokeAddModuleAddon(PacketType.PreMapChunkDone, OnSpwanPositionHandler);
+            ModuleHandler.InvokeAddModuleAddon(PacketType.PreChunk, OnSpwanPositionHandler);
         }
 
         public override void Start()
@@ -28,6 +28,7 @@ namespace LibOpenCraft.MojangProtocol
             base.RunModuleCache();
         }
 
+        //STILL LONGER NEEDED.
         public PacketHandler OnSpwanPositionHandler(PacketType p_type, string CustomPacketType, ref PacketReader _pReader, PacketHandler _p, ref ClientManager cm)
         {
             SpawnPlayerPacket p = new SpawnPlayerPacket(PacketType.SpwanPosition);

@@ -70,9 +70,10 @@ namespace LibOpenCraft
         #endregion Player data networking code
         public GridServer()
         {
-            Config.InitializeSettings();
+            //Config.InitializeSettings();
             DoSetupGCMode();
             player_list = new ClientManager[(int)Config.Configuration["MaxPlayers"] + 1];
+            
             World.LoadWorld();
             SetupModules();
         }

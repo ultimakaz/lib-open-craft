@@ -6,7 +6,7 @@ using System.IO.Compression;
 
 namespace LibOpenCraft
 {
-    public enum PacketType
+    public enum PacketType : byte
     {
         KeepAlive = 0x00,
         LoginRequest = 0x01,
@@ -72,6 +72,6 @@ namespace LibOpenCraft
         ServerListPing = 0xFE,
         ServerListPingBack = 0xFF,
         Disconnect_Kick = 0xFF,
-        PreMapChunkDone = 500,
+        //PreMapChunkDone = 500,
     };
 }

@@ -43,22 +43,33 @@ namespace LibOpenCraft.MojangProtocol
             //ubyte(/*maxPlayers*/)]
             int version = _pReader.ReadInt();
             string username = _pReader.ReadString();
-            long seed = _pReader.ReadLong();
-            int mode = _pReader.ReadInt();
-            byte world = _pReader.ReadByte();
-            _pReader.ReadByte();//nothing
-            byte height = _pReader.ReadByte();
-            byte maxPlayers = _pReader.ReadByte();
+            string empty_string = _pReader.ReadString();
+            _pReader.ReadInt();
+            _pReader.ReadInt();
+            _pReader.ReadByte();
+            _pReader.ReadByte();
+            _pReader.ReadByte();
+            /*
+            Protocol Version	 int	20	 1.2.5's protocol version is 29
+            Username	 string	TkTech	 The name of the user attempting to login, max length of 16
+            Not used	 string	 (empty string)	
+            Not used	 int	0	
+            Not used	 int	0	
+            Not used	 byte	0	
+            Not used	 unsigned byte	0	
+            Not used	 unsigned byte	0
+            */
+
             #region Login Handler Packet
             LoginHandlerPacket p = new LoginHandlerPacket(pt);
             p.EntityID = _client.id;
             p.NotUsed = "";
-            p.MapSeed = 0;
+            p.MapSeed = -2;
             p.LevelType = (string)Config.Configuration["LevelType"];
             p.ServerMode = (int)Config.Configuration["ServerMode"];
             p.Dimension = 0;
-            p.Unknown = 1;
-            p.WorldHeight = 128;
+            p.Difficulty = 1;
+            p.WorldHeight = 0;
             p.MaxPlayers = (byte)(int)Config.Configuration["MaxPlayers"];
             p.BuildPacket();
             _client.SendPacket(p, _client.id, ref _client, false, false);

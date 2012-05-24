@@ -21,37 +21,37 @@ namespace LibOpenCraft.ServerPackets
             set;
         }
 
-        public short Y
-        {
-            get;
-            set;
-        }
-
         public int Z
         {
             get;
             set;
         }
 
-        public byte SIZE_X
+        public bool GroundUpC
         {
             get;
             set;
         }
 
-        public byte SIZE_Y
+        public short PrimaryBitMap
         {
             get;
             set;
         }
 
-        public byte SIZE_Z
+        public short AddBitMap
         {
             get;
             set;
         }
 
         public int Compressed_Size
+        {
+            get;
+            set;
+        }
+
+        public int ModAPI
         {
             get;
             set;
@@ -67,12 +67,12 @@ namespace LibOpenCraft.ServerPackets
         {
             if (base._packetid == 0x00) AddByte(ChunkPacketID);
             AddInt(X);
-            AddShort(Y);
             AddInt(Z);
-            AddByte(SIZE_X);
-            AddByte(SIZE_Y);
-            AddByte(SIZE_Z);
+            AddBool(GroundUpC);
+            AddShort(PrimaryBitMap);
+            AddShort(AddBitMap);
             AddInt(Compressed_Size);
+            AddInt(ModAPI);
             AddBytes(ChunkData);
             return true;
         }
