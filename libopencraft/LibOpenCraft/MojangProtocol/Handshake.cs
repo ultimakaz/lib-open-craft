@@ -30,7 +30,8 @@ namespace LibOpenCraft.MojangProtocol
 
         public void OnHandshake(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
-            _client._player.name = _pReader.ReadString();
+            string[] conString = _pReader.ReadString().Split(';');
+            _client._player.name = conString[0];
             GridServer.player_list[_client.id].WaitToRead = false;
             #region Building Packet
             HandshakePacket p = new HandshakePacket(PacketType.Handshake);

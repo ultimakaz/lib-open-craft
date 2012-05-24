@@ -62,7 +62,17 @@ namespace LibOpenCraft.Biomes
 
             RandomGenerator = rnd;
 
-            DefaultHeigth = 64;
+            DefaultHeigth = 64;//Has to be a multiple of 2's 4's 8's 16's
+            base.IsAir = new bool[Depth / 16];
+            int i = 0;
+            for (; i < DefaultHeigth / 16; i++)
+            {
+                IsAir[i] = false;
+            }
+            for (; i < Depth / 16; i++)
+            {
+                IsAir[i] = true;
+            }
         }
 
         private void CreateFormat(BlockTypes type, int x, int y, int z, FormationType format)
@@ -106,9 +116,9 @@ namespace LibOpenCraft.Biomes
         {
             for (int block_y = 1; block_y < DefaultHeigth - 4; block_y++)
             {
-                for (int block_x = 0; block_x < 16; block_x++)
+                for (int block_x = 0; block_x < Width; block_x++)
                 {
-                    for (int block_z = 0; block_z < 16; block_z++)
+                    for (int block_z = 0; block_z < Height; block_z++)
                     {
 
                         int helper = RandomGenerator.Next(200000);
@@ -204,7 +214,17 @@ namespace LibOpenCraft.Biomes
         public Biome()
             : base()
         {
-            DefaultHeigth = 64;
+            DefaultHeigth = 64;//Has to be a multiple of 2's 4's 8's 16's
+            base.IsAir = new bool[Depth / 16];
+            int i = 0;
+            for (; i < DefaultHeigth / 16; i++)
+            {
+                IsAir[i] = false;
+            }
+            for (; i < Depth / 16; i++)
+            {
+                IsAir[i] = true;
+            }
         }
     }
 }

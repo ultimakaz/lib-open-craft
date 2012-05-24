@@ -60,15 +60,15 @@ namespace LibOpenCraft.ServerPackets
             set;
         }
         /// <summary>
-        /// This has only been recored as 1 and 2, So far. I am pretty sure its unkown.
+        /// 0 thru 3 for Peaceful, Easy, Normal, Hard
         /// </summary>
-        public byte Unknown
+        public byte Difficulty
         {
             get;
             set;
         }
         /// <summary>
-        /// This is the worlds height usually 128
+        /// This use to be used for the worlds height now it is unkown and seems to be only 0
         /// </summary>
         public byte WorldHeight
         {
@@ -93,7 +93,7 @@ namespace LibOpenCraft.ServerPackets
             this.AddString(LevelType);
             this.AddInt(ServerMode);
             this.AddByte(Dimension);
-            this.AddByte(Unknown);
+            this.AddByte(Difficulty);
 
 
             //byte world_max = 0x00;//(byte)((WorldHeight << 4) & (MaxPlayers >> 4));

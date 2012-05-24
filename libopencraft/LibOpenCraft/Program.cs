@@ -17,12 +17,14 @@ namespace LibOpenCraft
     public class Program
     {
         public static GridServer g;
+        public static bool CSetup = Config.InitializeSettings();
         //public static AdminPanel panel;
         //public static DynamicWebServer.SimpleWebServer webserver;
         //public static FormUtility f_utility;
         public static Assembly[] this_functions = new Assembly[1];
         public static void Main(string[] args)
         {
+            
             g = new GridServer();
             while(Console.Read() != '\n')
             {
