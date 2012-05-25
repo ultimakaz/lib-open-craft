@@ -19,7 +19,7 @@ namespace LibOpenCraft.ServerPackets
             set;
         }
 
-        public byte load
+        public bool load
         {
             get;
             set;
@@ -29,7 +29,7 @@ namespace LibOpenCraft.ServerPackets
         {
             AddInt(x);
             AddInt(y);
-            AddByte(load);
+            AddBool(load);
             return true;
         }
 
@@ -37,10 +37,13 @@ namespace LibOpenCraft.ServerPackets
             : base()
         {
         }
-        public PreChunkPacket(PacketType ptype)
+        public PreChunkPacket(PacketType ptype, int _x, int _y, bool _load)
             : base(ptype)
         {
-
+            this.x = _x;
+            this.y = _y;
+            this.load = _load;
+            BuildPacket();
         }
     }
 }
