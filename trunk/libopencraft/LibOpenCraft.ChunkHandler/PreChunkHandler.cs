@@ -212,32 +212,32 @@ namespace LibOpenCraft.ChunkHandler
                         {
                             if (!IsAir[i - 1])
                             {
-                                byte[] blockData = new byte[(Width * Height * (Depth / 16))];
+                                byte[] blockData = new byte[((Depth / 16) * Width * Height)];
                                 for (int ii = 0; ii < (Width * Height * (Depth / 16)); ii++)
                                 {
                                     blockData[ii] = (byte)c.GetBlocktype(ii * i);
                                 }
                                 f_blockData = f_blockData.Concat(blockData).ToArray();
 
-                                byte[] metadata = new byte[(Width * Height * (Depth / 16)) / 2];
+                                byte[] metadata = new byte[((Depth / 16) * Width * Height) / 2];
                                 // Write MetaData
-                                for (int ii = 0; ii < (Width * Height * (Depth / 16)) / 2; ii++)
+                                for (int ii = 0; ii < ((Depth / 16) * Width * Height) / 2; ii++)
                                 {
                                     metadata[ii] = (byte)(((c.GetData((ii * i) + 1) & 0x0F) << 4) | (c.GetData((ii * i) + 0) & 0x0F));
                                 }
                                 f_metadata = f_metadata.Concat(metadata).ToArray();
 
-                                byte[] blockLight = new byte[(Width * Height * (Depth / 16)) / 2];
+                                byte[] blockLight = new byte[((Depth / 16) * Width * Height) / 2];
                                 // Write BlockLight
-                                for (int ii = 0; ii < (Width * Height * (Depth / 16)) / 2; ii++)
+                                for (int ii = 0; ii < ((Depth / 16) * Width * Height) / 2; ii++)
                                 {
                                     blockLight[ii] = (byte)(((c.GetBlockLight((ii * i) + 1) & 0x0F) << 4) | (c.GetBlockLight((ii * i) + 0) & 0x0F));
                                 }
                                 f_blockLight = f_blockLight.Concat(blockLight).ToArray();
 
-                                byte[] skyLight = new byte[(Width * Height * (Depth / 16)) / 2];
+                                byte[] skyLight = new byte[((Depth / 16) * Width * Height) / 2];
                                 // Write SkyLight
-                                for (int ii = 0; ii < (Width * Height * (Depth / 16)) / 2; ii++)
+                                for (int ii = 0; ii < ((Depth / 16) * Width * Height) / 2; ii++)
                                 {
                                     skyLight[ii] = (byte)(((c.GetSkyLight((ii * i) + 1) & 0x0F) << 4) | (c.GetSkyLight((ii * i) + 0) & 0x0F));
                                 }
