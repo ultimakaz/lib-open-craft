@@ -33,13 +33,13 @@ namespace LibOpenCraft.ServerPackets
             set;
         }
 
-        public short PrimaryBitMap
+        public ushort PrimaryBitMap
         {
             get;
             set;
         }
 
-        public short AddBitMap
+        public ushort AddBitMap
         {
             get;
             set;
@@ -65,12 +65,16 @@ namespace LibOpenCraft.ServerPackets
 
         public override bool BuildPacket()
         {
-            if (base._packetid == 0x00) AddByte(ChunkPacketID);
+            if (base._packetid == 0x00)
+            {
+                base._packetid = (PacketType)0x33;
+                AddByte(0x33);
+            }
             AddInt(X);
             AddInt(Z);
             AddBool(GroundUpC);
-            AddShort(PrimaryBitMap);
-            AddShort(AddBitMap);
+            AddUShort(PrimaryBitMap);
+            AddUShort(AddBitMap);
             AddInt(Compressed_Size);
             AddInt(ModAPI);
             AddBytes(ChunkData);

@@ -75,6 +75,12 @@ namespace LibOpenCraft
             }
         }
         public bool WaitToRead = false;
+        public void Send(ClientManager cm, byte[] bytes)
+        {
+            if (cm != null && cm._client != null && cm._client.Connected == true)
+                GridServer.player_list[cm.id]._client.Client.Send(bytes);
+        }
+
         public void SendPacket(PacketHandler p, int id, ref ClientManager cm, bool PingType, bool Waitread)
         {
             try
@@ -82,10 +88,10 @@ namespace LibOpenCraft
                 byte[] t_byte = p.GetBytes();
                 if (PingType == false)
                 {
-                    //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     GridServer.player_list[cm.id]._client.Client.SendBufferSize = t_byte.Length;
                     GridServer.player_list[cm.id]._client.Client.NoDelay = true;
-                    GridServer.player_list[cm.id]._client.Client.Send(t_byte);
+                    GridServer.player_list[cm.id].Send(cm, t_byte);
                     if (GridServer.player_list[cm.id].keep_alive != null) GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     else
                     {
@@ -100,27 +106,27 @@ namespace LibOpenCraft
                     //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
                     byte[] temp = new byte[256];
                     t_byte.CopyTo(temp, 0);
-                    GridServer.player_list[cm.id]._client.Client.SendBufferSize = temp.Length;
+
+                    GridServer.player_list[cm.id]._client.Client.SendBufferSize = t_byte.Length;
                     GridServer.player_list[cm.id]._client.Client.NoDelay = true;
-                    GridServer.player_list[cm.id]._client.Client.Send(temp);
+                    GridServer.player_list[cm.id].Send(cm, temp);
                     GridServer.player_list[cm.id]._client.Close();
-                    //t_byte = null;
-                    //p = null;
                     GridServer.player_list[cm.id].Stop(true);
                 }
                 else
                 {
-                    //Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+                    Console.WriteLine("Packet Sent: " + p._packetid.ToString() + " Length: " + t_byte.Length);
+
                     GridServer.player_list[cm.id]._client.Client.SendBufferSize = t_byte.Length;
                     GridServer.player_list[cm.id]._client.Client.NoDelay = true;
-                    GridServer.player_list[cm.id]._client.Client.Send(t_byte);
+                    GridServer.player_list[cm.id].Send(cm, t_byte);
                     GridServer.player_list[cm.id].keep_alive = DateTime.Now;
                     GridServer.player_list[cm.id].WaitToRead = Waitread;
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nStack trace:" + e.StackTrace);
+                //Console.WriteLine("ERROR: " + e.Message + "\nSource:" + e.Source + "\nMethod:" + e.TargetSite + "\nData:" + e.Data + "\nStack trace:" + e.StackTrace);
                 if (GridServer.player_list[id] != null)
                 {
                     if (GridServer.player_list[id] != null)
@@ -159,14 +165,22 @@ namespace LibOpenCraft
             NetworkStream stream = new NetworkStream(_client.Client);
             PacketReader p_reader = new PacketReader(stream);
             //bool connected = true;
-            while (!_shouldStop)
+            while (GridServer.player_list[_id] != null && !GridServer.player_list[_id]._shouldStop)
             {
                 if (nano.RunMiliSecond()) System.Threading.Thread.Sleep(1);
                 try
                 {
-                    if (Suspendv == false)
+                    if (GridServer.player_list[_id] == null)
                     {
-                        if (GridServer.player_list[_id]._client.Connected == false) GridServer.player_list[_id].Stop(true);
+                        break;
+                    }
+                    if (GridServer.player_list[_id].Suspendv == false)
+                    {
+                        if (GridServer.player_list[_id]._client.Connected == false)
+                        {
+                            GridServer.player_list[_id].Stop(true);
+                            return;
+                        }
                         if (GridServer.player_list[_id]._client.Client.Available > 0)
                         {
                             //System.Threading.Thread.Sleep(1);
@@ -184,17 +198,12 @@ namespace LibOpenCraft
                             else
                             {
                                 System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
-                                //System.Console.WriteLine(p_type.ToString() + " is not implemented:" + (byte)p_type);
-                                //PacketHandler kick = new PacketHandler(PacketType.Disconnect_Kick);
-                                //kick.AddString("Server has kicked you for illegal packet!!");
-                                //GridServer.player_list[_id].SendPacket(kick, _id, ref GridServer.player_list[_id]);
                                 byte[] unsupported_garbage = new byte[(int)p_reader.reader.Length];
                                 p_reader.reader.Read(unsupported_garbage, 0, (int)p_reader.reader.Length);
-                                //p_reader.reader.Flush();
                                 GridServer.player_list[_id].WaitToRead = false;
 
                             }
-                            if (GridServer.player_list[_id]._stream != null && DateTime.Now.Minute > GridServer.player_list[_id].keep_alive.Minute || GridServer.player_list[_id].keep_alive.Second + 1 < DateTime.Now.Second)
+                            if (GridServer.player_list[_id] != null && GridServer.player_list[_id]._stream != null && DateTime.Now.Minute > GridServer.player_list[_id].keep_alive.Minute || GridServer.player_list[_id].keep_alive.Second + 1 < DateTime.Now.Second)
                             {
                                 Random r = new Random(1789);
                                 if (GridServer.player_list[_id].customAttributes.ContainsKey("PayLoad"))

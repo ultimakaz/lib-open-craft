@@ -69,10 +69,10 @@ namespace LibOpenCraft
 
         public void AddBytes(byte[] value)
         {
-            for (int i = 0; i < value.Length; i++)
-            {
-                stream.WriteByte(value[i]);
-            }
+            //for (int i = 0; i < value.Length; i++)
+            //{
+            stream.Write(value, 0, value.Count());
+            //}
         }
         public void AddSlot(slot cv_slot)
         {
@@ -104,6 +104,12 @@ namespace LibOpenCraft
         public void AddShort(short value)
         {
             byte[] buffer = BitConverter.GetBytes(Endianness.FlipIfLittleEndian(value));
+            AddBytes(buffer);
+        }
+
+        public void AddUShort(ushort value)
+        {
+            byte[] buffer = BitConverter.GetBytes(Endianness.FlipIfLittleEndian((short)value));
             AddBytes(buffer);
         }
 

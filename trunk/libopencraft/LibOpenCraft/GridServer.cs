@@ -15,7 +15,7 @@ namespace LibOpenCraft
     public class GridServer
     {
         private CompositionContainer _container;
-        
+        public static bool DEBUG = true;
         
         #region Player data networking code
         public static ClientManager[] player_list;

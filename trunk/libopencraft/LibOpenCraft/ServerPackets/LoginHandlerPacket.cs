@@ -19,14 +19,6 @@ namespace LibOpenCraft.ServerPackets
         /// So far this is not used AKA Reserved for feature use
         /// </summary>
         public string NotUsed = "";
-        /// <summary>
-        /// This is the maps seed must be sent during respawn
-        /// </summary>
-        public long MapSeed
-        {
-            get;
-            set;
-        }
 
         /// <summary>
         /// level-type in server.properties
@@ -54,7 +46,7 @@ namespace LibOpenCraft.ServerPackets
         /// -1 for hell
         /// 0 for normal
         /// </summary>
-        public byte Dimension
+        public int Dimension
         {
             get;
             set;
@@ -88,17 +80,10 @@ namespace LibOpenCraft.ServerPackets
             //str16('username'), long(/*seed*/), int(/*mode*/), byte(/*world*/), byte(), ubyte(/*height*/), ubyte(/*maxPlayers*/)]
             this.AddInt(EntityID);
             this.AddString(NotUsed);
-            if (MapSeed != -2)
-                this.AddLong(MapSeed);
             this.AddString(LevelType);
             this.AddInt(ServerMode);
-            this.AddByte(Dimension);
+            this.AddInt(Dimension);
             this.AddByte(Difficulty);
-
-
-            //byte world_max = 0x00;//(byte)((WorldHeight << 4) & (MaxPlayers >> 4));
-            //world_max = 
-
             this.AddByte(WorldHeight);
             this.AddByte(MaxPlayers);
             return true;
@@ -107,12 +92,10 @@ namespace LibOpenCraft.ServerPackets
         public LoginHandlerPacket()
             : base()
         {
-            MapSeed = -2;
         }
         public LoginHandlerPacket(PacketType ptype)
             : base(ptype)
         {
-            MapSeed = -2;
         }
     }
 }
