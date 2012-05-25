@@ -242,9 +242,10 @@ namespace LibOpenCraft.ChunkHandler
                                     skyLight[ii] = (byte)(((c.GetSkyLight((ii * i) + 1) & 0x0F) << 4) | (c.GetSkyLight((ii * i) + 0) & 0x0F));
                                 }
                                 f_skyLight = f_skyLight.Concat(skyLight).ToArray();
-                                //_cPacket.PrimaryBitMap |= mask;
+                                _cPacket.PrimaryBitMap |= mask;
                             }
-                            //mask <<= 1;
+                            mask <<= 1;
+
                         }
                         compressor.Write(f_blockData, 0, f_blockData.Length);
                         compressor.Write(f_metadata, 0, f_metadata.Length);
