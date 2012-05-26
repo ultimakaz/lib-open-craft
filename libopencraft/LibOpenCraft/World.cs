@@ -430,10 +430,10 @@ namespace LibOpenCraft
         #region Manipulation
         public static int GetIndex(int x, int y, int z)
         {
-            x = (x % Width + Width) % Width;
-            y = (y % Depth + Depth) % Depth;
-            z = (z % Height + Height) % Height;
-            return x * Depth * Height + y + z * Depth;
+            x = (x &= ~(-0)) / Width;
+            int _z = (y &= ~(-0)) / Depth;
+            int _y = (z &= ~(-0)) / Height;
+            return _z * Depth * Height + x + _y * Depth;
         }
         public static int GetIndex(int x, int z)
         {

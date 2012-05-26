@@ -208,12 +208,12 @@ namespace LibOpenCraft.ChunkHandler
                 {
                     using (Ionic.Zlib.ZlibStream compressor = new Ionic.Zlib.ZlibStream(ms_zipped, CompressionMode.Compress, (CompressionLevel)compression, false))
                     {
-                        for (int i = 16; i > 0; i--)
+                        for (int i = 0; i > 16; i++)
                         {
                             if (!IsAir[i - 1])
                             {
                                 byte[] blockData = new byte[((Depth / 16) * Width * Height)];
-                                for (int ii = 0; ii < (Width * Height * (Depth / 16)); ii++)
+                                /*for (int ii = 0; ii < (Width * Height * (Depth / 16)); ii++)
                                 {
                                     blockData[ii] = (byte)c.GetBlocktype(ii * i);
                                 }
@@ -240,7 +240,7 @@ namespace LibOpenCraft.ChunkHandler
                                 for (int ii = 0; ii < ((Depth / 16) * Width * Height) / 2; ii++)
                                 {
                                     skyLight[ii] = (byte)(((c.GetSkyLight((ii * i) + 1) & 0x0F) << 4) | (c.GetSkyLight((ii * i) + 0) & 0x0F));
-                                }
+                                }*/
                                 f_skyLight = f_skyLight.Concat(skyLight).ToArray();
                                 _cPacket.PrimaryBitMap |= mask;
                             }
