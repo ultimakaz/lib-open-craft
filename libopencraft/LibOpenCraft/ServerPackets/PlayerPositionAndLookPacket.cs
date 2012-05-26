@@ -26,7 +26,7 @@ namespace LibOpenCraft.ServerPackets
 
         }
 
-        public int OnGround
+        public bool OnGround
         {
             get;
             set;
@@ -58,7 +58,7 @@ namespace LibOpenCraft.ServerPackets
             AddDouble(Z);
             AddFloat(Yaw);
             AddFloat(Pitch);
-            AddByte((byte)OnGround);
+            AddBool(OnGround);
             return true;
         }
 

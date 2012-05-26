@@ -25,18 +25,22 @@ namespace LibOpenCraft
         public Vector3D position;
         public Vector3D rel_position;
         public double stance;
-        public byte onGround;
+        public bool onGround;
         public int fullPositionUpdateCounter = 0;
         public int CurrentSlot;
         public int EntityUpdateCount = 0;
         public float Yaw = 0.0f;
         public float Pitch = 0.0f;
 
+        public bool Invulnerable = false;
+        public bool CanFly = true;
+        public bool BlockInstantDestroy = true;
+
         public PlayerClass()
         {
             name = "";
             stance = 0;
-            onGround = 0x01;
+            onGround = true;
             position = new Vector3D(15, 68, 15);
             customerVariables = new Dictionary<string, object>();
             CurrentSlot = 0;

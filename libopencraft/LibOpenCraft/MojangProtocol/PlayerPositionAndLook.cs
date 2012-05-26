@@ -81,7 +81,7 @@ namespace LibOpenCraft.MojangProtocol
             _client._player.position.Z = _pReader.ReadDouble();// Z
             _client._player.Yaw = _pReader.ReadFloat();// Yaw
             _client._player.Pitch = _pReader.ReadFloat();// Pitch
-            _client._player.onGround = _pReader.ReadByte();// On Ground
+            _client._player.onGround = _pReader.ReadBool();// On Ground
             GridServer.player_list[_client.id].WaitToRead = false;
             /*if (_client._player.customerVariables.ContainsKey("BeforeFirstPosition"))
             {
