@@ -114,8 +114,6 @@ namespace LibOpenCraft.ChunkHandler
                         }
                     }
                 }
-                SendChunks(5, 11);
-                GC.Collect();
                 try
                 {
                     send.Abort();
@@ -129,6 +127,7 @@ namespace LibOpenCraft.ChunkHandler
             {
                 send.Abort();
             }
+            //SendChunks(5, 2);
                 #endregion SendSpawn
         }
         public PacketHandler LoginPreChunkHandler(PacketType p_type, string CustomPacketType, ref PacketReader packet_reader, PacketHandler _p, ref ClientManager cm)
@@ -159,7 +158,8 @@ namespace LibOpenCraft.ChunkHandler
                 {
                     _client.SendPacket(new PreChunkPacket(PacketType.PreChunk, x, y, true), _client.id, ref _client, false, true);
                     _client.SendPacket(MakeChunkArray(x, y, true), _client.id, ref _client, false, true);
-                    
+                    Thread.SpinWait(1000);
+
                 }
             }
             _client.PreChunkRan = 1;
@@ -178,18 +178,21 @@ namespace LibOpenCraft.ChunkHandler
                 }
             }
         }
-
+        public byte CombineByte(byte a, byte b)
+        {
+            return (byte)(((a & 0x0F) << 4) | (b & 0x0F));
+        }
         public ChunkPacket MakeChunkArray(int _x, int _y, bool Load)
         {
             int Width = Config.GetSettingInt("Size_X");
             int Height = Config.GetSettingInt("Size_Z");
             int Depth = Config.GetSettingInt("Size_Y");
-            
+
             ChunkPacket _cPacket = new ChunkPacket();
             _cPacket.X = _x * 16;
             _cPacket.Z = _y * 16;
             _cPacket.GroundUpC = true;
-            _cPacket.PrimaryBitMap = 15;
+            _cPacket.PrimaryBitMap = 0;
             _cPacket.AddBitMap = 0;
             _cPacket.ModAPI = 0;
 
@@ -208,49 +211,59 @@ namespace LibOpenCraft.ChunkHandler
                 {
                     using (Ionic.Zlib.ZlibStream compressor = new Ionic.Zlib.ZlibStream(ms_zipped, CompressionMode.Compress, (CompressionLevel)compression, false))
                     {
-                        for (int i = 0; i > 16; i++)
+                        for (int i_h = 0; i_h < 16; i_h++)
                         {
-                            if (!IsAir[i - 1])
-                            {
-                                byte[] blockData = new byte[((Depth / 16) * Width * Height)];
-                                /*for (int ii = 0; ii < (Width * Height * (Depth / 16)); ii++)
-                                {
-                                    blockData[ii] = (byte)c.GetBlocktype(ii * i);
-                                }
-                                f_blockData = f_blockData.Concat(blockData).ToArray();
+                            if (!IsAir[i_h])
+                                continue;
 
-                                byte[] metadata = new byte[((Depth / 16) * Width * Height) / 2];
-                                // Write MetaData
-                                for (int ii = 0; ii < ((Depth / 16) * Width * Height) / 2; ii++)
-                                {
-                                    metadata[ii] = (byte)(((c.GetData((ii * i) + 1) & 0x0F) << 4) | (c.GetData((ii * i) + 0) & 0x0F));
-                                }
-                                f_metadata = f_metadata.Concat(metadata).ToArray();
-
-                                byte[] blockLight = new byte[((Depth / 16) * Width * Height) / 2];
-                                // Write BlockLight
-                                for (int ii = 0; ii < ((Depth / 16) * Width * Height) / 2; ii++)
-                                {
-                                    blockLight[ii] = (byte)(((c.GetBlockLight((ii * i) + 1) & 0x0F) << 4) | (c.GetBlockLight((ii * i) + 0) & 0x0F));
-                                }
-                                f_blockLight = f_blockLight.Concat(blockLight).ToArray();
-
-                                byte[] skyLight = new byte[((Depth / 16) * Width * Height) / 2];
-                                // Write SkyLight
-                                for (int ii = 0; ii < ((Depth / 16) * Width * Height) / 2; ii++)
-                                {
-                                    skyLight[ii] = (byte)(((c.GetSkyLight((ii * i) + 1) & 0x0F) << 4) | (c.GetSkyLight((ii * i) + 0) & 0x0F));
-                                }*/
-                                f_skyLight = f_skyLight.Concat(skyLight).ToArray();
-                                _cPacket.PrimaryBitMap |= mask;
-                            }
-                            mask <<= 1;
-
+                            byte[] blockData = new byte[((Depth / 16) * Width * Height)];
+                            for (int i = 0; i < ((Depth / 16) * Width * Height); i++)
+                                blockData[i] = c.GetBlocktype(i * (i_h + 1));
+                            compressor.Write(blockData, 0, blockData.Count());
                         }
-                        compressor.Write(f_blockData, 0, f_blockData.Length);
-                        compressor.Write(f_metadata, 0, f_metadata.Length);
-                        compressor.Write(f_blockLight, 0, f_blockLight.Length);
-                        compressor.Write(f_skyLight, 0, f_skyLight.Length);
+
+                        for (int i_h = 0; i_h < 16; i_h++)
+                        {
+                            if (!IsAir[i_h])
+                                continue;
+
+                            byte[] metadata = new byte[((Depth / 16) * Width * Height) / 2];
+                            for (int i = 0; i < ((Depth / 16) * Width * Height) / 2; i++)
+                                metadata[i] = CombineByte(c.GetData((i * (i_h + 1)) + 1), c.GetData((i * (i_h + 1)) + 0));
+                            compressor.Write(metadata, 0, metadata.Count());
+                        }
+
+                        for (int i_h = 0; i_h < 16; i_h++)
+                        {
+                            if (!IsAir[i_h])
+                                continue;
+
+                            byte[] blockLight = new byte[((Depth / 16) * Width * Height) / 2];
+                            for (int i = 0; i < ((Depth / 16) * Width * Height) / 2; i++)
+                                blockLight[i] = CombineByte(c.GetBlockLight((i * (i_h + 1)) + 1), c.GetBlockLight((i * (i_h + 1)) + 0));
+                            compressor.Write(blockLight, 0, blockLight.Count());
+                        }
+
+                        for (int i_h = 0; i_h < 16; i_h++)
+                        {
+                            if (!IsAir[i_h])
+                                continue;
+
+                            byte[] skyLight = new byte[((Depth / 16) * Width * Height) / 2];
+                            for (int i = 0; i < ((Depth / 16) * Width * Height) / 2; i++)
+                                skyLight[i] = CombineByte(c.GetSkyLight((i * (i_h + 1)) + 1), c.GetSkyLight((i * (i_h + 1)) + 0));
+                            compressor.Write(skyLight, 0, skyLight.Count());
+                        }
+                        for (int i_h = 0; i_h < 16; i_h++)
+                        {
+                            if(IsAir[i_h])
+                                _cPacket.PrimaryBitMap |= mask;
+                            mask <<= 1;
+                        }
+                        //compressor.Write(f_blockData, 0, f_blockData.Length);
+                        //compressor.Write(f_metadata, 0, f_metadata.Length);
+                        //compressor.Write(f_blockLight, 0, f_blockLight.Length);
+                        //compressor.Write(f_skyLight, 0, f_skyLight.Length);
                     }
                     _cPacket.ChunkData = ms_zipped.ToArray();
                 }

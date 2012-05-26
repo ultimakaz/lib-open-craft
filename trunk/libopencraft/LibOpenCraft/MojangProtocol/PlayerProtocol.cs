@@ -29,7 +29,7 @@ namespace LibOpenCraft.MojangProtocol
 
         public void OnPlayer(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
-            _client._player.onGround = _pReader.ReadByte();// On Ground
+            _client._player.onGround = _pReader.ReadBool();// On Ground
             GridServer.player_list[_client.id].WaitToRead = false;
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)
@@ -83,7 +83,7 @@ namespace LibOpenCraft.MojangProtocol
             _client._player.position.Y = _pReader.ReadDouble();
             _client._player.stance = _pReader.ReadDouble();
             _client._player.position.Z = _pReader.ReadDouble();
-            _client._player.onGround = _pReader.ReadByte();
+            _client._player.onGround = _pReader.ReadBool();
             GridServer.player_list[_client.id].WaitToRead = false;
             #endregion
             #region New Position Calculations
@@ -204,7 +204,7 @@ namespace LibOpenCraft.MojangProtocol
         {
             _client._player.Yaw = _pReader.ReadFloat();// Yaw
             _client._player.Pitch = _pReader.ReadFloat();
-            _client._player.onGround = _pReader.ReadByte();// On Ground
+            _client._player.onGround = _pReader.ReadBool();// On Ground
             GridServer.player_list[_client.id].WaitToRead = false;
             int i = 0;
             for (; i < base.ModuleAddons.Count; i++)

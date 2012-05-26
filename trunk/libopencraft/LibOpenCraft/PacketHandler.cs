@@ -252,6 +252,11 @@ namespace LibOpenCraft
             return (byte)reader.ReadByte();
         }
 
+        public bool ReadBool()
+        {
+            return (reader.ReadByte() == 0 ? false : true);
+        }
+
         public byte[] ReadBytes(int length)
         {
             byte[] buffer = new byte[length];

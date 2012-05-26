@@ -69,6 +69,8 @@ namespace LibOpenCraft
         ItemData = 0x83,
         IncrementStatistic = 0xC8,
         PlayerListItem = 0xC9,
+        PlayerAbilities = 0xCA,
+        PluginMessage = 0xFA,
         ServerListPing = 0xFE,
         ServerListPingBack = 0xFF,
         Disconnect_Kick = 0xFF,
