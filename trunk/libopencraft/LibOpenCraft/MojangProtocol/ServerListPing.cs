@@ -31,12 +31,16 @@ namespace LibOpenCraft.MojangProtocol
         public void OnServerListPing(ref PacketReader _pReader, PacketType pt, ref ClientManager _client)
         {
             GridServer.player_list[_client.id].WaitToRead = false;
-            ServerListPingPacket p = new ServerListPingPacket();
+			DisconnectKick p = new DisconnectKick(PacketType.Disconnect_Kick);
+			p.Reason = "Ping";
+			p.BuildPacket();
+			_client.SendPacket(p, _client.id, ref _client, true, false);
+            /*ServerListPingPacket p = new ServerListPingPacket();
             p.NumberOfSlots = (int)Config.Configuration["MaxPlayers"];
             p.ServerDescription = (string)Config.Configuration["ServerDescription"];
             p.NumberOfUsers = GridServer.PlayerCount() - 1;
             p.BuildPacket();
-            _client.SendPacket(p, _client.id, ref _client, true, false);
+            _client.SendPacket(p, _client.id, ref _client, true, false);*/
             //GridServer.player_list[_client.id] = null;
             //p = null;
         }
