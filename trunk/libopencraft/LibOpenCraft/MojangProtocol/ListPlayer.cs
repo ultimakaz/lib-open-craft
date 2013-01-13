@@ -50,7 +50,7 @@ namespace LibOpenCraft.MojangProtocol
                         #region BuildPacket
                         PlayerListItemPacket p = new PlayerListItemPacket(PacketType.PlayerListItem);
                         p.Online = true;
-                        p.Ping = (short)(ms_latency == null ? 0 : (short)ms_latency);
+                        p.Ping = (short)(ms_latency == null ? 0 : ms_latency);
                         p.PlayerName = GridServer.player_list[i]._player.name;
                         p.BuildPacket();
                         #endregion BuildPacket
