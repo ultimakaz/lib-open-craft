@@ -1,7 +1,9 @@
 ﻿ServerName=libOpenCraft
 ServerDescription=LibOpenCraft test server
+Query=true
+Query.port=25565
 MaxPlayers=100
-Port=25566
+Port=25565
 IPAddress=0.0.0.0
 LevelType=default
 ServerMode=1

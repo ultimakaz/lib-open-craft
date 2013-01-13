@@ -380,7 +380,10 @@ namespace LibOpenCraft
                 {
                     string key = ModuleHandler._CoreModules.ElementAt(i).Key;
                     if (ModuleHandler._CoreModules[key].started == false)
-                        InvokeStartCoreModule(ModuleHandler._CoreModules[key]);
+						if(LibOpenCraft.Config.Configuration.ContainsKey(key) && (bool)LibOpenCraft.Config.Configuration[key] == true)
+                        	InvokeStartCoreModule(ModuleHandler._CoreModules[key]);
+						else if(!LibOpenCraft.Config.Configuration.ContainsKey(key))
+							InvokeStartCoreModule(ModuleHandler._CoreModules[key]);
                 }
             }
             else
@@ -391,7 +394,10 @@ namespace LibOpenCraft
                     string key = ModuleHandler._CoreModules.ElementAt(i).Key;
                     if (ModuleHandler._CoreModules[key].started == true)
                         InvokeStopCoreModule(ModuleHandler._CoreModules[key]);
-                    InvokeStartCoreModule(ModuleHandler._CoreModules[key]);
+					if(LibOpenCraft.Config.Configuration.ContainsKey(key) && (bool)LibOpenCraft.Config.Configuration[key] == true)
+						InvokeStartCoreModule(ModuleHandler._CoreModules[key]);
+					else if(!LibOpenCraft.Config.Configuration.ContainsKey(key))
+						InvokeStartCoreModule(ModuleHandler._CoreModules[key]);
                 }
             }
         }
